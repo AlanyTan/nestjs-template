@@ -1,73 +1,104 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# NestJS Example
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Purpose
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+To provide a standardized starting point for our backend node.js microservices
 
-## Description
+## Added Benefits of Using This Template
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- standardized tsconfig and .eslintrc
+- openapi/swagger-ui
+- husky git hooks
+- dockerfile
+- .env config files for environment vars
+- database config
+- dockerized postgres db setup script
+- rename script (to change all instances of "nestjs-example" to whatever you call the repo)
 
-## Installation
+## Requirements
 
-```bash
-$ npm install
+### Node.js - v14.x.x
+
+Windows
+
+```
+TODO - If you use Windows, please fill this out
 ```
 
-## Running the app
+Mac OS
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```
+TODO - If you use Mac OS, please fill this out
 ```
 
-## Test
+Debian/Ubuntu
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```
+curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+sudo apt-get install -y nodejs
 ```
 
-## Support
+### npm - v7.x.x
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Windows
 
-## Stay in touch
+```
+TODO - If you use Windows, please fill this out
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Mac OS
 
-## License
+```
+TODO - If you use Mac OS, please fill this out
+```
 
-Nest is [MIT licensed](LICENSE).
+Debian/Ubuntu
+
+```
+npm i -g npm@^7.23.0
+```
+
+### Nest CLI - v8.x.x
+
+```
+npm i -g @nestjs/cli@^8.1.1
+```
+
+## Getting Started
+
+### Run Rename Script
+
+This script will change all instances of "nestjs-example" to whatever you provide in the prompt
+
+```
+./rename.sh
+```
+
+### Run Local PostgreSQL Setup Script
+
+This script will create a dockerized postgres container named `postgres_local` if it does not exist and create run & test databases for this server in that postgres container
+
+```
+./local_setup.sh
+```
+
+This script can be configured to your needs:
+
+```bash
+# config
+SERVER_NAME=nestjs_example
+SERVER_PORT=8080
+DB_PORT=5432
+```
+
+### Install Dependencies
+
+```
+npm i
+```
+
+### Start NestJS Server
+
+```
+npm start
+```
