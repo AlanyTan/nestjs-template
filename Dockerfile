@@ -1,12 +1,12 @@
 FROM node:14 AS build
 
-RUN npm install -g npm@^7.23.0
+RUN npm i -g npm@^8.0.0
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm i
 
 COPY . .
 
@@ -14,13 +14,13 @@ RUN npm run build
 
 FROM node:14
 
-RUN npm install -g npm@^7.23.0
+RUN npm i -g npm@^8.0.0
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install --only=production
+RUN npm ci --only=production --ignore-scripts
 
 COPY --from=build /usr/src/app/dist ./dist
 

@@ -38,7 +38,7 @@ curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
 
-### npm - v7.x.x
+### npm - v8.x.x
 
 Windows
 
@@ -55,13 +55,13 @@ TODO - If you use Mac OS, please fill this out
 Debian/Ubuntu
 
 ```
-npm i -g npm@^7.23.0
+npm i -g npm@^8.0.0
 ```
 
 ### Nest CLI - v8.x.x
 
 ```
-npm i -g @nestjs/cli@^8.1.1
+npm i -g @nestjs/cli@^8.0.0
 ```
 
 ## Getting Started
