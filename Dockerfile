@@ -1,6 +1,6 @@
 FROM node:14 AS build
 
-RUN npm i -g npm@^8.0.0
+RUN npm i -g npm@^7.24.2
 
 WORKDIR /usr/src/app
 
@@ -14,7 +14,7 @@ RUN npm run build
 
 FROM node:14
 
-RUN npm i -g npm@^8.0.0
+RUN npm i -g npm@^7.24.2
 
 WORKDIR /usr/src/app
 
