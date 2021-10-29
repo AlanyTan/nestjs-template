@@ -26,4 +26,4 @@ COPY --from=build /usr/src/app/dist ./dist
 
 EXPOSE 8080
 
-CMD ["node", "dist/main"]
+ENTRYPOINT ["node", "dist/main"]
