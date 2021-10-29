@@ -3,6 +3,9 @@
 ## Purpose
 
 To provide a standardized starting point for our backend node.js microservices
+Database (Posgresql) optional. 
+
+offer .devcontainer config so that development can happen remotely in the Linux VM running in the cloud (you should also be able to use local docker if you prefer, not thoroughly tested for local docker other than Linux host though). 
 
 ## Added Benefits of Using This Template
 
@@ -17,52 +20,9 @@ To provide a standardized starting point for our backend node.js microservices
 
 ## Requirements
 
-### Node.js - v14.x.x
-
-Windows
-
-```
-TODO - If you use Windows, please fill this out
-```
-
-Mac OS
-
-```
-TODO - If you use Mac OS, please fill this out
-```
-
-Debian/Ubuntu
-
-```
-curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
-
-### npm - v7.x.x
-
-Windows
-
-```
-TODO - If you use Windows, please fill this out
-```
-
-Mac OS
-
-```
-TODO - If you use Mac OS, please fill this out
-```
-
-Debian/Ubuntu
-
-```
-npm i -g npm@^7.24.2
-```
-
-### Nest CLI - v8.x.x
-
-```
-npm i -g @nestjs/cli@^8.0.0
-```
+- Node.js - v14.x.x
+- npm - v7.x.x
+- Nest CLI - v8.x.x
 
 ## Getting Started
 
@@ -74,7 +34,7 @@ This script will change all instances of "nestjs-example" to whatever you provid
 ./rename.sh
 ```
 
-### Run Local PostgreSQL Setup Script
+### Run Local PostgreSQL Setup Script (optional, if you need Postgresql in a container)
 
 This script will create a dockerized postgres container named `postgres_local` if it does not exist and create run & test databases for this server in that postgres container
 
@@ -91,11 +51,23 @@ SERVER_PORT=8080
 DB_PORT=5432
 ```
 
-### Install Dependencies
+### Open this repo
+Make sure you have VSCode installed on your PC, you need docker CLI as well (if you use Linux PC, it is ok to skip Docker engine, and install docker cli only)
 
-```
-npm i
-```
+Make sure you have SSH private key on your PC ```~/.ssh/id_rsa``` and public key in the remote Linux Host ```~/.ssh/authorized_keys```
+To test your set up, do ```docker info``` on your PC, it should show you docker  info of the remote host. 
+
+
+In VScode, go to Preferences->Settings, and search for "dockerode", then click on the "edit in settings.json" link.  
+add ```    "docker.host": "ssh:<username>@<ip.addr.of.vm>", ```
+Install "Remote-containers" extension to your VSCode.
+
+For the first time opening this repo, use the Ctrl-Shift-P "Remote-containers: clone github repo to Container Volume" function to clone the repo to the remote docker container instead of to your local PC. 
+This might take some time as the docker system needs to build the image. 
+
+After the remote Linux host builds the docker image and runs it, your VSCode should be able to be used normally.  You may want to save the workspace as a file locally (which is about 2K file that can help you open this remote container later). 
+
+You should be able to use the "Run" menu and debug runction.  
 
 ### Start NestJS Server
 
