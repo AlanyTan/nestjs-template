@@ -24,3 +24,10 @@ RUN if \[ ! -d /workspaces \]; then mkdir /workspaces; fi && chmod -R ugo+rwx /w
 RUN npm i -g npm@^7.24.2
 
 RUN npm i -g @nestjs/cli@^8.0.0
+
+# Install kubectl
+RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
+    && chmod +x /usr/local/bin/kubectl
+
+# Install Helm
+RUN curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash -
