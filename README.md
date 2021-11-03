@@ -67,10 +67,12 @@ This might take some time as the docker system needs to build the image.
 
 After the remote Linux host builds the docker image and runs it, your VSCode should be able to be used normally.  You may want to save the workspace as a file locally (which is about 2K file that can help you open this remote container later). 
 
-You should be able to use the "Run" menu and debug runction.  
+You should be able to use the "Run" menu and debug function. Click the sidebar Debug icon, and select "Run npm start" to the right of "RUN and DEBUG" label. Use menu "Run"->"Start Debug", VSCode should start nmp for you, and ask you if you want to open webbrowser.  Open the web broswer, you should be able to see swagger and make testing API call. 
 
-### Start NestJS Server
+You can also test it in a docker container, select "Docker Node.js Launch" next the "RUN and DEBUG" label, then use menu "Run"->"Start debug" again, this time, VScode should build docker container for you.  
+Once the image is built and started, you should be able to see it running in the Docker explorer window within VSCode, you should also be able to open a terminal inside VSCode, and run: 
+``` docker exec nestjsexample-dev curl http://localhost:8080/#/App/AppController_getHello```
+(Note, the nest server runs inside the debug container, out of the devcontainer, that's why you need to call the docker exec nestjsexample-dev that exec the curl inside the debug container. If you have access to the remote Linux VM, you can SSH to it, and something like 
+```curl http://localhost:<map-port>/#/App/AppController_getHello"```
+should show you the same results.  <map-port> is the port docker used to map host port to docker exposed port, you can get this port number by calling ```docker ps | grep 8080```
 
-```
-npm start
-```
