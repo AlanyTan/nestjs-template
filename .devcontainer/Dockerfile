@@ -21,9 +21,7 @@ RUN if \[ ! -d /workspaces \]; then mkdir /workspaces; fi && chmod -R ugo+rwx /w
 # [Optional] Uncomment if you want to install more global node packages
 # RUN su node -c "npm install -g <your-package-list -here>"
 
-RUN npm i -g npm@^7.24.2
-
-RUN npm i -g @nestjs/cli@^8.0.0
+RUN npm i -g npm@^7.24.2 -g @nestjs/cli@^8.0.0
 
 # Install kubectl
 RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
@@ -31,3 +29,5 @@ RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernete
 
 # Install Helm
 RUN curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash -
+
+RUN apt-get update && apt-get install -y tinyproxy
