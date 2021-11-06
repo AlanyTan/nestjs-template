@@ -41,5 +41,8 @@
     "kubectl-helm-minikube": "latest",
     "git": "latest",
     "github-cli": "latest"
-  }
+  },
+
+  // install all dependent packages after container is built and files copied into
+  "postStartCommand": "npm update -g"
 }
