@@ -22,7 +22,6 @@ RUN if \[ ! -d /workspaces \]; then mkdir /workspaces; fi && chmod -R ugo+rwx /w
 # RUN su node -c "npm install -g <your-package-list -here>"
 
 RUN npm install -g npm@^7.24.2 
-RUN npm install husky --save-dev
 
 # Install kubectl
 RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
