@@ -20,6 +20,8 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
+COPY .env* ./
+
 RUN npm ci --only=production --ignore-scripts
 
 COPY --from=build /usr/src/app/dist ./dist
