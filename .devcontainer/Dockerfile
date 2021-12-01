@@ -8,7 +8,7 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 RUN if [ "$USER_GID" != "1000" ] || [ "$USER_UID" != "1000" ]; then groupmod --gid $USER_GID node && usermod --uid $USER_UID --gid $USER_GID node; fi
 
-RUN if \[ ! -d /workspaces \]; then mkdir /workspaces; fi && chmod -R ugo+rwx /workspaces
+RUN if \[ ! -d /workspaces \]; then mkdir /workspaces; fi && chown -R $USER_UID:$USER_GID /workspaces
 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -30,4 +30,4 @@ RUN curl -sSL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernete
 # Install Helm
 RUN curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash -
 
-RUN apt-get update && apt-get install -y tinyproxy
+
