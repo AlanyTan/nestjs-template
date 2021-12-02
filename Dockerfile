@@ -26,6 +26,6 @@ RUN npm ci --only=production --ignore-scripts
 
 COPY --from=build /usr/src/app/dist ./dist
 
-EXPOSE 8080
+EXPOSE 9080
 
 ENTRYPOINT ["node", "dist/main"]
