@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.202.5/containers/typescript-node
 {
   "name": "Nest.js Example with DevContainer",
-  "runArgs": ["--init"],
+  "runArgs": ["--init", "--name","${localEnv:USERNAME}Nestjs.Example"],
   "overrideCommand": true,
   "build": {
     "dockerfile": "Dockerfile",
