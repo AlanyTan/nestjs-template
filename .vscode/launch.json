@@ -2,11 +2,11 @@
   "configurations": [
     {
       "name": "Launch via NPM",
+      "type": "pwa-node",
       "request": "launch",
       "runtimeArgs": ["run-script", "start:debug"],
       "runtimeExecutable": "npm",
-      "skipFiles": ["<node_internals>/**"],
-      "type": "pwa-node"
+      "skipFiles": ["<node_internals>/**"]
     },
     {
       "name": "Docker Node.js Launch",
@@ -15,8 +15,10 @@
       "preLaunchTask": "docker-run: debug",
       "platform": "node",
       "dockerServerReadyAction": {
-        "action": "debugWithChrome",
-        "pattern": "Nest application successfully started"
+        "action": "openExternally",
+        "containerName": "NestjsExample",
+        "pattern": "Listening on port ([0-9]+)",
+        "uriFormat": "http://localhost:%s"
       }
     }
   ]

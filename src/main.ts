@@ -15,7 +15,7 @@ async function bootstrap(): Promise<void> {
   SwaggerModule.setup("", app, document);
 
   const { port, host } = app.get(ConfigService);
-  await app.listen(port, host);
+  await app.listen(port, host, () => console.log("Listening on port ", port));
 }
 
 bootstrap();

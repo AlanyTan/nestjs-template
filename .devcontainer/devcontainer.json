@@ -2,8 +2,13 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.202.5/containers/typescript-node
 {
   "name": "Nest.js Example with DevContainer",
-  "runArgs": ["--init", "--name","${localEnv:USERNAME}Nestjs.Example"],
-  "overrideCommand": true,
+  //runArgs is used to set container name to USERNAME.programname
+  //the reason it shows ${localEnv:USERNAME}${localEnv:LOGNAME} is so that it covers both Windwos and *nix systems as frontend VSCode
+  "runArgs": [
+    "--init",
+    "--name",
+    "${localEnv:USERNAME}${localEnv:LOGNAME}.Nestjs.Example"
+  ],
   "build": {
     "dockerfile": "Dockerfile",
     // Update 'VARIANT' to pick a Node version: 16, 14, 12.
@@ -14,12 +19,17 @@
     }
   },
 
+  "portsAttributes": {
+    "9080": {
+      "label": "NestJS Example",
+      "onAutoForward": "notify"
+    }
+  },
   // Set *default* container specific settings.json values on container create.
   "settings": {},
 
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
-    "dbaeumer.vscode-eslint",
     "dbaeumer.vscode-eslint",
     "mtxr.sqltools",
     "mtxr.sqltools-driver-pg",
@@ -38,7 +48,10 @@
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "node",
   "features": {
-    "docker-from-docker": "latest",
+    "docker-in-docker": {
+      "version": "latest",
+      "moby": true
+    },
     "kubectl-helm-minikube": "latest",
     "git": "latest",
     "github-cli": "latest"
