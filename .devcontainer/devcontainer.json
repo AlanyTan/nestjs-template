@@ -3,11 +3,11 @@
 {
   "name": "Nest.js Example with DevContainer",
   //runArgs is used to set container name to USERNAME.programname
-  //the reason it shows ${localEnv:USERNAME}${localEnv:LOGNAME} is so that it covers both Windwos and *nix systems as frontend VSCode
+  //the reason it shows ${localEnv:USERNAME} is so that it covers both Windwos and *nix systems as frontend VSCode
   "runArgs": [
     "--init",
     "--name",
-    "${localEnv:USERNAME}${localEnv:LOGNAME}.Nestjs.Example"
+    "${localEnv:USERNAME}.Nestjs.Example"
   ],
   "build": {
     "dockerfile": "Dockerfile",
