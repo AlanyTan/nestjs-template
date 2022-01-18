@@ -16,8 +16,8 @@
       "platform": "node",
       "dockerServerReadyAction": {
         "action": "openExternally",
-        "containerName": "NestjsExample",
-        "pattern": "Listening on port ([0-9]+)",
+
+        "pattern": "Listening on port (\\d+)",
         "uriFormat": "http://localhost:%s"
       }
     }

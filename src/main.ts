@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ConfigService } from "config";
@@ -15,7 +16,9 @@ async function bootstrap(): Promise<void> {
   SwaggerModule.setup("", app, document);
 
   const { port, host } = app.get(ConfigService);
-  await app.listen(port, host, () => console.log("Listening on port ", port));
+  //the Logger.log("Listening on port "+port) is important to tell dockerserverReadyAction that the service is ready.  This actually not important for the service itself
+
+  await app.listen(port, host, () => Logger.log("Listening on port " + port));
 }
 
 bootstrap();

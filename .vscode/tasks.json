@@ -22,7 +22,6 @@
       "label": "docker-run: debug",
       "dependsOn": ["docker-build"],
       "dockerRun": {
-        "containerName": "NestjsExample",
         "env": {
           "DEBUG": "*",
           "NODE_ENV": "development"
