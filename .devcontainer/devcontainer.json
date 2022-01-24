@@ -7,7 +7,7 @@
   "runArgs": [
     "--init",
     "--network=host",
-    "--name ${localEnv:USER}${localEnv:USERNAME}.Nestjs.Example"
+    "--name Nestjs.Example"
   ],
   "build": {
     "dockerfile": "Dockerfile",
