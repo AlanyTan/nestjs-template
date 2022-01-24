@@ -6,8 +6,7 @@
   //the reason it shows ${localEnv:USERNAME} is so that it covers both Windwos and *nix systems as frontend VSCode
   "runArgs": [
     "--init",
-    "--network=host",
-    "--name Nestjs.Example"
+    "--network=host"
   ],
   "build": {
     "dockerfile": "Dockerfile",
