@@ -11,7 +11,7 @@ import { AppService } from "./app.service";
 @Module({
   imports: [
     NestConfigModule.forRoot({
-      envFilePath: [".env.local", ".env"],
+      envFilePath: [`.env.${process.env.NODE_ENV}`, ".env"],
     }),
     // TypeOrmModule.forRootAsync({
     //   imports: [ConfigModule],
