@@ -6,12 +6,10 @@ export class ConfigService {
   constructor(private readonly nestConfigService: NestConfigService) {}
 
   private getSafeValueByKey<T>(key: string, defaultValue?: T): T {
-    const { nestConfigService } = this;
-
     const value =
       defaultValue === undefined
-        ? nestConfigService.get<T>(key)
-        : nestConfigService.get<T>(key, defaultValue);
+        ? this.nestConfigService.get<T>(key)
+        : this.nestConfigService.get<T>(key, defaultValue);
 
     if (value === undefined) {
       throw new Error(
