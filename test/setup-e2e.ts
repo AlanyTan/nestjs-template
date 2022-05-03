@@ -12,6 +12,7 @@ beforeAll(async () => {
   }).compile();
 
   app = moduleFixture.createNestApplication();
+  app.useLogger(false);
   mainConfig(app);
   await app.init();
 });
