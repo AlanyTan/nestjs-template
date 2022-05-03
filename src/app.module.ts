@@ -1,5 +1,7 @@
+import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { ConfigModule as NestConfigModule } from "@nestjs/config";
+import { TerminusModule } from "@nestjs/terminus";
 // import { TypeOrmModule } from "@nestjs/typeorm";
 import {
   ConfigModule,
@@ -22,6 +24,8 @@ import { AppService } from "./app.service";
     //     databaseUser,
     //     databasePassword,
     //     databaseName,
+    //     databaseSynchronize,
+    //     databaseDropSchema,
     //   }: ConfigService) => ({
     //     type: "postgres",
     //     host: databaseHost,
@@ -29,10 +33,13 @@ import { AppService } from "./app.service";
     //     username: databaseUser,
     //     password: databasePassword,
     //     database: databaseName,
+    //     synchronize: databaseSynchronize,
+    //     dropSchema: databaseDropSchema,
     //     entities: [],
-    //     synchronize: true,
     //   }),
     // }),
+    HttpModule,
+    TerminusModule,
     ConfigModule,
   ],
   controllers: [AppController],

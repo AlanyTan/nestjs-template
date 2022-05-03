@@ -49,4 +49,12 @@ export class ConfigService {
   get databaseName(): string {
     return this.getSafeValueByKey<string>("DATABASE_NAME");
   }
+
+  get databaseSynchronize(): boolean {
+    return this.getSafeValueByKey<boolean>("DATABASE_SYNCHRONIZE", false);
+  }
+
+  get databaseDropSchema(): boolean {
+    return this.getSafeValueByKey<boolean>("DATABASE_DROP_SCHEMA", false);
+  }
 }
