@@ -5,39 +5,47 @@ import { ConfigService as NestConfigService } from "@nestjs/config";
 export class ConfigService {
   constructor(private readonly nestConfigService: NestConfigService) {}
 
-  private getSafeValueByKey<T>(key: string, defaultValue?: T): T {
+  private getSafeValueByKey(key: string, defaultValue?: string): string {
     const value =
       defaultValue === undefined
-        ? this.nestConfigService.get<T>(key)
-        : this.nestConfigService.get<T>(key, defaultValue);
+        ? this.nestConfigService.get<string>(key)
+        : this.nestConfigService.get<string>(key, defaultValue);
 
     if (value === undefined) {
-      throw new Error(
-        `Please supply the ${key} environment variable in the .env file.`
-      );
+      throw new Error(`Please supply the ${key} environment variable`);
     }
 
     return value;
   }
 
+  test(): void {
+    const getters = Object.entries(
+      Object.getOwnPropertyDescriptors(ConfigService.prototype)
+    )
+      .filter(([, descriptor]) => typeof descriptor?.get === "function")
+      .map(([key]) => key);
+
+    getters.forEach((getter) => this[getter as keyof ConfigService]);
+  }
+
   get port(): number {
-    return this.getSafeValueByKey<number>("PORT", 9080);
+    return +this.getSafeValueByKey("PORT", "9080");
   }
 
   get host(): string {
-    return this.getSafeValueByKey<string>("HOST", "0.0.0.0");
+    return this.getSafeValueByKey("HOST", "0.0.0.0");
   }
 
   get databasePort(): number {
-    return this.getSafeValueByKey<number>("DATABASE_PORT");
+    return +this.getSafeValueByKey("DATABASE_PORT");
   }
 
   get databaseHost(): string {
-    return this.getSafeValueByKey<string>("DATABASE_HOST");
+    return this.getSafeValueByKey("DATABASE_HOST");
   }
 
   get databaseUser(): string {
-    return this.getSafeValueByKey<string>("DATABASE_USER");
+    return this.getSafeValueByKey("DATABASE_USER");
   }
 
   get databasePassword(): string | undefined {
@@ -45,14 +53,14 @@ export class ConfigService {
   }
 
   get databaseName(): string {
-    return this.getSafeValueByKey<string>("DATABASE_NAME");
+    return this.getSafeValueByKey("DATABASE_NAME");
   }
 
   get databaseSynchronize(): boolean {
-    return this.getSafeValueByKey<boolean>("DATABASE_SYNCHRONIZE", false);
+    return this.getSafeValueByKey("DATABASE_SYNCHRONIZE", "false") === "true";
   }
 
   get databaseDropSchema(): boolean {
-    return this.getSafeValueByKey<boolean>("DATABASE_DROP_SCHEMA", false);
+    return this.getSafeValueByKey("DATABASE_DROP_SCHEMA", "false") === "true";
   }
 }

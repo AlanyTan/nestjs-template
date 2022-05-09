@@ -18,9 +18,10 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("example/docs", app, document);
 
-  const { port, host } = app.get(ConfigService);
+  const configService = app.get(ConfigService);
+  configService.test();
+  const { port, host } = configService;
   //the Logger.log("Listening on port "+port) is important to tell dockerserverReadyAction that the service is ready.  This actually not important for the service itself
-
   await app.listen(port, host, () => Logger.log("Listening on port " + port));
 }
 
