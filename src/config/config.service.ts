@@ -36,31 +36,31 @@ export class ConfigService {
     return this.getSafeValueByKey("HOST", "0.0.0.0");
   }
 
-  get databasePort(): number {
-    return +this.getSafeValueByKey("DATABASE_PORT");
-  }
+  // get databasePort(): number {
+  //   return +this.getSafeValueByKey("DATABASE_PORT");
+  // }
 
-  get databaseHost(): string {
-    return this.getSafeValueByKey("DATABASE_HOST");
-  }
+  // get databaseHost(): string {
+  //   return this.getSafeValueByKey("DATABASE_HOST");
+  // }
 
-  get databaseUser(): string {
-    return this.getSafeValueByKey("DATABASE_USER");
-  }
+  // get databaseUser(): string {
+  //   return this.getSafeValueByKey("DATABASE_USER");
+  // }
 
-  get databasePassword(): string | undefined {
-    return this.nestConfigService.get<string>("DATABASE_PASSWORD");
-  }
+  // get databasePassword(): string | undefined {
+  //   return this.nestConfigService.get<string>("DATABASE_PASSWORD");
+  // }
 
-  get databaseName(): string {
-    return this.getSafeValueByKey("DATABASE_NAME");
-  }
+  // get databaseName(): string {
+  //   return this.getSafeValueByKey("DATABASE_NAME");
+  // }
 
-  get databaseSynchronize(): boolean {
-    return this.getSafeValueByKey("DATABASE_SYNCHRONIZE", "false") === "true";
-  }
+  // get databaseSynchronize(): boolean {
+  //   return this.getSafeValueByKey("DATABASE_SYNCHRONIZE", "false") === "true";
+  // }
 
-  get databaseDropSchema(): boolean {
-    return this.getSafeValueByKey("DATABASE_DROP_SCHEMA", "false") === "true";
-  }
+  // get databaseDropSchema(): boolean {
+  //   return this.getSafeValueByKey("DATABASE_DROP_SCHEMA", "false") === "true";
+  // }
 }
