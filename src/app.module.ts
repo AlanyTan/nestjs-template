@@ -6,7 +6,8 @@ import { TerminusModule } from "@nestjs/terminus";
 import { LoggerModule } from "nestjs-pino";
 import {
   ConfigModule,
-  // ConfigService
+  // ConfigService,
+  // dbConfig,
 } from "config";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -32,25 +33,8 @@ import { AppService } from "./app.service";
     // TypeOrmModule.forRootAsync({
     //   imports: [ConfigModule],
     //   inject: [ConfigService],
-    //   useFactory: async ({
-    //     databaseHost,
-    //     databasePort,
-    //     databaseUser,
-    //     databasePassword,
-    //     databaseName,
-    //     databaseSynchronize,
-    //     databaseDropSchema,
-    //   }: ConfigService) => ({
-    //     type: "postgres",
-    //     host: databaseHost,
-    //     port: databasePort,
-    //     username: databaseUser,
-    //     password: databasePassword,
-    //     database: databaseName,
-    //     synchronize: databaseSynchronize,
-    //     dropSchema: databaseDropSchema,
-    //     entities: [],
-    //   }),
+    //   useFactory: async (configService: ConfigService) =>
+    //     dbConfig(configService),
     // }),
     HttpModule,
     TerminusModule,

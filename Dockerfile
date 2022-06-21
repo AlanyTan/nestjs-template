@@ -16,12 +16,10 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-COPY .env* ./
-
 RUN npm ci --only=production --ignore-scripts
 
 COPY --from=build /usr/src/app/dist ./dist
 
 EXPOSE 9080
 
-CMD ["node", "dist/main"]
+CMD ["npm","run","start:prod"]

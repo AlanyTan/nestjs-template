@@ -56,6 +56,12 @@ export class ConfigService {
   //   return this.getSafeValueByKey("DATABASE_NAME");
   // }
 
+  // get databaseMigrationsRun(): boolean {
+  //   return (
+  //     this.getSafeValueByKey("DATABASE_MIGRATIONS_RUN", "false") === "true"
+  //   );
+  // }
+
   // get databaseSynchronize(): boolean {
   //   return this.getSafeValueByKey("DATABASE_SYNCHRONIZE", "false") === "true";
   // }
