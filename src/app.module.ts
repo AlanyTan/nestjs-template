@@ -3,6 +3,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule as NestConfigModule } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 // import { TypeOrmModule } from "@nestjs/typeorm";
+import { LoggerModule } from "nestjs-pino";
 import {
   ConfigModule,
   // ConfigService
@@ -14,6 +15,19 @@ import { AppService } from "./app.service";
   imports: [
     NestConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`, ".env"],
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        enabled: process.env.NODE_ENV !== "test",
+        transport: {
+          target: "pino-pretty",
+          options: {
+            colorize: true,
+            levelFirst: true,
+            translateTime: "UTC: mm/dd/yyyy, h:MM:ss TT Z",
+          },
+        },
+      },
     }),
     // TypeOrmModule.forRootAsync({
     //   imports: [ConfigModule],
