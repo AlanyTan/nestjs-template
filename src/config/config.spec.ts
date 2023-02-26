@@ -1,7 +1,7 @@
 // test the config module only without app module? ... use below
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
-import { ConfigModule, ConfigService } from ".";
+import { ConfigModule, ConfigService } from "../example";
 
 describe("Config Service check configurations", () => {
   let app: INestApplication;

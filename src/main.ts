@@ -9,17 +9,20 @@ async function bootstrap(): Promise<void> {
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
-  const { port, host } = mainConfig(app);
+  const port = mainConfig(app).get<number>("PORT") || 9080;
+  const host = mainConfig(app).get<string>("HOST") || "0.0.0.0";
 
-  const config = new DocumentBuilder()
-    .setTitle("Acerta NestJS Boilerplate")
-    .setDescription(
-      "Acerta Node.js Boiler Plate Repo based on NestJS Example Swagger UI"
-    )
-    .setVersion("1.0")
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("example/docs", app, document);
+  if (mainConfig(app).get<string>("NODE_ENV") !== "production") {
+    const config = new DocumentBuilder()
+      .setTitle("Acerta NestJS Boilerplate")
+      .setDescription(
+        "Acerta Node.js Boiler Plate Repo based on NestJS Example Swagger UI"
+      )
+      .setVersion("1.0")
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup("example/docs", app, document);
+  }
 
   await app.listen(port, host);
 }

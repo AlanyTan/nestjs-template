@@ -4,7 +4,7 @@ import {
   RequestMethod,
   VersioningType,
 } from "@nestjs/common";
-import { ConfigService } from "config";
+import { ConfigService } from "@nestjs/config";
 
 export function mainConfig(app: INestApplication): ConfigService {
   app.useGlobalPipes(new ValidationPipe());
@@ -17,6 +17,9 @@ export function mainConfig(app: INestApplication): ConfigService {
   });
   const configService = app.get(ConfigService);
   //Check all defined configs can return valid values, if not throw error
-  configService.checkAllDefinedConfigs();
+  //configService.checkAllDefinedConfigs();
+
   return configService;
 }
+
+// this file allows the e2e test to run without the main module but still is configured as close as possible to the main module
