@@ -11,18 +11,19 @@ offer .devcontainer config so that development can happen remotely in the Linux 
 
 - VSCode remote-container ready repo, all design time requirements can be built into the devcontainer
 - standardized tsconfig and .eslintrc
+- standardized logging using pino
 - openapi/swagger-ui
 - husky git hooks
 - dockerfile
-- .env config files for environment vars
+- .env config files for environment vars (are ignored in .gitignore and .dockerignore)
 - database config (optional)
 - dockerized postgres db setup script (optional)
 - rename script (to change all instances of "nestjs-example" to whatever you call the repo)
 
 ## Requirements
 
-- Node.js - v14.x.x
-- npm - v7.x.x
+- Node.js - v16.x.x
+- npm - v9.x.x
 - Nest CLI - v8.x.x
 - VSCode, docker extension, remote-container extention
 
@@ -53,11 +54,43 @@ SERVER_PORT=9080
 DB_PORT=5432
 ```
 
-### Open this repo
+### Things to pay attention to
 
-#### prepare the VSCode
+#### logging
 
-Make sure you have VSCode installed on your PC, you need docker CLI as well (if you use Linux PC, it is ok to skip Docker engine, and install docker cli only). Install "Remote-containers" extension to your VSCode.
+This repo uses pino logging, including pino-http. This means all incoming HTTP requests are automatically logged.  
+Standard pino logging format is set in the app.module.ts
+
+The logging policy is:
+when NODE_ENV is no 'production', logs are writting via pino-pretty to the STDOUT, and with full details.
+when NODE_ENV is 'production', logs are written directly to STDOUT as json (default pino format), with reduced details (see below for LOG_LEVEL)
+when NODE_ENV is 'production', logs redacts sensitive information including req.header.authorization req.header.cookies
+
+LOG_LEVEL is default to "info",
+if LOG_ELVEL is set to either "trace" or "debug", even in 'production'
+valid LOG_LEVEL (and their internal numerical values) are:
+"trace": 10,
+"debug": 20,
+"info": 30,
+"warn": 40,
+"error": 50,
+"fatal": 60
+The higher the LOG_LEVEL numerical value the less verbos the logs will be.
+To change LOG_LEVEL, a restart of the service is needed (it is only evaluated at the creation of the app instance).
+
+#### Swagger
+
+swagger is used for automatically document APIs.
+However, Swagger is DISABLED if NODE_ENV='production'. This should be the default behavior for all repo unless otherwise required.
+To change this behavior, update main.ts
+
+### prepare the VSCode
+
+Make sure you have VSCode installed on your PC, you need docker engine CLI as well "dev containers" extension for VSCode.
+
+(if you use the remove linux host for development, it is ok to skip Docker engine, and install docker cli only and "Remote-containers" extension for VSCode.)
+
+#### to use the Acerta DevLab VMs
 
 Make sure you have SSH private key on your PC `~/.ssh/id_rsa` and public key in the remote Linux Host `~/.ssh/authorized_keys`
 To test your set up, do `docker info` on your PC, it should show you docker info of the remote host.
@@ -83,11 +116,11 @@ After the remote Linux host builds the docker image and runs it, your VSCode sho
 
 #### debug nestjs using npm
 
-You should be able to use the "Run" menu and debug function. Click the sidebar Debug icon, and select "Run npm start" to the right of "RUN and DEBUG" label. Use menu "Run"->"Start Debug", VSCode should start nmp for you, and ask you if you want to open webbrowser. Open the web broswer, you should be able to see swagger and make testing API call.
+You should be able to use the "Run" menu and debug function. Click the sidebar Debug icon, and select "Launch via NPM" to the right of "RUN and DEBUG" label. You can also use menu "Run"->"Start Debug", VSCode should start nmp for you, and ask you if you want to open web browser. Open the web broswer, you should be able to see swagger and make testing API call.
 
 #### test using runtime container
 
-You can also test it in a docker container, select "Docker Node.js Launch" next the "RUN and DEBUG" label, then use menu "Run"->"Start debug" again, this time, VScode should build docker container for you.  
+You can also test it in a docker container, select "Docker Node.js Launch" next the "RUN and DEBUG" label, You can also use menu "Run"->"Start debugging" (it launches what you select in the previous drop down), this time, VScode should build docker container for you.  
 Once the image is built and started, you should be able to see it running in the Docker explorer window within VSCode, your default browser should pop up and open the main page of the Nestjs application.
 
 Troubleshoot:

@@ -16,6 +16,7 @@ export function mainConfig(app: INestApplication): ConfigService {
     defaultVersion: "1",
   });
   const configService = app.get(ConfigService);
-  configService.test();
+  //Check all defined configs can return valid values, if not throw error
+  configService.checkAllDefinedConfigs();
   return configService;
 }

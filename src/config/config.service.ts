@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from "@nestjs/common";
 import { ConfigService as NestConfigService } from "@nestjs/config";
 
@@ -18,7 +19,7 @@ export class ConfigService {
     return value;
   }
 
-  test(): void {
+  checkAllDefinedConfigs(): boolean {
     const getters = Object.entries(
       Object.getOwnPropertyDescriptors(ConfigService.prototype)
     )
@@ -26,14 +27,19 @@ export class ConfigService {
       .map(([key]) => key);
 
     getters.forEach((getter) => this[getter as keyof ConfigService]);
+    return true;
   }
 
   get port(): number {
-    return +this.getSafeValueByKey("PORT", "9080");
+    return +this.getSafeValueByKey("PORT");
   }
 
   get host(): string {
     return this.getSafeValueByKey("HOST", "0.0.0.0");
+  }
+
+  get logLevel(): string {
+    return this.getSafeValueByKey("LOG_LEVEL", "info");
   }
 
   // get databasePort(): number {
