@@ -11,14 +11,18 @@ export class ExampleService {
   ) {}
   getExample(): string | PromiseLike<string> {
     this.logger.debug(
-      { msg: "Calling getExample within the service with debug" },
+      {
+        msg:
+          "Calling getExample within the service with debug details: " +
+          this.configService.get("HOST") +
+          ":" +
+          this.configService.get("PORT"),
+      },
       "ExampleService:debug"
     );
     this.logger.verbose(
       "Calling getExample within the service with trace including details: " +
-        this.configService.get("HOST") +
-        ":" +
-        this.configService.get("PORT"),
+        JSON.stringify(this.configService.get("logger")),
       "ExampleService:trace"
     );
     return (
@@ -26,18 +30,18 @@ export class ExampleService {
       this.configService.get("HOST") +
       ":" +
       this.configService.get("PORT") +
-      "!"
+      "!\n"
     );
   }
 
-  private checkAllDefinedConfigs(): boolean {
-    const getters = Object.entries(
-      Object.getOwnPropertyDescriptors(ExampleService.prototype)
-    )
-      .filter(([, descriptor]) => typeof descriptor?.get === "function")
-      .map(([key]) => key);
+  //   private checkAllDefinedConfigs(): boolean {
+  //     const getters = Object.entries(
+  //       Object.getOwnPropertyDescriptors(ExampleService.prototype)
+  //     )
+  //       .filter(([, descriptor]) => typeof descriptor?.get === "function")
+  //       .map(([key]) => key);
 
-    getters.forEach((getter) => this[getter as keyof ExampleService]);
-    return true;
-  }
+  //     getters.forEach((getter) => this[getter as keyof ExampleService]);
+  //     return true;
+  //   }
 }

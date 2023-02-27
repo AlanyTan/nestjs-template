@@ -1,0 +1,35 @@
+production:
+  info:
+    redact:
+      - "req.headers.Authorization"
+      - 'req.headers["X-Api-Key"]'
+      - "req.headers.authorization"
+      - "req.headers.cookie"
+      - "res.headers.authorization"
+      - "res.headers.cookie"
+      - "res.body.password"
+  debug:
+    redact:
+      - "req.headers.Authorization"
+      - "req.headers.authorization"
+      - "req.headers.cookie"
+      - "res.headers.authorization"
+      - "res.headers.cookie"
+      - "res.body.password"
+  trace:
+    redact:
+      - "req.headers.Authorization"
+      - "req.headers.authorization"
+      - "req.headers.cookie"
+      - "res.headers.authorization"
+      - "res.headers.cookie"
+      - "res.body.password"
+development:
+  trace:
+    redact:
+      - "req.headers.Authorization"
+      - 'req.headers["X-Api-Key"]'
+      - "req.headers.cookie"
+      - "res.headers.authorization"
+      - "res.headers.cookie"
+      - "res.body.password"

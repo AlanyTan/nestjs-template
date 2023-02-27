@@ -36,16 +36,15 @@ import configurationDB from "./config/configuration-db";
         pinoHttp: {
           enabled: true,
           level: configService.get<string>("LOG_LEVEL") || "info",
-          redact:
-            configService.get<string>("NODE_ENV") === "production"
-              ? [
-                  "req.headers.authorization",
-                  "req.headers.cookie",
-                  "res.headers.authorization",
-                  "res.headers.cookie",
-                  "res.body.password",
-                ]
-              : [],
+          //by default, we redact the Authorization header and the cookie header, if you'd like to customize it, you can do so by editting the logg_config.yaml file.
+          redact: configService.get<string[]>(
+            "logger." +
+              configService.get<string>("NODE_ENV") +
+              "." +
+              configService.get<string>("LOG_LEVEL") +
+              ".redact",
+            ["req.headers.Authorization", "req.headers.cookie"]
+          ),
           transport:
             configService.get<string>("NODE_ENV") === "production"
               ? {
@@ -64,7 +63,7 @@ import configurationDB from "./config/configuration-db";
           serializers:
             configService.get<string>("LOG_LEVEL") === "trace"
               ? {
-                  req: (req) => ({ req }),
+                  req: (req) => req,
                 }
               : configService.get<string>("LOG_LEVEL") === "debug"
               ? {
