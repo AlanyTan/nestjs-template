@@ -4,6 +4,7 @@ import { Logger, LoggerErrorInterceptor } from "nestjs-pino";
 import { mainConfig } from "main.config";
 import { AppModule } from "./app.module";
 
+//we use pino logger here.  once it's set up here and in app.module.ts, we can use it in any other file by using the standard nestjs Logger
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.useLogger(app.get(Logger));

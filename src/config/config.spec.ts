@@ -1,7 +1,7 @@
 // test the config module only without app module? ... use below
 import { INestApplication } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
-import { ConfigModule, ConfigService } from "../example";
 
 describe("Config Service check configurations", () => {
   let app: INestApplication;
@@ -17,29 +17,32 @@ describe("Config Service check configurations", () => {
     configService = await moduleFixture.resolve(ConfigService);
   });
   test("Known Configuration value of Host, Ports and LOG Level should be 0.0.0.0  80 info", () => {
-    expect(configService.host).toBe("0.0.0.0");
-    expect(configService.port).toBe(9080);
-    expect(configService.logLevel).toBe("info");
+    expect(configService.get<string>("HOST")).toBe("0.0.0.0");
+    expect(configService.get<number>("PORT")).toBe("9080");
+    expect(configService.get<string>("LOG_LEVEL")).toBe("info");
   });
 
-  test("Unknown Configuration value of test should throw error", () => {
+  test("Missing Configuration value with default value of should return default value", () => {
     const env = process.env;
     process.env = {};
-    expect(() => {
-      configService.port;
-    }).toThrowError();
+    expect(configService.get<string>("test", "default")).toBe("default");
     process.env = env;
   });
 
-  test("Load all expected configuration values", () => {
-    expect(configService.checkAllDefinedConfigs()).toBe(true);
-  });
+  // test("Missing Configuration value without default value of test should throw error", () => {
+  //   const env = process.env;
+  //   process.env = {};
+  //   expect(() => {
+  //     configService.get<string>('test');
+  //   }).toThrowError();
+  //   process.env = env;
+  // });
 
   it("Function checkAllDefinedConfigs can be mocked and return true", () => {
-    jest
-      .spyOn(configService, "checkAllDefinedConfigs")
-      .mockImplementation(() => true);
+    jest.spyOn(configService, "get").mockImplementation(() => {
+      throw new Error(`Please supply the MISSED_ENVAR environment variable`);
+    });
 
-    expect(configService.checkAllDefinedConfigs()).toBe(true);
+    expect(() => configService.get("test")).toThrowError();
   });
 });

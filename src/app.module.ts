@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpModule } from "@nestjs/axios";
-import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
-
+import { Module, RequestMethod } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 // import { TypeOrmModule } from "@nestjs/typeorm";
-import * as Joi from "joi";
+import Joi from "joi";
 import { LoggerModule } from "nestjs-pino";
+import { pinoHttp } from "pino-http";
+import { ExampleModule } from "example/example.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import configuration from "./config/configuration";
@@ -16,40 +17,86 @@ import configurationDB from "./config/configuration-db";
   imports: [
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`, ".env"],
-      load: [configuration /*configurationDB*/], //configurationDB is a structured config obj, can be access like get('database.host')
+      load: [configuration /*configurationDB*/], //configurationDB is a structured config obj, can be accessed like get('database.host')
       validationSchema: Joi.object({
         //add mandatory env variables here, and the app will fail to start if any of them are missing
         NODE_ENV: Joi.string()
           .valid("development", "production", "test")
           .default("production"),
-        PORT: Joi.number().default(9080),
-        HOST: Joi.string().default("0.0.0.0"),
+        PORT: Joi.number().required(),
+        HOST: Joi.string().required(),
         API_CUSTOMER_BASE_URL: Joi.string().required(),
       }),
-
       isGlobal: true,
     }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        enabled: process.env.NODE_ENV !== "test",
-        transport: {
-          target: "pino-pretty",
-          options: {
-            colorize: true,
-            levelFirst: true,
-            translateTime: "UTC: mm/dd/yyyy, h:MM:ss TT Z",
-          },
+    //we setup pino logger options here, and in main.ts.  once it's set up here and in main.ts, we can use it in any other file by using the standard nestjs Logger
+    LoggerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        pinoHttp: {
+          enabled: true,
+          level: configService.get<string>("LOG_LEVEL") || "info",
+          redact:
+            configService.get<string>("NODE_ENV") === "production"
+              ? [
+                  "req.headers.authorization",
+                  "req.headers.cookie",
+                  "res.headers.authorization",
+                  "res.headers.cookie",
+                  "res.body.password",
+                ]
+              : [],
+          transport:
+            configService.get<string>("NODE_ENV") === "production"
+              ? {
+                  // in production keep json format
+                  target: "pino/file",
+                }
+              : {
+                  // if this is non production env, then use pino-pretty to format the log
+                  target: "pino-pretty",
+                  options: {
+                    colorize: true,
+                    levelFirst: false,
+                    translateTime: "UTC: yyyy-mm-dd HH:MM:ss.l Z",
+                  },
+                },
+          serializers:
+            configService.get<string>("LOG_LEVEL") === "trace"
+              ? {
+                  req: (req) => ({ req }),
+                }
+              : configService.get<string>("LOG_LEVEL") === "debug"
+              ? {
+                  req: (req) => ({
+                    id: req.id,
+                    method_url: req.method + " " + req.url,
+                    query: req.query,
+                    params: req.params,
+                    remoteAddress_port:
+                      req.remoteAddress + ":" + req.remotePort,
+                  }),
+                }
+              : {
+                  req: (req) => ({
+                    id: req.id,
+                    method_url: req.method + " " + req.url,
+                  }),
+                },
         },
-      },
+        exclude: [{ method: RequestMethod.ALL, path: "/health" }],
+      }),
+      inject: [ConfigService],
     }),
     // TypeOrmModule.forRootAsync({
     //   imports: [ConfigModule],
     //   inject: [ConfigService],
     //   useFactory: async (configService: ConfigService) =>
-    //     dbConfig(configService),
+    //     configService.get('database'),
     // }),
     HttpModule,
     TerminusModule,
+    ExampleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

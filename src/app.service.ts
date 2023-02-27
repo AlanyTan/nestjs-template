@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import {
   HealthCheckResult,
   HealthCheckService,
@@ -11,6 +13,7 @@ import {
 export class AppService {
   constructor(
     private readonly healthCheckService: HealthCheckService,
+    private readonly configService: ConfigService,
     // private readonly typeOrmHealthIndicator: TypeOrmHealthIndicator,
     private readonly httpHealthIndicator: HttpHealthIndicator
   ) {}
