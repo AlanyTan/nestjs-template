@@ -4,6 +4,7 @@ import { Module, RequestMethod } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 // import { TypeOrmModule } from "@nestjs/typeorm";
+import { OpenFeature } from "@openfeature/js-sdk";
 import Joi from "joi";
 import { LoggerModule } from "nestjs-pino";
 import { pinoHttp } from "pino-http";
@@ -12,6 +13,10 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import configuration from "./config/configuration";
 import configurationDB from "./config/configuration-db";
+import { OPENFEATURE_CLIENT } from "./constants";
+import { OpenFeatureEnvProvider } from "./js-env-provider";
+
+//export const OPENFEATURE_CLIENT = Symbol.for('OPENFEATURE_CLIENT');
 
 @Module({
   imports: [
@@ -98,6 +103,16 @@ import configurationDB from "./config/configuration-db";
     ExampleModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: OPENFEATURE_CLIENT,
+      useFactory: () => {
+        OpenFeature.setProvider(new OpenFeatureEnvProvider());
+        const client = OpenFeature.getClient("app");
+        return client;
+      },
+    },
+  ],
 })
 export class AppModule {}
