@@ -13,6 +13,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import configuration from "./config/configuration";
 import configurationDB from "./config/configuration-db";
+import { MetricsModule } from "./metrics/metrics.module";
 import {
   OpenFeatureEnvProvider,
   OPENFEATURE_CLIENT,
@@ -40,7 +41,7 @@ import { OpenFeatureLaunchDarklyProvider } from "./utils/js-launchdarkly-provide
     }),
     //we setup pino logger options here, and in main.ts.  once it's set up here and in main.ts, we can use it in any other file by using the standard nestjs Logger
     LoggerModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, MetricsModule],
       useFactory: async (configService: ConfigService) => ({
         pinoHttp: {
           enabled: true,

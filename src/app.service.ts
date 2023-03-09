@@ -20,11 +20,20 @@ export class AppService {
 
   health(): Promise<HealthCheckResult> {
     return this.healthCheckService.check([
+      //Here we validate the services that we depend on are up and running
+      // You should have defined required service's URL in ENV variables
+      // add as many checks as you need to ensure all services
       (): Promise<HealthIndicatorResult> =>
         this.httpHealthIndicator.pingCheck(
-          "nestjs-docs",
-          "https://docs.nestjs.com"
+          "1st API that I need:",
+          this.configService.get<string>("API_CUSTOMER_BASE_URL") || ""
         ),
+      (): Promise<HealthIndicatorResult> =>
+        this.httpHealthIndicator.pingCheck(
+          "2nd API that I need:",
+          this.configService.get<string>("API_CUSTOMER_BASE_URL") || ""
+        ),
+      // // if you use TypeORM, you can use this to check the database connection
       // (): Promise<HealthIndicatorResult> =>
       //   this.typeOrmHealthIndicator.pingCheck("database"),
     ]);
