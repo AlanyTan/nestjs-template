@@ -10,10 +10,11 @@ async function bootstrap(): Promise<void> {
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
-  const port = mainConfig(app).get<number>("PORT") || 9080;
-  const host = mainConfig(app).get<string>("HOST") || "0.0.0.0";
+  const port = mainConfig(app).get<number>("PORT") || 0;
+  const host = mainConfig(app).get<string>("HOST") || "";
 
-  if (mainConfig(app).get<string>("NODE_ENV") !== "production") {
+  if (mainConfig(app).get<boolean>("SWAGGER_ON")) {
+    // can we log Swagger usage???
     const config = new DocumentBuilder()
       .setTitle("Acerta NestJS Boilerplate")
       .setDescription(

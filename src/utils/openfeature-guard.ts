@@ -10,7 +10,7 @@ import {
   Type,
 } from "@nestjs/common";
 import { Client } from "@openfeature/js-sdk";
-import { OPENFEATURE_CLIENT } from "../constants";
+import { OPENFEATURE_CLIENT } from "../utils/js-env-provider";
 
 function OpenFeatureGuard(featureFlagName: string): Type<CanActivate> {
   @Injectable()

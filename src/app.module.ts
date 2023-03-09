@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpModule } from "@nestjs/axios";
-import { Module, RequestMethod } from "@nestjs/common";
+import { Module, RequestMethod, Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 // import { TypeOrmModule } from "@nestjs/typeorm";
@@ -13,9 +13,11 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import configuration from "./config/configuration";
 import configurationDB from "./config/configuration-db";
-import { OPENFEATURE_CLIENT } from "./constants";
-import { OpenFeatureEnvProvider } from "./js-env-provider";
-
+import {
+  OpenFeatureEnvProvider,
+  OPENFEATURE_CLIENT,
+} from "./utils/js-env-provider";
+import { OpenFeatureLaunchDarklyProvider } from "./utils/js-launchdarkly-provider";
 //export const OPENFEATURE_CLIENT = Symbol.for('OPENFEATURE_CLIENT');
 
 @Module({
@@ -24,12 +26,14 @@ import { OpenFeatureEnvProvider } from "./js-env-provider";
       envFilePath: [`.env.${process.env.NODE_ENV}`, ".env"],
       load: [configuration /*configurationDB*/], //configurationDB is a structured config obj, can be accessed like get('database.host')
       validationSchema: Joi.object({
-        //add mandatory env variables here, and the app will fail to start if any of them are missing
-        NODE_ENV: Joi.string()
-          .valid("development", "production", "test")
-          .default("production"),
+        //add configuration validation here,
+        //if ".required()" then application will abort starting if that configuration was not provided.
+        //if ".default(value)" then the value is used if the expected EnVar does not exist
+        LINEPULSE_ENV: Joi.string().required(),
+        SWAGGER_ON: Joi.boolean().default(false),
         PORT: Joi.number().required(),
         HOST: Joi.string().required(),
+        PINO_PRETTY: Joi.boolean().default(true),
         API_CUSTOMER_BASE_URL: Joi.string().required(),
       }),
       isGlobal: true,
@@ -40,31 +44,29 @@ import { OpenFeatureEnvProvider } from "./js-env-provider";
       useFactory: async (configService: ConfigService) => ({
         pinoHttp: {
           enabled: true,
-          level: configService.get<string>("LOG_LEVEL") || "info",
+          uselevel: configService.get<string>("LOG_LEVEL") || "info",
           //by default, we redact the Authorization header and the cookie header, if you'd like to customize it, you can do so by editting the logg_config.yaml file.
-          redact: configService.get<string[]>(
-            "logger." +
-              configService.get<string>("NODE_ENV") +
-              "." +
-              configService.get<string>("LOG_LEVEL") +
-              ".redact",
-            ["req.headers.Authorization", "req.headers.cookie"]
-          ),
-          transport:
-            configService.get<string>("NODE_ENV") === "production"
-              ? {
-                  // in production keep json format
-                  target: "pino/file",
-                }
-              : {
-                  // if this is non production env, then use pino-pretty to format the log
-                  target: "pino-pretty",
-                  options: {
-                    colorize: true,
-                    levelFirst: false,
-                    translateTime: "UTC: yyyy-mm-dd HH:MM:ss.l Z",
-                  },
+          redact: [
+            "req.headers.Authorization",
+            "req.headers.authorization",
+            "req.headers.cookie",
+          ], //concat( configService.get<string[]>("LOGGING_REDACT_PATTERNS"))
+          transport: configService.get<string>("PINO_PRETTY")
+            ? {
+                // if this is non production env, then use pino-pretty to format the log
+                target: "pino-pretty",
+                options: {
+                  colorize:
+                    configService.get<string>("LINEPULSE_ENV") === "lcl",
+                  singleLine: true,
+                  levelFirst: false,
+                  translateTime: "UTC:yyyy-mm-dd HH:MM:ss.l Z",
                 },
+              }
+            : {
+                // in production keep json format
+                target: "pino/file",
+              },
           serializers:
             configService.get<string>("LOG_LEVEL") === "trace"
               ? {
@@ -88,7 +90,7 @@ import { OpenFeatureEnvProvider } from "./js-env-provider";
                   }),
                 },
         },
-        exclude: [{ method: RequestMethod.ALL, path: "/health" }],
+        exclude: [{ method: RequestMethod.ALL, path: "/nothing_to_exclude" }],
       }),
       inject: [ConfigService],
     }),
@@ -107,8 +109,36 @@ import { OpenFeatureEnvProvider } from "./js-env-provider";
     AppService,
     {
       provide: OPENFEATURE_CLIENT,
-      useFactory: () => {
-        OpenFeature.setProvider(new OpenFeatureEnvProvider());
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        switch (
+          configService.get<string>("OPENFEATURE_PROVIDER")?.split(":")[0]
+        ) {
+          case "env":
+          case "ENV":
+            OpenFeature.setProvider(new OpenFeatureEnvProvider());
+            break;
+          case "LD":
+          case "ld":
+          case "launchdarkly":
+          case "LaunchDarkly":
+            const LD_KEY = configService
+              .get<string>("OPENFEATURE_PROVIDER")
+              ?.split(":")[1];
+            if (!LD_KEY) {
+              throw new Error("LaunchDarkly key not provided");
+            } else {
+              OpenFeature.setProvider(
+                new OpenFeatureLaunchDarklyProvider(LD_KEY)
+              );
+            }
+            break;
+          default:
+            throw new Error(
+              "OpenFeature provider value invalid:" +
+                configService.get<string>("OPENFEATURE_PROVIDER")
+            );
+        }
         const client = OpenFeature.getClient("app");
         return client;
       },

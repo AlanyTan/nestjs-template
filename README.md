@@ -3,22 +3,32 @@
 ## Purpose
 
 To provide a standardized starting point for our backend node.js microservices
-Database (Posgresql) optional.
+Database (Postgresql) optional.
+(\*note, Postgresql is currently turned off while we are solving a technical challenge to allow different user data to be stored in different physical tables)
 
-offer .devcontainer config so that development can happen remotely in the Linux VM running in the cloud (you should also be able to use local docker if you prefer, not thoroughly tested for local docker other than Linux host though).
+This repo includes .devcontainer config so that development environment requirements can be built into dev-container, which allows multiple repo to respect their different lib/tool/package requirements. .devcontainer works on Linux host, or remotely on a Linux VM running in the cloud (you should also be able to use local docker on WSL if you prefer Windows, although it's not thoroughly tested).
 
-## Added Benefits of Using This Template
+## Key Benefits of Using This Template
 
-- VSCode remote-container ready repo, all design time requirements can be built into the devcontainer
-- standardized tsconfig and .eslintrc
-- standardized logging using pino
+- Standardized logging, logging format, redact.
+- OPENFEATURE feature toggle
+- - two feature toggle providers Environment Variable & LaunchDarkly
+- - standard OPENFEATURE client that can be easily switched between the two providers using EnVar without changing application code
+- Jest based unit test and app e2e test templates.
 - openapi/swagger-ui
-- husky git hooks
+- health check
+- version end-point
+- metrics end-point
 - dockerfile
-- .env config files for environment vars (are ignored in .gitignore and .dockerignore)
-- database config (optional)
-- dockerized postgres db setup script (optional)
-- rename script (to change all instances of "nestjs-example" to whatever you call the repo)
+- .env config files for environment vars (are ignored in .gitignore and .dockerignore, check .example.env for example)
+- VSCode usability enhancements
+- - remote-container ready repo, all design time requirements can be built into the devcontainer
+- - .vscode/launch.json & .vscode/tasks.json that enables VSCode integrated "run and debug" and test function.
+- - standardized tsconfig and .eslintrc (so vscode intellisense will catch most lint issues that would otherwise fail the build)
+- husky git hooks to perform pre-commit lint (so CI/CD )
+- - database config (optional)
+- - dockerized postgres db setup script (optional)
+- - rename script (to change all instances of "nestjs-example" to whatever you call the repo)
 
 ## Requirements
 
@@ -37,7 +47,7 @@ This script will change all instances of "nestjs-example" to whatever you provid
 ./rename.sh
 ```
 
-### Run Local PostgreSQL Setup Script (optional, if you need Postgresql in a container)
+### Run Local PostgreSQL Setup Script (optional, if you need Postgresql in a container) _currently disabled_
 
 This script will create a dockerized postgres container named `postgres_local` if it does not exist and create run & test databases for this server in that postgres container
 
@@ -54,21 +64,86 @@ SERVER_PORT=9080
 DB_PORT=5432
 ```
 
-### Things to pay attention to
+### OpenFeature
 
-#### logging
+This repo uses OpenFeature as server-side feature toggle.
+It has two Feature Flag function providers:
+
+- a locally implemented OpenFeature Provider that reads environment variables (an Environment Variable that is all capital, replace "-" with "\_" will be read, and its value retruned as the value for the flag. e.g. if you look up a flag "a-flag", and you have set up an Env Var "A_FLAG=true", then the lookup will return "true")
+- a Launch Darkly that connects to Launch Darkly and requires a "sdkKey", please ask the Product Management group for the key for local development
+
+To switch which Feature Toggle provider to be used, change the Environment Varialbe {OPENFEATURE_PROVIDER} to "ENV" or "LaunchDarkly".
+
+It is recommended for you to use the local Env-Provider and change the flag setting as often as you like first, then test with LaunchDarkly in collaboration with Product Management, once you are ready to commit.
+
+Two feature toggling was demonstrated:
+in ExampleService, a new-feature-flag was used to control the content of the returned message
+in ExampleController, a new-end-point was used to control if the v2 of the end-point would be available or not (return 404) using the Guard decorator
+
+In the env-provider case, to change the value of the flags, update the .env (or EnVar) to have `NEW_FEATURE_FLAG=true` or `NEW_END_POINT=false`
+
+#### how to "copy"" feature toggle functionality to your own nest.js repo?
+
+- start from the app.module.ts,
+
+```
+import { OpenFeature } from '@openfeature/js-sdk';
+import { OPENFEATURE_CLIENT } from "./utils/js-env-provider";
+import { OpenFeatureEnvProvider } from "./utils/js-env-provider";
+import { OpenFeatureLaunchDarklyProvider } from './utils/js-launchdarkly-provider';
+...
+  controllers: [AppController],
+  providers: [
+    AppService,
+    {
+      provide: OPENFEATURE_CLIENT,
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        switch (configService.get<string>("OPENFEATURE_PROVIDER")?.split(":")[0]) {
+        case 'env' || 'ENV':
+          OpenFeature.setProvider(new OpenFeatureEnvProvider());
+          break;
+        case 'LD' || 'ld' || 'launchdarkly' || 'LaunchDarkly':
+          const LD_KEY = configService.get<string>("OPENFEATURE_PROVIDER")?.split(":")[1]
+          if (!LD_KEY) {
+            throw new Error("LaunchDarkly key not provided")
+          } else {
+            OpenFeature.setProvider(new OpenFeatureLaunchDarklyProvider(
+              LD_KEY
+            ));
+          }
+          break;
+        default:
+          throw new Error("OpenFeature provider value invalid:" + configService.get<string>("OPENFEATURE_PROVIDER"))
+        }
+        const client = OpenFeature.getClient("app");
+        return client;
+      },
+    },
+  ],
+```
+
+- create a `utils` dir under `src` and copy the following 4 files from this repo's utils
+
+```
+utils\js-env-provider.ts
+utils\js-env-provider.spec.ts
+utils\js-launchdarkly-provider.ts
+utils\js-launchdarkly-provider.spec.ts
+```
+
+### Logging
 
 This repo uses pino logging, including pino-http. This means all incoming HTTP requests are automatically logged.  
-Standard pino logging format is set in the app.module.ts
+Pino logging format is set in the app.module.ts, and should be considered Logging standard.
 
-The logging policy is:
-when NODE_ENV is no 'production', logs are writting via pino-pretty to the STDOUT, and with full details.
-when NODE_ENV is 'production', logs are written directly to STDOUT as json (default pino format), with reduced details (see below for LOG_LEVEL)
-when NODE_ENV is 'production', logs redacts sensitive information including req.header.authorization req.header.cookies
+There are 3 environment Variables that influence logging:
 
-LOG_LEVEL is default to "info",
-if LOG_ELVEL is set to either "trace" or "debug", even in 'production'
-valid LOG_LEVEL (and their internal numerical values) are:
+- LOG_LEVEL : determines how verbose the logging will be (i.e. when LOG_LEVEL=info, trace and debug messages won't be added to the log) see below for valid values
+- PINO_PRETTY : boolean value determines if the logs will be written in pretty format or JSON
+- NODE_ENV : only if NODE_ENV=development the colorization will be used in pino-pretty, and it affects redactation as well.
+
+LOG_LEVEL default is "info", valid values are (and their internal numerical values) are:
 "trace": 10,
 "debug": 20,
 "info": 30,
@@ -76,7 +151,13 @@ valid LOG_LEVEL (and their internal numerical values) are:
 "error": 50,
 "fatal": 60
 The higher the LOG_LEVEL numerical value the less verbos the logs will be.
-To change LOG_LEVEL, a restart of the service is needed (it is only evaluated at the creation of the app instance).
+In your code, you can use `logger.error`, `logger.warn`, `logger.log` (maps to info) `logger.debug`, `logger.verbose` (maps to trace), and depending on the LOG_LEVEL setting, lower numerical log level messages will be supressed, for example if you set LOG_LEVEL=debug, your `logger.trace` messages won't show up in your stdout, while all others will.
+
+Log Colorization
+For local development and debug, colored logs are often helpful, however, for production execution, colorization will introduce special characters into the log stream and make log hard to read. So we configure the log to use colorization when NODE_ENV=development, but turn colorization off for all other cases.
+
+Log Redactation
+We shall redact sensitive informations
 
 #### Swagger
 

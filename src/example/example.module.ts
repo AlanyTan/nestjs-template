@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Module, Logger } from "@nestjs/common";
 import { OpenFeature } from "@openfeature/js-sdk";
-import { OPENFEATURE_CLIENT } from "../constants";
+import { OPENFEATURE_CLIENT } from "../utils/js-env-provider";
 import { ExampleController } from "./example.controller";
 import { ExampleService } from "./example.service";
 

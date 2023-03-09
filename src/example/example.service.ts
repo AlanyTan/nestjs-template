@@ -2,7 +2,7 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Client } from "@openfeature/js-sdk";
-import { OPENFEATURE_CLIENT } from "../constants";
+import { OPENFEATURE_CLIENT } from "../utils/js-env-provider";
 
 //we will use the standard logger from nestjs, but it is actually pino writting the logs (set up in main.ts and app.module.ts)
 @Injectable()
@@ -24,7 +24,8 @@ export class ExampleService {
   async getExample(): Promise<string> {
     const newFeatureFlag = await this.client.getBooleanValue(
       "new-feature-flag",
-      false
+      false,
+      { customerId: "1234" }
     );
 
     this.logger.debug(

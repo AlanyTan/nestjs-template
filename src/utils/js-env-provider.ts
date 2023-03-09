@@ -1,6 +1,9 @@
 //import { FlagNotFoundError, parseValidBoolean, parseValidJsonObject, parseValidNumber } from '@openfeature/extra';
+import { Logger } from "@nestjs/common";
 import { JsonValue, Provider, ResolutionDetails } from "@openfeature/js-sdk";
 import { constantCase } from "change-case";
+
+export const OPENFEATURE_CLIENT = Symbol.for("OPENFEATURE_CLIENT");
 
 export enum ErrorCode {
   PROVIDER_NOT_READY = "PROVIDER_NOT_READY",
@@ -25,9 +28,12 @@ export class FlagNotFoundError extends OpenFeatureError {
 
 export class ParseError extends OpenFeatureError {
   code: ErrorCode;
-  constructor(message?: string) {
-    console.log("in ParseError: [" + message + "]");
+  constructor(
+    message?: string,
+    private readonly logger: Logger = new Logger(ParseError.name)
+  ) {
     super(message);
+    this.logger.log("in ParseError: [" + message + "]");
     Object.setPrototypeOf(this, ParseError.prototype);
     this.message = message ? message : "Generic Parse Error.";
     this.code = ErrorCode.PARSE_ERROR;
@@ -81,11 +87,7 @@ export const parseValidJsonObject = <T extends JsonValue>(
 };
 
 export const parseValidNumber = (stringValue: string | undefined): number => {
-  console.log("in ParseValidNumber: [" + stringValue + "]");
   if (stringValue === undefined) {
-    console.log(
-      "in ParseValidNumber.stringValue===undefined: [" + stringValue + "]"
-    );
     throw new ParseError(`Invalid 'undefined' value.`);
   }
   const result = Number.parseFloat(stringValue);
@@ -102,13 +104,21 @@ export const parseValidNumber = (stringValue: string | undefined): number => {
  */
 export class OpenFeatureEnvProvider implements Provider {
   metadata = {
-    name: "environment variable",
+    name: "environment variable Feature Provider",
   };
+
+  constructor(
+    private readonly logger: Logger = new Logger(OpenFeatureEnvProvider.name)
+  ) {}
 
   resolveBooleanEvaluation(
     flagKey: string
   ): Promise<ResolutionDetails<boolean>> {
+    this.logger.log(`OF.. Evaluating Boolean flag [${flagKey}] from EnVar...`);
     const details = this.evaluateEnvironmentVariable(flagKey);
+    this.logger.log(
+      `OF.. Received value <${details.value}> for flag [${flagKey}] from EnVar`
+    );
     return Promise.resolve({
       ...details,
       value: parseValidBoolean(details.value),
@@ -116,11 +126,20 @@ export class OpenFeatureEnvProvider implements Provider {
   }
 
   resolveStringEvaluation(flagKey: string): Promise<ResolutionDetails<string>> {
-    return Promise.resolve(this.evaluateEnvironmentVariable(flagKey));
+    this.logger.log(`OF.. Evaluating Boolean flag [${flagKey}] from EnVar...`);
+    const details = this.evaluateEnvironmentVariable(flagKey);
+    this.logger.log(
+      `OF.. Received value <${details.value}> for flag [${flagKey}] from EnVar`
+    );
+    return Promise.resolve(details);
   }
 
   resolveNumberEvaluation(flagKey: string): Promise<ResolutionDetails<number>> {
+    this.logger.log(`OF.. Evaluating Boolean flag [${flagKey}] from EnVar...`);
     const details = this.evaluateEnvironmentVariable(flagKey);
+    this.logger.log(
+      `OF.. Received value <${details.value}> for flag [${flagKey}] from EnVar`
+    );
     return Promise.resolve({
       ...details,
       value: parseValidNumber(details.value),
@@ -130,7 +149,11 @@ export class OpenFeatureEnvProvider implements Provider {
   resolveObjectEvaluation<U extends JsonValue>(
     flagKey: string
   ): Promise<ResolutionDetails<U>> {
+    this.logger.log(`OF.. Evaluating Boolean flag [${flagKey}] from EnVar...`);
     const details = this.evaluateEnvironmentVariable(flagKey);
+    this.logger.log(
+      `OF.. Received value <${details.value}> for flag [${flagKey}] from EnVar`
+    );
     return Promise.resolve({
       ...details,
       value: parseValidJsonObject(details.value),

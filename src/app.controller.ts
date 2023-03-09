@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller, Get, Version, VERSION_NEUTRAL } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";

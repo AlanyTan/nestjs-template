@@ -1,4 +1,4 @@
-production:
+prd:
   info:
     redact:
       - "req.headers.Authorization"
@@ -24,7 +24,7 @@ production:
       - "res.headers.authorization"
       - "res.headers.cookie"
       - "res.body.password"
-development:
+dev:
   trace:
     redact:
       - "req.headers.Authorization"
