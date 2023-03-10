@@ -26,12 +26,12 @@ export class AppService {
       (): Promise<HealthIndicatorResult> =>
         this.httpHealthIndicator.pingCheck(
           "1st API that I need:",
-          this.configService.get<string>("API_CUSTOMER_BASE_URL") || ""
+          this.configService.get<string>("SVC_1_ENDPOINT") || ""
         ),
       (): Promise<HealthIndicatorResult> =>
         this.httpHealthIndicator.pingCheck(
           "2nd API that I need:",
-          this.configService.get<string>("API_CUSTOMER_BASE_URL") || ""
+          this.configService.get<string>("SVC_2_ENDPOINT") || ""
         ),
       // // if you use TypeORM, you can use this to check the database connection
       // (): Promise<HealthIndicatorResult> =>

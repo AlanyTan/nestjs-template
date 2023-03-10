@@ -3,8 +3,6 @@ import { Logger } from "@nestjs/common";
 import { JsonValue, Provider, ResolutionDetails } from "@openfeature/js-sdk";
 import { constantCase } from "change-case";
 
-export const OPENFEATURE_CLIENT = Symbol.for("OPENFEATURE_CLIENT");
-
 export enum ErrorCode {
   PROVIDER_NOT_READY = "PROVIDER_NOT_READY",
   FLAG_NOT_FOUND = "FLAG_NOT_FOUND",

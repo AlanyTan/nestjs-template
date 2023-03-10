@@ -2,7 +2,7 @@ import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
 import { OpenFeature, Client } from "@openfeature/js-sdk";
-import { OPENFEATURE_CLIENT } from "../utils/js-env-provider";
+import { OPENFEATURE_CLIENT } from "openfeature";
 import { OpenFeatureLaunchDarklyProvider } from "./js-launchdarkly-provider";
 
 // we will only test 2 flags using "new-feature-flag" and "new-end-point"
@@ -58,8 +58,8 @@ describe("LaunchDarkly Provider", () => {
       ).toEqual(true);
     });
   });
-  afterEach(async () => {
+  afterAll((done) => {
     // eslint-disable-next-line no-delete-var
-    await testingModule.close();
+    done();
   });
 });

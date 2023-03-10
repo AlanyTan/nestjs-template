@@ -71,16 +71,36 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
       OpenFeatureLaunchDarklyProvider.name
     )
   ) {
+    this.logger.log(
+      "initializing OpenFeatureLaunchDarklyProvider with [" + sdkKey + "]"
+    );
     this.client = init(sdkKey);
 
     // we don't expose any init events at the moment (we might later) so for now, lets create a private
     // promise to await into before we evaluate any flags.
-    this.initialized = new Promise((resolve) => {
-      this.client.once("ready", () => {
-        this.logger.log(`${this.metadata.name} provider initialized`);
-        resolve();
-      });
-    });
+    let LDinited = false;
+    this.initialized = Promise.race([
+      new Promise<void>((resolve) => {
+        this.client.once("ready", () => {
+          this.logger.log(`[${this.metadata.name}] provider initialized`);
+          LDinited = true;
+          resolve();
+        });
+      }),
+      new Promise<void>((resolve, reject) => {
+        const milliseconds = 5000;
+        const initTimeout = setTimeout(() => {
+          clearTimeout(initTimeout);
+          if (LDinited == false) {
+            reject(
+              `[${this.metadata.name}] failed to respond to initialization after ${milliseconds} ms.`
+            );
+          }
+        }, milliseconds);
+      }).catch((e) => {
+        this.logger.error(e);
+      }),
+    ]);
   }
 
   async resolveBooleanEvaluation(

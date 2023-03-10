@@ -2,7 +2,7 @@ import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
 import { Client, OpenFeature } from "@openfeature/js-sdk";
-import { OPENFEATURE_CLIENT } from "../utils/js-env-provider";
+import { OPENFEATURE_CLIENT } from "openfeature";
 import { ExampleController } from "./example.controller";
 import { ExampleService } from "./example.service";
 
@@ -32,5 +32,17 @@ describe("ExampleService", () => {
 
   it("should be defined", () => {
     expect(service).toBeDefined();
+  });
+
+  it("should respond to getExample func call", () => {
+    expect(service.getExample()).toHaveReturned;
+  });
+
+  it("should respond to newFeature1 func call", () => {
+    expect(service.newFeature1).toBe("the Value of New Feature 1");
+  });
+
+  it("should respond to newFeature2 func call", () => {
+    expect(service.newFeature2).toBe("the Value of New Feature 2!");
   });
 });

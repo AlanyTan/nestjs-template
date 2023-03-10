@@ -9,24 +9,19 @@ import Joi from "joi";
 import { LoggerModule } from "nestjs-pino";
 import { pinoHttp } from "pino-http";
 import { ExampleModule } from "example/example.module";
+import { OpenFeatureModule } from "openfeature";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import configuration from "./config/configuration";
 import configurationDB from "./config/configuration-db";
 import { MetricsModule } from "./metrics/metrics.module";
-import {
-  OpenFeatureEnvProvider,
-  OPENFEATURE_CLIENT,
-} from "./utils/js-env-provider";
-import { OpenFeatureLaunchDarklyProvider } from "./utils/js-launchdarkly-provider";
-//export const OPENFEATURE_CLIENT = Symbol.for('OPENFEATURE_CLIENT');
 
 @Module({
   imports: [
     MetricsModule,
+    OpenFeatureModule,
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`, ".env"],
-      load: [configuration /*configurationDB*/], //configurationDB is a structured config obj, can be accessed like get('database.host')
+      //load: [configurationDB], //configurationDB is a structured config obj, can be accessed like get('database.host')
       validationSchema: Joi.object({
         //add configuration validation here,
         //if ".required()" then application will abort starting if that configuration was not provided.
@@ -36,7 +31,8 @@ import { OpenFeatureLaunchDarklyProvider } from "./utils/js-launchdarkly-provide
         PORT: Joi.number().required(),
         HOST: Joi.string().required(),
         PINO_PRETTY: Joi.boolean().default(true),
-        API_CUSTOMER_BASE_URL: Joi.string().required(),
+        SVC_1_ENDPOINT: Joi.string().required(),
+        SVC_2_ENDPOINT: Joi.string().required(),
       }),
       isGlobal: true,
     }),
@@ -52,7 +48,11 @@ import { OpenFeatureLaunchDarklyProvider } from "./utils/js-launchdarkly-provide
             "req.headers.Authorization",
             "req.headers.authorization",
             "req.headers.cookie",
-          ], //concat( configService.get<string[]>("LOGGING_REDACT_PATTERNS"))
+          ].concat(
+            JSON.parse(
+              configService.get<string>("LOGGING_REDACT_PATTERNS") || "[]"
+            )
+          ),
           transport: configService.get<string>("PINO_PRETTY")
             ? {
                 // if this is non production env, then use pino-pretty to format the log
@@ -107,44 +107,6 @@ import { OpenFeatureLaunchDarklyProvider } from "./utils/js-launchdarkly-provide
     ExampleModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: OPENFEATURE_CLIENT,
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        switch (
-          configService.get<string>("OPENFEATURE_PROVIDER")?.split(":")[0]
-        ) {
-          case "env":
-          case "ENV":
-            OpenFeature.setProvider(new OpenFeatureEnvProvider());
-            break;
-          case "LD":
-          case "ld":
-          case "launchdarkly":
-          case "LaunchDarkly":
-            const LD_KEY = configService
-              .get<string>("OPENFEATURE_PROVIDER")
-              ?.split(":")[1];
-            if (!LD_KEY) {
-              throw new Error("LaunchDarkly key not provided");
-            } else {
-              OpenFeature.setProvider(
-                new OpenFeatureLaunchDarklyProvider(LD_KEY)
-              );
-            }
-            break;
-          default:
-            throw new Error(
-              "OpenFeature provider value invalid:" +
-                configService.get<string>("OPENFEATURE_PROVIDER")
-            );
-        }
-        const client = OpenFeature.getClient("app");
-        return client;
-      },
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}

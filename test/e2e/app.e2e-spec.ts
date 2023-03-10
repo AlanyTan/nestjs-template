@@ -3,9 +3,17 @@ import request from "supertest";
 import { app } from "../setup-e2e";
 
 describe("AppController (e2e)", () => {
-  describe("GET /health", () => {
+  describe("standard end-points", () => {
     it("should perform health check", async () => {
       const response = await request(app.getHttpServer()).get("/health");
+      expect(response.status).toEqual(200);
+    });
+    it("should return version", async () => {
+      const response = await request(app.getHttpServer()).get("/version");
+      expect(response.status).toEqual(200);
+    });
+    it("should provide metrics", async () => {
+      const response = await request(app.getHttpServer()).get("/metrics");
       expect(response.status).toEqual(200);
     });
   });
@@ -17,7 +25,7 @@ describe("AppController read configuration (e2e)", () => {
       "0.0.0.0"
     );
     expect((await app.resolve(ConfigService)).get<number>("PORT")).toBe(9080);
-    expect((await app.resolve(ConfigService)).get<string>("logLevel")).toBe(
+    expect((await app.resolve(ConfigService)).get<string>("LOG_LEVEL")).toBe(
       "info"
     );
   });

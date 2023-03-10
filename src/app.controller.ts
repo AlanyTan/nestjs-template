@@ -23,8 +23,8 @@ export class AppController {
   @Get("version")
   @Version(VERSION_NEUTRAL)
   version(): string {
-    return JSON.stringify(
-      this.configService.get<string>("LINEPULSE_SVC_VERSION")
+    return JSON.parse(
+      this.configService.get<string>("LINEPULSE_SVC_VERSION") || "{}"
     );
   }
 }

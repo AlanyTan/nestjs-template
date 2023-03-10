@@ -1,23 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Module, Logger } from "@nestjs/common";
-import { OpenFeature } from "@openfeature/js-sdk";
-import { OPENFEATURE_CLIENT } from "../utils/js-env-provider";
+import { OpenFeatureModule } from "openfeature";
 import { ExampleController } from "./example.controller";
 import { ExampleService } from "./example.service";
 
 @Module({
-  imports: [],
+  imports: [OpenFeatureModule],
   controllers: [ExampleController],
-  providers: [
-    Logger,
-    ExampleService,
-    {
-      provide: OPENFEATURE_CLIENT,
-      useFactory: () => {
-        const client = OpenFeature.getClient("app");
-        return client;
-      },
-    },
-  ],
+  providers: [Logger, ExampleService],
 })
 export class ExampleModule {}
