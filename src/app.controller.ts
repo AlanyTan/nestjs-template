@@ -5,7 +5,7 @@ import { ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";
 import { AppService } from "app.service";
 
-@ApiTags("App")
+@ApiTags("standard")
 @Controller()
 export class AppController {
   constructor(

@@ -23,6 +23,7 @@ import { OpenFeatureLaunchDarklyProvider } from "./utils/js-launchdarkly-provide
 
 @Module({
   imports: [
+    MetricsModule,
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`, ".env"],
       load: [configuration /*configurationDB*/], //configurationDB is a structured config obj, can be accessed like get('database.host')
@@ -41,7 +42,7 @@ import { OpenFeatureLaunchDarklyProvider } from "./utils/js-launchdarkly-provide
     }),
     //we setup pino logger options here, and in main.ts.  once it's set up here and in main.ts, we can use it in any other file by using the standard nestjs Logger
     LoggerModule.forRootAsync({
-      imports: [ConfigModule, MetricsModule],
+      imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         pinoHttp: {
           enabled: true,
