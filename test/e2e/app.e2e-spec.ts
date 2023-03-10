@@ -17,6 +17,20 @@ describe("AppController (e2e)", () => {
       expect(response.status).toEqual(200);
     });
   });
+  describe("the 'example' application end-points", () => {
+    it("/v1/example/get_request", async () => {
+      const response = await request(app.getHttpServer()).get(
+        "/v1/example/get_request"
+      );
+      expect(response.status).toEqual(200);
+    });
+    it("/v2/example/get_request", async () => {
+      const response = await request(app.getHttpServer()).get(
+        "/v2/example/get_request"
+      );
+      expect(response.status).toEqual(200);
+    });
+  });
 });
 
 describe("AppController read configuration (e2e)", () => {
