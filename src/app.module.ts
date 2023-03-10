@@ -27,12 +27,14 @@ import { MetricsModule } from "./metrics/metrics.module";
         //if ".required()" then application will abort starting if that configuration was not provided.
         //if ".default(value)" then the value is used if the expected EnVar does not exist
         LINEPULSE_ENV: Joi.string().required(),
+        OPENFEATURE_PROVIDER: Joi.string().required(),
         SWAGGER_ON: Joi.boolean().default(false),
         PORT: Joi.number().required(),
         HOST: Joi.string().required(),
         PINO_PRETTY: Joi.boolean().default(true),
         SVC_1_ENDPOINT: Joi.string().required(),
         SVC_2_ENDPOINT: Joi.string().required(),
+        LOGGING_REDACT_PATTERNS: Joi.string(),
       }),
       isGlobal: true,
     }),

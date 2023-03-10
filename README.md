@@ -96,7 +96,7 @@ There are 3 environment Variables that influence logging:
 
 - LOG_LEVEL : determines how verbose the logging will be (i.e. when LOG_LEVEL=info, trace and debug messages won't be added to the log) see below for valid values
 - PINO_PRETTY : boolean value determines if the logs will be written in pretty format or JSON
-- NODE_ENV : only if NODE_ENV=development the colorization will be used in pino-pretty, and it affects redactation as well.
+- LINEPULSE_ENV : only if LINEPULSE_ENV=lcl the colorization will be used in pino-pretty, and it affects redactation as well.
 
 LOG_LEVEL default is "info", valid values are (and their internal numerical values) are:
 "trace": 10,
