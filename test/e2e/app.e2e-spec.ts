@@ -18,18 +18,26 @@ describe("AppController (e2e)", () => {
     });
   });
   describe("the 'example' application end-points", () => {
-    it("/v1/example/get_request", async () => {
-      const response = await request(app.getHttpServer()).get(
-        "/v1/example/get_request"
-      );
-      expect(response.status).toEqual(200);
-    });
-    it("/v2/example/get_request", async () => {
-      const response = await request(app.getHttpServer()).get(
-        "/v2/example/get_request"
-      );
-      expect(response.status).toEqual(200);
-    });
+    it(
+      (process.env.SERVICE_PREFIX ? "/" + process.env.SERVICE_PREFIX : "") +
+        "/v1/example/get_request",
+      async () => {
+        const response = await request(app.getHttpServer()).get(
+          "/v1/example/get_request"
+        );
+        expect(response.status).toEqual(200);
+      }
+    );
+    it(
+      (process.env.SERVICE_PREFIX ? "/" + process.env.SERVICE_PREFIX : "") +
+        "/v2/example/get_request",
+      async () => {
+        const response = await request(app.getHttpServer()).get(
+          "/v2/example/get_request"
+        );
+        expect(response.status).toEqual(200);
+      }
+    );
   });
 });
 

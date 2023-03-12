@@ -35,6 +35,7 @@ import { MetricsModule } from "./metrics/metrics.module";
         SVC_1_ENDPOINT: Joi.string().required(),
         SVC_2_ENDPOINT: Joi.string().required(),
         LOGGING_REDACT_PATTERNS: Joi.string(),
+        SERVICE_PREFIX: Joi.string(),
       }),
       isGlobal: true,
     }),

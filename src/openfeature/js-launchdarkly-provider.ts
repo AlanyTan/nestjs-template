@@ -6,7 +6,17 @@ import {
   Provider,
   ResolutionDetails,
 } from "@openfeature/js-sdk";
-import { init, LDClient, LDUser } from "launchdarkly-node-server-sdk";
+import { init, LDClient, LDLogger, LDUser } from "launchdarkly-node-server-sdk";
+
+class LoggerForLD extends Logger implements LDLogger {
+  protected context?: string | undefined;
+  protected options: { timestamp?: boolean | undefined };
+
+  info(...args: unknown[]): void {
+    const [msg, ...context] = args;
+    this.log(msg, context);
+  }
+}
 
 export enum ErrorCode {
   PROVIDER_NOT_READY = "PROVIDER_NOT_READY",
@@ -67,14 +77,14 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
 
   constructor(
     sdkKey: string,
-    private readonly logger: Logger = new Logger(
+    private readonly logger: LoggerForLD = new LoggerForLD(
       OpenFeatureLaunchDarklyProvider.name
     )
   ) {
-    this.logger.log(
+    this.logger.info(
       "initializing OpenFeatureLaunchDarklyProvider with [" + sdkKey + "]"
     );
-    this.client = init(sdkKey);
+    this.client = init(sdkKey, { logger: this.logger });
 
     // we don't expose any init events at the moment (we might later) so for now, lets create a private
     // promise to await into before we evaluate any flags.
@@ -82,7 +92,7 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
     this.initialized = Promise.race([
       new Promise<void>((resolve) => {
         this.client.once("ready", () => {
-          this.logger.log(`[${this.metadata.name}] provider initialized`);
+          this.logger.info(`[${this.metadata.name}] provider initialized`);
           LDinited = true;
           resolve();
         });
@@ -108,7 +118,7 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
     defaultValue: boolean,
     context: EvaluationContext
   ): Promise<ResolutionDetails<boolean>> {
-    this.logger.log(
+    this.logger.info(
       `OF.. Evaluating Boolean flag [${flagKey}] from LaunchDarkly...`
     );
     const details = await this.evaluateFlag<boolean>(
@@ -117,7 +127,7 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
       this.transformContext(context)
     );
     if (typeof details.value === "boolean") {
-      this.logger.log(
+      this.logger.info(
         `OF.. Received value <${details.value}> for flag [${flagKey}] from LaunchDarkly`
       );
       return details;
@@ -136,7 +146,7 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
     defaultValue: string,
     context: EvaluationContext
   ): Promise<ResolutionDetails<string>> {
-    this.logger.log(
+    this.logger.info(
       `OF.. Evaluating String flag [${flagKey}] from LaunchDarkly...`
     );
     const details = await this.evaluateFlag<string>(
@@ -145,7 +155,7 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
       this.transformContext(context)
     );
     if (typeof details.value === "string") {
-      this.logger.log(
+      this.logger.info(
         `OF.. Received value <${details.value}> for flag [${flagKey}] from LaunchDarkly`
       );
       return details;
@@ -164,7 +174,7 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
     defaultValue: number,
     context: EvaluationContext
   ): Promise<ResolutionDetails<number>> {
-    this.logger.log(
+    this.logger.info(
       `OF.. Evaluating Number flag [${flagKey}] from LaunchDarkly...`
     );
     const details = await this.evaluateFlag<number>(
@@ -173,7 +183,7 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
       this.transformContext(context)
     );
     if (typeof details.value === "number") {
-      this.logger.log(
+      this.logger.info(
         `OF.. Received value <${details.value}> for flag [${flagKey}] from LaunchDarkly`
       );
       return details;
@@ -192,7 +202,7 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
     defaultValue: U,
     context: EvaluationContext
   ): Promise<ResolutionDetails<U>> {
-    this.logger.log(
+    this.logger.info(
       `OF.. Evaluating Object flag [${flagKey}] from LaunchDarkly...`
     );
     const details = await this.evaluateFlag<unknown>(
@@ -203,7 +213,7 @@ export class OpenFeatureLaunchDarklyProvider implements Provider {
     if (typeof details.value === "string") {
       // we may want to allow the parsing to be customized.
       try {
-        this.logger.log(
+        this.logger.info(
           `OF.. Received value <${details.value}> for flag [${flagKey}] from LaunchDarkly`
         );
         return { ...details, value: JSON.parse(details.value) as U };

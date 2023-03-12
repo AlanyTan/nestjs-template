@@ -1,12 +1,11 @@
 import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
-import { OpenFeature, Client } from "@openfeature/js-sdk";
-import { OPENFEATURE_CLIENT } from "openfeature";
+import { Client } from "@openfeature/js-sdk";
+import { OpenFeatureModule, OPENFEATURE_CLIENT } from "openfeature";
 import {
   ErrorCode,
   FlagNotFoundError,
-  OpenFeatureLaunchDarklyProvider,
   ParseError,
   TypeMismatchError,
 } from "./js-launchdarkly-provider";
@@ -19,34 +18,13 @@ describe("LaunchDarkly Provider", () => {
 
   beforeEach(async () => {
     testingModule = await Test.createTestingModule({
-      imports: [],
-      providers: [
-        ConfigService,
-        Logger,
-        {
-          provide: OPENFEATURE_CLIENT,
-          inject: [ConfigService],
-          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-          useFactory: (configService: ConfigService) => {
-            const LD_KEY = configService
-              .get<string>("OPENFEATURE_PROVIDER")
-              ?.split(":")[1];
-            if (!LD_KEY) {
-              throw new Error("LaunchDarkly key not provided");
-            } else {
-              OpenFeature.setProvider(
-                new OpenFeatureLaunchDarklyProvider(LD_KEY)
-              );
-            }
-            const client = OpenFeature.getClient("app");
-            return client;
-          },
-        },
-      ],
+      imports: [OpenFeatureModule],
+      providers: [ConfigService, Logger],
     }).compile();
 
     OFClient = testingModule.get<Client>(OPENFEATURE_CLIENT);
   });
+
   describe("OpenFeatureLaunchDarklyProvider", () => {
     it("should be defined", () => {
       expect(OFClient).toBeDefined();

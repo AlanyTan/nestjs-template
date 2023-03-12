@@ -2,21 +2,24 @@
 
 ## Purpose
 
-To provide a standardized starting point for our backend node.js microservices
+To provide a standardized starting point for our backend node.js microservices.
 Database (Postgresql) optional.
 (\*note, Postgresql is currently turned off while we are solving a technical challenge to allow different user data to be stored in different physical tables)
 
-This repo includes .devcontainer config so that development environment requirements can be built into dev-container, which allows multiple repo to respect their different lib/tool/package requirements. .devcontainer works on Linux host, or remotely on a Linux VM running in the cloud (you should also be able to use local docker on WSL if you prefer Windows, although it's not thoroughly tested).
+Standard logging, testing, /health, /version, metrics and Feature Toggle are included in this repo, and should be used in all Nest.js based repos for Acerta products.
 
-## Key Benefits of Using This Template
+This repo also includes VSCode assets including .devcontainer config and .vscode config so that development environment requirements can be built into a design-time container which allows multiple repo to respect their different lib/tool/package requirements that can co-exist on a single host concurrently .devcontainer works on Linux host, or remotely on a Linux VM running in the cloud (you should also be able to use local docker on WSL if you prefer Windows, although it's not thoroughly tested).
+The .vscode config allows the VSCode to be able to debug, build container and run, and execute automated test scripts (jest based) all in an VSCode integrated fashion.
 
-- Standardized logging, logging format, redact.
+## Key features in this Template
+
+- Standardized logging, logging format, redact, dynamic verbosness
 - OPENFEATURE feature toggle
 - - two feature toggle providers Environment Variable & LaunchDarkly
 - - standard OPENFEATURE client that can be easily switched between the two providers using EnVar without changing application code
-- Jest based unit test and app e2e test templates.
-- openapi/swagger-ui
-- health check
+- Jest based unit test and app e2e test templates, and vscode integrated test execution
+- openapi/swagger-ui (can be turned on/off using EnVar via ConfigService)
+- health check end-point (checks dependending services)
 - version end-point
 - metrics end-point
 - dockerfile
@@ -39,17 +42,17 @@ This repo includes .devcontainer config so that development environment requirem
 
 ## Getting Started
 
-### Run Rename Script
+### If you are starting a new repo based on this template
 
-This script will change all instances of "nestjs-example" to whatever you provide in the prompt
+You shall change the package.json to reflect the new name of your repo:
 
 ```
-./rename.sh
+  "name": "nestjs-example",
 ```
 
 ### Run Local PostgreSQL Setup Script (optional, if you need Postgresql in a container) _currently disabled_
 
-This script will create a dockerized postgres container named `postgres_local` if it does not exist and create run & test databases for this server in that postgres container
+Update teh local_setup.sh to use new name of the Database you'd like to use (if you use Database)
 
 ```
 ./local_setup.sh
@@ -64,7 +67,11 @@ SERVER_PORT=9080
 DB_PORT=5432
 ```
 
+This script will create a dockerized postgres container named `postgres_local` if it does not exist and create run & test databases for this server in that postgres container
+
 ### OpenFeature
+
+_Please ask the Product Manager responsible for your service to provide you the LaunchDarkly sdkKey._
 
 This repo uses OpenFeature as server-side feature toggle.
 It has two Feature Flag function providers:
@@ -84,7 +91,7 @@ In the env-provider case, to change the value of the flags, update the .env (or 
 
 #### how to "copy"" feature toggle functionality to your own nest.js repo?
 
-copy the `openfeature` dir and import openfeature module to your code.
+copy the `openfeature` dir and import `openfeature.module` to your code.
 to use the end-point guard, you should import the guard to the controller that you use them, see the example.controller.ts for code how to accomplish it.
 
 ### Logging
@@ -96,7 +103,7 @@ There are 3 environment Variables that influence logging:
 
 - LOG_LEVEL : determines how verbose the logging will be (i.e. when LOG_LEVEL=info, trace and debug messages won't be added to the log) see below for valid values
 - PINO_PRETTY : boolean value determines if the logs will be written in pretty format or JSON
-- LINEPULSE_ENV : only if LINEPULSE_ENV=lcl the colorization will be used in pino-pretty, and it affects redactation as well.
+- LINEPULSE_ENV : only if LINEPULSE_ENV=lcl (which you should keep when you are developing in your local PC IDE), the colorization will be used in pino-pretty, and it affects redactation as well.
 
 LOG_LEVEL default is "info", valid values are (and their internal numerical values) are:
 "trace": 10,
@@ -145,10 +152,10 @@ However, Swagger is DISABLED if Environment Variable SWAGGER_ON=false (which is 
 
 #### ConfigService
 
-We use standard Nestjs ConfigService (a change from previous version of the Nestjs.Example). The required Environment Variables are listed in the app.module.ts files under the imports:[ConfigModule.forRoot] section using Joi notions.  
+We use **standard** Nestjs ConfigService (a change from previous version of the Nestjs.Example). The required Environment Variables are listed in the app.module.ts files under the `validationSchema` section under imports:[ConfigModule.forRoot] using Joi notions.  
 This ensures the service will fail on start if the required Environment Variable has not been set. You can also provide default values in here as well so that instead of fail to start, ConfigService can use that default value if the EnVar is missing.
 
-This also centralize all environment variables in one place and help documenting them.
+This also centralize all environment variables in one place and help documenting them. Please remember, it is your responsibility to clearly list all the required Environment Variables that your service needs, and your service should fail starting up if such environment variable do not exist.
 
 ### debug and test
 
