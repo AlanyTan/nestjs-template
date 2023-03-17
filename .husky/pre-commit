@@ -1,4 +1,14 @@
-#!/bin/sh
+#!/bin/sh -x
 . "$(dirname "$0")/_/husky.sh"
 
 npx lint-staged
+
+GIT_COMMIT_FILE=.git_commit.yml
+echo "commits: " > $GIT_COMMIT_FILE
+echo "  latest commit: " >> $GIT_COMMIT_FILE
+echo "    commit hash: 'I cannot tell my own commit hash#'" >> $GIT_COMMIT_FILE
+date +"    timestamp: %Y-%m-%d %H:%M:%S" >> $GIT_COMMIT_FILE
+git status -s -b ":(exclude).git_commit.yml" | awk 'NR==1{print "    branch: \47" $0 "\47\n    files changed: "} NR>1{print "      - " $0}'>> $GIT_COMMIT_FILE
+echo "  previous 2 commits:" >> $GIT_COMMIT_FILE
+git log -n 2 --oneline --abbrev=8 | awk '{COMMIT_HASH=$1; $1=""; print "    - " COMMIT_HASH ": " $0}' >> $GIT_COMMIT_FILE
+git add $GIT_COMMIT_FILE
