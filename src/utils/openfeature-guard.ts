@@ -10,15 +10,15 @@ import {
   Type,
 } from "@nestjs/common";
 import { Client } from "@openfeature/js-sdk";
-import { OPENFEATURE_CLIENT } from "openfeature";
+import { OPENFEATURE_CLIENT } from "config";
 
 function OpenFeatureGuard(featureFlagName: string): Type<CanActivate> {
   @Injectable()
   class Guard implements CanActivate {
-    constructor(@Inject(OPENFEATURE_CLIENT) private client: Client) {}
+    constructor(@Inject(OPENFEATURE_CLIENT) private openFeature: Client) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-      const newEndPointFeatureFlag = await this.client.getBooleanValue(
+      const newEndPointFeatureFlag = await this.openFeature.getBooleanValue(
         featureFlagName,
         false
       );

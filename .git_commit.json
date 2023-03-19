@@ -1,0 +1,38 @@
+{"latest commit": {
+  "commit hash": "I cannot tell my own commit hash#",
+  "timestamp": "2023-03-19 21:42:24",
+  "branch": "## feature/precommit...origin/feature/precommit",
+  "files changed": [ "M  .husky/pre-commit",
+ "A  .npmrc",
+ "M  Dockerfile",
+ "M  package-lock.json",
+ "M  package.json",
+ "M  src/app.controller.ts",
+ "M  src/app.module.ts",
+ "M  src/app.service.ts",
+ "D  src/config/config.ts",
+ "M  src/config/configuration-db.ts",
+ "A  src/config/configuration.ts",
+ "R  src/openfeature/index.ts -> src/config/index.ts",
+ "M  src/example/example.controller.ts",
+ "M  src/example/example.module.ts",
+ "M  src/example/example.service.ts",
+ "A  src/example_orm/data-source.ts",
+ "A  src/example_orm/entities/User.entity.ts",
+ "A  src/example_orm/index.ts",
+ "M  src/main.config.ts",
+ "D  src/metrics/index.ts",
+ "D  src/metrics/metrics.controller.ts",
+ "D  src/metrics/metrics.module.ts",
+ "D  src/openfeature/js-env-provider.spec.ts",
+ "D  src/openfeature/js-env-provider.ts",
+ "D  src/openfeature/js-launchdarkly-provider.spec.ts",
+ "D  src/openfeature/js-launchdarkly-provider.ts",
+ "D  src/openfeature/openfeature.module.ts",
+ "R  src/openfeature/openfeature-guard.ts -> src/utils/openfeature-guard.ts"]
+},
+"previous commits":[
+ {"135989c7": " Squashed commit of the following:"},
+ {"e5dab6d9": " Add versioning"}-e 
+ ]
+}

@@ -2,7 +2,7 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Client } from "@openfeature/js-sdk";
-import { OPENFEATURE_CLIENT } from "openfeature";
+import { OPENFEATURE_CLIENT } from "config";
 
 //we will use the standard logger from nestjs, but it is actually pino writting the logs (set up in main.ts and app.module.ts)
 @Injectable()
@@ -10,7 +10,7 @@ export class ExampleService {
   constructor(
     private readonly configService: ConfigService,
     private readonly logger: Logger = new Logger(ExampleService.name),
-    @Inject(OPENFEATURE_CLIENT) private client: Client
+    @Inject(OPENFEATURE_CLIENT) private openFeature: Client
   ) {}
 
   get newFeature1(): string {
@@ -22,7 +22,7 @@ export class ExampleService {
   }
 
   async getExample(): Promise<string> {
-    const newFeatureFlag = await this.client.getBooleanValue(
+    const newFeatureFlag = await this.openFeature.getBooleanValue(
       "new-feature-flag",
       false,
       { transactionContext: "specific context for this particular transation" }

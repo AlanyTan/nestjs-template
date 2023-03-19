@@ -6,7 +6,7 @@ import {
   HealthCheckService,
   HealthIndicatorResult,
   HttpHealthIndicator,
-  // TypeOrmHealthIndicator,
+  TypeOrmHealthIndicator,
 } from "@nestjs/terminus";
 
 @Injectable()
@@ -14,30 +14,28 @@ export class AppService {
   constructor(
     private readonly healthCheckService: HealthCheckService,
     private readonly configService: ConfigService,
-    // private readonly typeOrmHealthIndicator: TypeOrmHealthIndicator,
+    private readonly typeOrmHealthIndicator: TypeOrmHealthIndicator,
     private readonly httpHealthIndicator: HttpHealthIndicator
   ) {}
 
-  health(): Promise<HealthCheckResult> {
+  health(servicesToCheck: string[]): Promise<HealthCheckResult> {
     return this.healthCheckService.check([
       //Here we validate the services that we depend on are up and running
       // You should have defined required service's URL in ENV variables
       // add as many checks as you need to ensure all services
-      (): Promise<HealthIndicatorResult> =>
-        this.httpHealthIndicator.pingCheck(
-          `1st API ${this.configService.get<string>(
-            "SVC_1_ENDPOINT"
-          )}that I need:`,
-          this.configService.get<string>("SVC_1_ENDPOINT") || ""
-        ),
-      (): Promise<HealthIndicatorResult> =>
-        this.httpHealthIndicator.pingCheck(
-          "2nd API that I need:",
-          this.configService.get<string>("SVC_2_ENDPOINT") || ""
-        ),
+      ...servicesToCheck.map((value, index) => {
+        return (): Promise<HealthIndicatorResult> =>
+          this.httpHealthIndicator.pingCheck(
+            `the #${index + 1} API <${value}> that I depend on:`,
+            value || ""
+          );
+      }),
       // // if you use TypeORM, you can use this to check the database connection
-      // (): Promise<HealthIndicatorResult> =>
-      //   this.typeOrmHealthIndicator.pingCheck("database"),
+      (): Promise<HealthIndicatorResult> =>
+        this.typeOrmHealthIndicator.pingCheck("database"),
     ]);
   }
 }
+
+// to call these internal GUARD-ed endpoints, use:
+// az rest -m get --header "Accept=application/json" -u ‘https://lp-nest-js-example/version'
