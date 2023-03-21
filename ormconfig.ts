@@ -1,10 +1,12 @@
 // https://stackoverflow.com/a/68154675/11670977
 
-// import { ConfigService as NestConfigService } from "@nestjs/config";
-import {
-  // ConfigService,
-  dbConfig,
-} from "config";
+import { ConfigModule } from "@nestjs/config";
+import configurationDB from "config/configuration-db";
 
-export default dbConfig();
+ConfigModule.forRoot({
+  isGlobal: true,
+  load: [configurationDB],
+});
+
+export default configurationDB();
 // new ConfigService(new NestConfigService())

@@ -4,7 +4,13 @@
   "moduleDirectories": ["../node_modules", "../src"],
   "setupFilesAfterEnv": ["<rootDir>/test/setup-e2e.ts"],
   "testEnvironment": "node",
-  "testRegex": ".e2e-spec.ts$",
+  "collectCoverage": true,
+  "collectCoverageFrom": ["<rootDir>/src/**/*.(t|j)s"],
+  "coveragePathIgnorePatterns": [
+    "<rootDir>/node_modules",
+    "<rootDir>/migrations"
+  ],
+  "testRegex": ".*spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   }
