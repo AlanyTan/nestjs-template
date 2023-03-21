@@ -1,21 +1,13 @@
-import { readFileSync } from "fs";
-import { join } from "path";
-import * as yaml from "js-yaml";
-
+import gitCommitJson from "../../.git_commit.json";
 import packageJson from "../../package.json";
-const title = packageJson.name;
-const description = packageJson.description;
-const version = packageJson.version;
 
-const YAML_CONFIG_FILENAME = "../../../.git_commit.yml";
 export default (): Record<string, unknown> => {
-  let yaml_cfg = {};
-  try {
-    yaml_cfg = yaml.load(
-      readFileSync(join(__dirname, YAML_CONFIG_FILENAME), "utf8")
-    ) as Record<string, unknown>;
-  } catch (e) {
-    //ignore
-  }
-  return { title, description, version, ...yaml_cfg };
+  const title = packageJson.name;
+  const description = packageJson.description;
+  const version = packageJson.version;
+  // const lastCommits = gitCommitJson["latest commit"];
+  // const previousCommits = gitCommitJson["previous commits"];
+  const commits = gitCommitJson;
+
+  return { title, description, version, commits };
 };

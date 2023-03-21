@@ -3,8 +3,8 @@ import { HttpModule } from "@nestjs/axios";
 import { Module, RequestMethod, Logger, Global } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
-import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 // import { TypeOrmModule } from "@nestjs/typeorm";
+import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 import { Client } from "@openfeature/js-sdk";
 import {
   PrometheusModule,

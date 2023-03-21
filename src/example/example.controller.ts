@@ -6,7 +6,7 @@ import OpenFeatureGuard from "utils/openfeature-guard";
 import { ExampleService } from "./example.service";
 
 @ApiTags("example")
-@Controller("example")
+@Controller({ path: "example", version: "1" })
 export class ExampleController {
   constructor(
     private readonly exampleService: ExampleService,

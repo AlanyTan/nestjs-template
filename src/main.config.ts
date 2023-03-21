@@ -42,6 +42,17 @@ export function mainConfig(app: INestApplication): {
         configService.get<string>("description") || "No description"
       )
       .setVersion(configService.get<string>("version") || "0.0.0")
+      .addBearerAuth(
+        {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          name: "JWT",
+          description: "Enter JWT token",
+          in: "header",
+        },
+        "JWT-auth"
+      )
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup(

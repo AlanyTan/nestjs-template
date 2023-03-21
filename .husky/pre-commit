@@ -11,5 +11,5 @@ git status -s -b ':(exclude).git_commit.*' | awk 'NR==1{printf "  \042branch\042
 echo "}," >> $GIT_COMMIT_FILE
 echo '"previous commits":[' >> $GIT_COMMIT_FILE
 git log -n 2 --oneline --abbrev=8 | awk 'NR>1{print ","} {gsub(/([\"\\/])/, "\\\&") ; COMMIT_HASH=$1; $1=""; printf " {\042" COMMIT_HASH "\042: \042" $0 "\042}"} ' >> $GIT_COMMIT_FILE
-echo -e "\n ]\n}" >> $GIT_COMMIT_FILE
+echo "\n ]\n}" >> $GIT_COMMIT_FILE
 git add $GIT_COMMIT_FILE

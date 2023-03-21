@@ -1,10 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Controller, Get, Version, VERSION_NEUTRAL, Req } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Version,
+  VERSION_NEUTRAL,
+  Req,
+  Request,
+  Res,
+  Response,
+  HttpException,
+  UseGuards,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";
 import { validateAadJwt } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 import { AppService } from "app.service";
+import JwtGuard from "utils/jwt-guard";
 
 @ApiTags("standard")
 @Controller()
@@ -30,28 +42,34 @@ export class AppController {
 
   @Get("version")
   @Version(VERSION_NEUTRAL)
-  version(): unknown {
+  @ApiBearerAuth("JWT-auth")
+  async version(@Req() request: Request): Promise<unknown> {
+    let commitJson = {};
+    try {
+      const jwtIsValid = await validateAadJwt(request);
+      commitJson = { commits: this.configService.get("commits") };
+    } catch (err) {
+      commitJson = { commits: "Unauthorized to view commit info" };
+    }
     return {
       version: this.configService.get("version"),
       runtime_version_env: JSON.parse(
         this.configService.get<string>("LINEPULSE_SVC_VERSION") || "{}"
       ),
-      commits: this.configService.get("commits"),
+      ...commitJson,
     };
   }
 
   @Get("config")
   @Version(VERSION_NEUTRAL)
-  config(@Req() request: Request): unknown {
-    if (validateAadJwt(request, {})) {
-      return {
-        version: this.configService.get("version"),
-        commits: this.configService.get("commits"),
-        database: this.configService.get("database"),
-        config: this.configService.get("_PROCESS_ENV_VALIDATED"),
-      };
-    } else {
-      throw new Error("Not authorized");
-    }
+  @ApiBearerAuth("JWT-auth")
+  @UseGuards(JwtGuard())
+  config(): unknown {
+    return {
+      version: this.configService.get("version"),
+      commits: this.configService.get("commits"),
+      database: this.configService.get("database"),
+      config: this.configService.get("_PROCESS_ENV_VALIDATED"),
+    };
   }
 }
