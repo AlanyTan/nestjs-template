@@ -1,27 +1,33 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpModule } from "@nestjs/axios";
-import { Module, RequestMethod, Logger } from "@nestjs/common";
+import { Module, RequestMethod, Logger, Global } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 // import { TypeOrmModule } from "@nestjs/typeorm";
-import { OpenFeature } from "@openfeature/js-sdk";
+import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
+import { Client } from "@openfeature/js-sdk";
+import {
+  PrometheusModule,
+  PrometheusController,
+} from "@willsoto/nestjs-prometheus";
 import Joi from "joi";
 import { LoggerModule } from "nestjs-pino";
-import { pinoHttp } from "pino-http";
+import { OPENFEATURE_CLIENT, config, dbConfig } from "config";
 import { ExampleModule } from "example/example.module";
-import { OpenFeatureModule } from "openfeature";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import configurationDB from "./config/configuration-db";
 import { MetricsModule } from "./metrics/metrics.module";
 
+@Global()
 @Module({
   imports: [
-    MetricsModule,
-    OpenFeatureModule,
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`, ".env"],
+      load: [config],
       //load: [configurationDB], //configurationDB is a structured config obj, can be accessed like get('database.host')
+      expandVariables: true,
+      isGlobal: true,
       validationSchema: Joi.object({
         //add configuration validation here,
         //if ".required()" then application will abort starting if that configuration was not provided.
@@ -31,13 +37,13 @@ import { MetricsModule } from "./metrics/metrics.module";
         SWAGGER_ON: Joi.boolean().default(false),
         PORT: Joi.number().required(),
         HOST: Joi.string().required(),
+        HAS_DATABSE: Joi.boolean().default(false),
         PINO_PRETTY: Joi.boolean().default(true),
         SVC_1_ENDPOINT: Joi.string().required(),
         SVC_2_ENDPOINT: Joi.string().required(),
         LOGGING_REDACT_PATTERNS: Joi.string(),
         SERVICE_PREFIX: Joi.string(),
       }),
-      isGlobal: true,
     }),
     //we setup pino logger options here, and in main.ts.  once it's set up here and in main.ts, we can use it in any other file by using the standard nestjs Logger
     LoggerModule.forRootAsync({
@@ -105,11 +111,30 @@ import { MetricsModule } from "./metrics/metrics.module";
     //   useFactory: async (configService: ConfigService) =>
     //     configService.get('database'),
     // }),
+    PrometheusModule.register({
+      controller: PrometheusController,
+      path: "/metrics",
+    }),
     HttpModule,
     TerminusModule,
     ExampleModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: OPENFEATURE_CLIENT,
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService): Promise<Client> => {
+        const client = (
+          await new openfeature(
+            configService.get("OPENFEATURE_PROVIDER") || ""
+          ).initialized()
+        ).client;
+        return client as Client;
+      },
+    },
+  ],
+  exports: [OPENFEATURE_CLIENT],
 })
 export class AppModule {}

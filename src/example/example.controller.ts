@@ -2,11 +2,11 @@
 import { Controller, Get, Version, Logger, UseGuards } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
-import OpenFeatureGuard from "openfeature/openfeature-guard";
+import OpenFeatureGuard from "utils/openfeature-guard";
 import { ExampleService } from "./example.service";
 
 @ApiTags("example")
-@Controller("example")
+@Controller({ path: "example", version: "1" })
 export class ExampleController {
   constructor(
     private readonly exampleService: ExampleService,

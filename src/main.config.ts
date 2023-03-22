@@ -3,6 +3,7 @@ import {
   RequestMethod,
   ValidationPipe,
   VersioningType,
+  VERSION_NEUTRAL,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
@@ -25,24 +26,40 @@ export function mainConfig(app: INestApplication): {
         { path: "health", method: RequestMethod.GET },
         { path: "version", method: RequestMethod.GET },
         { path: "metrics", method: RequestMethod.GET },
+        { path: "config", method: RequestMethod.GET },
       ],
     });
   }
   app.enableVersioning({
     type: VersioningType.URI,
-    defaultVersion: "1",
+    defaultVersion: VERSION_NEUTRAL,
   });
   if (configService.get<boolean>("SWAGGER_ON")) {
     // can we log Swagger usage???
     const config = new DocumentBuilder()
-      .setTitle("Acerta NestJS Boilerplate")
+      .setTitle(configService.get<string>("title") || "No Title")
       .setDescription(
-        "Acerta Node.js Boiler Plate Repo based on NestJS Example Swagger UI"
+        configService.get<string>("description") || "No description"
       )
-      .setVersion("1.0")
+      .setVersion(configService.get<string>("version") || "0.0.0")
+      .addBearerAuth(
+        {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          name: "JWT",
+          description: "Enter JWT token",
+          in: "header",
+        },
+        "JWT-auth"
+      )
       .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup("example/docs", app, document);
+    SwaggerModule.setup(
+      `${configService.get<string>("SERVICE_PREFIX") || ""}/docs`,
+      app,
+      document
+    );
   }
 
   return {
