@@ -1,23 +1,30 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-03-22 00:11:22",
-  "branch": "## feature/precommit...origin/feature/precommit",
-  "files changed": [ "M  package-lock.json",
- "M  package.json",
- "M  src/app.module.ts",
- "A  src/metrics/index.ts",
- "A  src/metrics/metrics.controller.ts",
- "A  src/metrics/metrics.module.ts",
- "A  src/openfeature/index.ts",
- "A  src/openfeature/js-env-provider.spec.ts",
- "A  src/openfeature/js-env-provider.ts",
- "A  src/openfeature/js-launchdarkly-provider.spec.ts",
- "A  src/openfeature/js-launchdarkly-provider.ts",
- "A  src/openfeature/openfeature-guard.ts",
- "A  src/openfeature/openfeature.module.ts"]
+  "timestamp": "2023-03-22 03:49:54",
+  "branch": "## feature/updateTestCases",
+  "files changed": [ "M  src/app.module.ts",
+ "M  src/example/example.controller.spec.ts",
+ "M  src/example/example.controller.ts",
+ "M  src/example/example.service.spec.ts",
+ "M  src/example/example.service.ts",
+ "D  src/metrics/index.ts",
+ "D  src/metrics/metrics.controller.ts",
+ "D  src/metrics/metrics.module.ts",
+ "D  src/openfeature/index.ts",
+ "D  src/openfeature/js-env-provider.spec.ts",
+ "D  src/openfeature/js-env-provider.ts",
+ "D  src/openfeature/js-launchdarkly-provider.spec.ts",
+ "D  src/openfeature/js-launchdarkly-provider.ts",
+ "D  src/openfeature/openfeature-guard.ts",
+ "D  src/openfeature/openfeature.module.ts",
+ "M  src/utils/index.ts",
+ "M  src/utils/jwt-guard.ts",
+ "M  src/utils/openfeature-guard.ts",
+ "M  test/e2e/app.e2e-spec.ts",
+ "M  test/setup-e2e.ts"]
 },
 "previous commits":[
- {"ece24289": " added jwtGuard for AAD, use .git_commit.json"},
- {"04f1ea98": " cleanup old openfeature_dir"}
+ {"766327f0": " Merge pull request #2 from AcertaAnalyticsSolutions\/feature\/precommit"},
+ {"883b0a36": " Merge branch 'main' into feature\/precommit"}
  ]
 }

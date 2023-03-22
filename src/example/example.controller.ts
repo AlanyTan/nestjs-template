@@ -2,7 +2,7 @@
 import { Controller, Get, Version, Logger, UseGuards } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
-import OpenFeatureGuard from "utils/openfeature-guard";
+import { OpenFeatureGuard } from "utils";
 import { ExampleService } from "./example.service";
 
 @ApiTags("example")

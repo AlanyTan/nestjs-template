@@ -3,7 +3,7 @@ import { HttpModule } from "@nestjs/axios";
 import { Module, RequestMethod, Logger, Global } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
-// import { TypeOrmModule } from "@nestjs/typeorm";
+import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 import { Client } from "@openfeature/js-sdk";
 import {
@@ -17,14 +17,13 @@ import { ExampleModule } from "example/example.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import configurationDB from "./config/configuration-db";
-import { MetricsModule } from "./metrics/metrics.module";
 
 @Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`, ".env"],
-      load: [config],
+      load: [config, configurationDB],
       //load: [configurationDB], //configurationDB is a structured config obj, can be accessed like get('database.host')
       expandVariables: true,
       isGlobal: true,
@@ -45,14 +44,14 @@ import { MetricsModule } from "./metrics/metrics.module";
         SERVICE_PREFIX: Joi.string(),
       }),
     }),
-    //we setup pino logger options here, and in main.ts.  once it's set up here and in main.ts, we can use it in any other file by using the standard nestjs Logger
+    // we setup pino logger options here, and in main.ts.  once it's set up here and in main.ts, we can use it in any other file by using the standard nestjs Logger
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         pinoHttp: {
           enabled: true,
           uselevel: configService.get<string>("LOG_LEVEL") || "info",
-          //by default, we redact the Authorization header and the cookie header, if you'd like to customize it, you can do so by editting the logg_config.yaml file.
+          // by default, we redact the Authorization header and the cookie header, if you'd like to customize it, you can do so by editting the logg_config.yaml file.
           redact: [
             "req.headers.Authorization",
             "req.headers.authorization",
@@ -105,12 +104,12 @@ import { MetricsModule } from "./metrics/metrics.module";
       }),
       inject: [ConfigService],
     }),
-    // TypeOrmModule.forRootAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: async (configService: ConfigService) =>
-    //     configService.get('database'),
-    // }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        configService.get("database") as TypeOrmModuleOptions,
+    }),
     PrometheusModule.register({
       controller: PrometheusController,
       path: "/metrics",
@@ -125,13 +124,13 @@ import { MetricsModule } from "./metrics/metrics.module";
     {
       provide: OPENFEATURE_CLIENT,
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService): Promise<Client> => {
-        const client = (
-          await new openfeature(
-            configService.get("OPENFEATURE_PROVIDER") || ""
-          ).initialized()
-        ).client;
-        return client as Client;
+      useFactory: async (
+        configService: ConfigService
+      ): Promise<openfeature> => {
+        const client = await new openfeature(
+          configService.get("OPENFEATURE_PROVIDER") || ""
+        ).initialized();
+        return client as openfeature;
       },
     },
   ],

@@ -1,7 +1,7 @@
 import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
-import { Client, OpenFeature } from "@openfeature/js-sdk";
+import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 import { OPENFEATURE_CLIENT } from "config";
 import { ExampleController } from "./example.controller";
 import { ExampleService } from "./example.service";
@@ -19,8 +19,8 @@ describe("ExampleService", () => {
         ExampleService,
         {
           provide: OPENFEATURE_CLIENT,
-          useFactory: (): Client => {
-            const client = OpenFeature.getClient("app");
+          useFactory: (): openfeature => {
+            const client = new openfeature("ENV");
             return client;
           },
         },
