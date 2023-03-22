@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Client } from "@openfeature/js-sdk";
+import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 import { OPENFEATURE_CLIENT } from "config";
 
 //we will use the standard logger from nestjs, but it is actually pino writting the logs (set up in main.ts and app.module.ts)
@@ -10,7 +10,7 @@ export class ExampleService {
   constructor(
     private readonly configService: ConfigService,
     private readonly logger: Logger = new Logger(ExampleService.name),
-    @Inject(OPENFEATURE_CLIENT) private openFeature: Client
+    @Inject(OPENFEATURE_CLIENT) private openFeature: openfeature
   ) {}
 
   get newFeature1(): string {
@@ -22,7 +22,7 @@ export class ExampleService {
   }
 
   async getExample(): Promise<string> {
-    const newFeatureFlag = await this.openFeature.getBooleanValue(
+    const newFeatureFlag = await this.openFeature.client.getBooleanValue(
       "new-feature-flag",
       false,
       { transactionContext: "specific context for this particular transation" }

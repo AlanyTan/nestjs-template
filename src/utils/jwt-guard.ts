@@ -10,7 +10,7 @@ import {
 } from "@nestjs/common";
 import { validateAadJwt } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 
-function JwtGuard(): Type<CanActivate> {
+export function JwtGuard(): Type<CanActivate> {
   @Injectable()
   class Guard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {

@@ -9,19 +9,17 @@ import {
   NotFoundException,
   Type,
 } from "@nestjs/common";
-import { Client } from "@openfeature/js-sdk";
+import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 import { OPENFEATURE_CLIENT } from "config";
 
-function OpenFeatureGuard(featureFlagName: string): Type<CanActivate> {
+export function OpenFeatureGuard(featureFlagName: string): Type<CanActivate> {
   @Injectable()
   class Guard implements CanActivate {
-    constructor(@Inject(OPENFEATURE_CLIENT) private openFeature: Client) {}
+    constructor(@Inject(OPENFEATURE_CLIENT) private openFeature: openfeature) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-      const newEndPointFeatureFlag = await this.openFeature.getBooleanValue(
-        featureFlagName,
-        false
-      );
+      const newEndPointFeatureFlag =
+        await this.openFeature.client.getBooleanValue(featureFlagName, false);
       if (newEndPointFeatureFlag) {
         return true;
       } else {

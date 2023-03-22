@@ -2,7 +2,7 @@ import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
 import { Client, OpenFeature } from "@openfeature/js-sdk";
-import { OPENFEATURE_CLIENT } from "openfeature";
+import { OPENFEATURE_CLIENT } from "config";
 import { ExampleController } from "./example.controller";
 import { ExampleService } from "./example.service";
 
