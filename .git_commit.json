@@ -1,21 +1,23 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-03-21 21:33:06",
+  "timestamp": "2023-03-22 00:11:22",
   "branch": "## feature/precommit...origin/feature/precommit",
-  "files changed": [ "M  .husky/pre-commit",
- "M  package-lock.json",
+  "files changed": [ "M  package-lock.json",
  "M  package.json",
- "M  src/app.controller.ts",
  "M  src/app.module.ts",
- "M  src/config/configuration.ts",
- "M  src/example/example.controller.ts",
- "M  src/example/example.module.ts",
- "M  src/example/example.service.spec.ts",
- "M  src/main.config.ts",
- "A  src/utils/jwt-guard.ts"]
+ "A  src/metrics/index.ts",
+ "A  src/metrics/metrics.controller.ts",
+ "A  src/metrics/metrics.module.ts",
+ "A  src/openfeature/index.ts",
+ "A  src/openfeature/js-env-provider.spec.ts",
+ "A  src/openfeature/js-env-provider.ts",
+ "A  src/openfeature/js-launchdarkly-provider.spec.ts",
+ "A  src/openfeature/js-launchdarkly-provider.ts",
+ "A  src/openfeature/openfeature-guard.ts",
+ "A  src/openfeature/openfeature.module.ts"]
 },
 "previous commits":[
- {"04f1ea98": " cleanup old openfeature_dir"},
- {"135989c7": " Squashed commit of the following:"}
+ {"ece24289": " added jwtGuard for AAD, use .git_commit.json"},
+ {"04f1ea98": " cleanup old openfeature_dir"}
  ]
 }

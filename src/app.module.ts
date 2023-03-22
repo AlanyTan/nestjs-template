@@ -16,6 +16,8 @@ import { OPENFEATURE_CLIENT, config, dbConfig } from "config";
 import { ExampleModule } from "example/example.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import configurationDB from "./config/configuration-db";
+import { MetricsModule } from "./metrics/metrics.module";
 
 @Global()
 @Module({
