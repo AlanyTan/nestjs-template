@@ -1,29 +1,37 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Controller, Get, Version, Logger, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Version,
+  Logger,
+  UseGuards,
+  Param,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { OpenFeatureGuard } from "utils";
-import { ExampleService } from "./example.service";
+import { User } from "./entities/user.entity";
+import { ExampleOrmService } from "./example_orm.service";
 
-@ApiTags("example")
-@Controller({ path: "example", version: "1" })
-export class ExampleController {
+@ApiTags("example_orm")
+@Controller({ path: "example_orm", version: "1" })
+export class ExampleOrmController {
   constructor(
-    private readonly exampleService: ExampleService,
+    private readonly exampleOrmService: ExampleOrmService,
     private readonly configService: ConfigService,
-    private readonly logger: Logger = new Logger(ExampleController.name)
+    private readonly logger: Logger = new Logger(ExampleOrmController.name)
   ) {}
-  @Get("get_request")
+  @Get("find_all")
   @Version("1")
-  @ApiOperation({ summary: "A feature controlled example message." })
+  @ApiOperation({ summary: "List all users" })
   @ApiResponse({
     status: 200,
-    description:
-      "Normal run, returns either old or new messages based on the feature flag value.",
+    description: "Return list of all users.",
   })
   @ApiResponse({
     status: 204,
-    description: "No data found for the given query filter.",
+    description:
+      "The query was properly executed, but there is no users found so the return is an empty list.",
   })
   @ApiResponse({
     status: 400,
@@ -34,16 +42,17 @@ export class ExampleController {
     description:
       "The service run into internal trouble, please check error logs for details.",
   })
-  async getExample(): Promise<string> {
+  async findAll(): Promise<User[]> {
     this.logger.log("Calling getExample with info", "ExampleController:info");
-    return this.exampleService.getExample();
+    return this.exampleOrmService.findAll();
   }
 
-  @Get("get_request")
+  @Get("find_one/:id")
   @Version("2")
+  @ApiOperation({ summary: "Retrieve a user by id" })
   @ApiResponse({
     status: 200,
-    description: "Normal run, with sample and calculation returned.",
+    description: "Returned user detail.",
   })
   @ApiResponse({
     status: 204,
@@ -52,11 +61,6 @@ export class ExampleController {
   @ApiResponse({
     status: 400,
     description: "The request sent was invalid or uninterpretable.",
-  })
-  @ApiResponse({
-    status: 404,
-    description:
-      "The requested resource is not found (i.e. being turned off by the feature flag).",
   })
   @ApiResponse({
     status: 500,
@@ -64,8 +68,8 @@ export class ExampleController {
       "The service run into internal trouble, please check error logs for details.",
   })
   @UseGuards(OpenFeatureGuard("new-end-point"))
-  async getNewExample(): Promise<string> {
+  async findOne(@Param("id") id: string): Promise<User | null> {
     this.logger.log("Calling getExample with info", "ExampleController:info");
-    return this.exampleService["newFeature2"];
+    return this.exampleOrmService.findOne(parseInt(id));
   }
 }

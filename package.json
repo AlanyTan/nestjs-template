@@ -1,7 +1,7 @@
 {
   "name": "nestjs-example",
   "version": "1.0.2",
-  "description": "Acert Analytics Nest.js based Repo should use this as template",
+  "description": "Acerta Analytics Nest.js based Repo should use this as template",
   "author": "",
   "main": "dist/main.js",
   "private": true,

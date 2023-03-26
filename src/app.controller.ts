@@ -16,7 +16,7 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";
 import { validateAadJwt } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 import { AppService } from "app.service";
-import JwtGuard from "utils/jwt-guard";
+import { JwtGuard } from "utils/jwt-guard";
 
 @ApiTags("standard")
 @Controller()
@@ -66,10 +66,8 @@ export class AppController {
   @UseGuards(JwtGuard())
   config(): unknown {
     return {
-      version: this.configService.get("version"),
-      commits: this.configService.get("commits"),
-      database: this.configService.get("database"),
       config: this.configService.get("_PROCESS_ENV_VALIDATED"),
+      database: this.configService.get("database"),
     };
   }
 }
