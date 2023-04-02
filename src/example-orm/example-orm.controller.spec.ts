@@ -5,10 +5,14 @@
 import { Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
+import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
+import { Repository } from "typeorm";
 import { config, dbConfig, OPENFEATURE_CLIENT } from "config";
-import { ExampleController } from "./example.controller";
-import { ExampleService } from "./example.service";
+import configurationDB from "config/db";
+import { User } from "./entities/user.entity";
+import { ExampleOrmController } from "./example-orm.controller";
+import { ExampleOrmService } from "./example-orm.service";
 
 jest.mock(
   "@AcertaAnalyticsSolutions/acerta-standardnpm/dist/openfeature",
@@ -24,22 +28,35 @@ jest.mock(
 );
 
 describe("ExampleController", () => {
-  let controller: ExampleController;
+  let controller: ExampleOrmController;
+  let moduleRef: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    moduleRef = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
           ignoreEnvFile: true,
           ignoreEnvVars: true,
           load: [config, dbConfig],
         }),
+        TypeOrmModule.forRootAsync({
+          imports: [ConfigModule.forRoot({ load: [configurationDB] })],
+          inject: [ConfigService],
+          useFactory: async (configService: ConfigService) => {
+            return configService.get("database") as TypeOrmModuleOptions;
+          },
+        }),
       ],
-      controllers: [ExampleController],
+      controllers: [ExampleOrmController],
       providers: [
-        ExampleService,
+        ExampleOrmService,
         ConfigService,
         Logger,
+        {
+          provide: "user1Repository",
+          useClass: Repository<User>,
+        },
+
         {
           provide: OPENFEATURE_CLIENT,
           useFactory: async (): Promise<openfeature> => {
@@ -51,23 +68,21 @@ describe("ExampleController", () => {
       ],
     }).compile();
 
-    controller = module.get<ExampleController>(ExampleController);
+    controller = moduleRef.get<ExampleOrmController>(ExampleOrmController);
   });
 
   it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 
-  it("getExample should return a string with 'Hello World'", async () => {
-    expect(await controller.getExample()).toContain("Hello World");
-  });
   it("getNewExample should return a string with 'the Value of New Feature 2!", async () => {
-    expect(await controller.getNewExample()).toContain(
-      "the Value of New Feature 2!"
+    expect(async () => await controller.findOne("wrong uuid")).rejects.toThrow(
+      '"value" must be a valid GUID'
     );
   });
 
   afterEach(async () => {
+    await moduleRef.close();
     jest.resetAllMocks();
   });
 });

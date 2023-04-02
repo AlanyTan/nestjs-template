@@ -19,5 +19,6 @@
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
     "isolatedModules": true
-  }
+  },
+  "compileOnSave": true
 }

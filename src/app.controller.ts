@@ -63,7 +63,7 @@ export class AppController {
   @Get("config")
   @Version(VERSION_NEUTRAL)
   @ApiBearerAuth("JWT-auth")
-  @UseGuards(JwtGuard())
+  @UseGuards(JwtGuard)
   config(): unknown {
     return {
       config: this.configService.get("_PROCESS_ENV_VALIDATED"),

@@ -10,13 +10,14 @@ import {
 } from "@nestjs/common";
 import { validateAadJwt } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 
-export function JwtGuard(): Type<CanActivate> {
-  @Injectable()
-  class Guard implements CanActivate {
-    async canActivate(context: ExecutionContext): Promise<boolean> {
-      const request = context.switchToHttp().getRequest();
+@Injectable()
+export class JwtGuard implements CanActivate {
+  public async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+    if (request.headers === undefined) {
+      throw new HttpException("Unauthorized", 401);
+    } else {
       const jwtIsValid = await validateAadJwt(request);
-
       if (jwtIsValid) {
         return true;
       } else {
@@ -26,6 +27,5 @@ export function JwtGuard(): Type<CanActivate> {
       }
     }
   }
-  return mixin(Guard);
 }
 export default JwtGuard;

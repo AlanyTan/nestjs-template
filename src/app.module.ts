@@ -13,7 +13,7 @@ import Joi from "joi";
 import { LoggerModule } from "nestjs-pino";
 import { OPENFEATURE_CLIENT, config, dbConfig } from "config";
 import { ExampleModule } from "example/example.module";
-import { ExampleOrmModule } from "example_orm/example_orm.module";
+import { ExampleOrmModule } from "example-orm/example-orm.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import configurationDB from "./config/db";
@@ -116,7 +116,7 @@ import configurationDB from "./config/db";
     HttpModule,
     TerminusModule,
     ExampleModule,
-    ...((process.env.DATABASE_TYPE ?? "none") === "none"
+    ...((process.env.DATABASE_TYPE ?? "none") == "none"
       ? []
       : [
           TypeOrmModule.forRootAsync({

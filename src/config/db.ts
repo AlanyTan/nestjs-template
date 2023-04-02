@@ -84,14 +84,15 @@ export default registerAs("database", (): TypeOrmModuleOptions => {
   };
   if (typeOfDatabase === "postgres") {
     typeOrmConfig.entities = [`${__dirname}/../**/*.entity{.ts,.js}`];
-    typeOrmConfig.migrations = [`${__dirname}/../../migrations/*{.ts,.js}`];
-    // typeOrmConfig.cli = {
-    //   migrationsDir: "migrations",
-    // };
+    typeOrmConfig.migrations = [`${__dirname}/../migrations/*{.ts,.js}`];
+    typeOrmConfig.autoLoadEntities = true;
+    typeOrmConfig.cli = { migrationsDir: "src/migrations" };
     const prefixRegExp = new RegExp(`^${typeOfDatabase.toUpperCase()}_`, "i");
     for (const configItem in validatedEnvConfig as Record<string, string>) {
-      const configKey = ENVARToCamelCase(configItem, prefixRegExp);
-      typeOrmConfig[configKey] = validatedEnvConfig[configItem];
+      if (configItem.match(prefixRegExp)) {
+        const configKey = ENVARToCamelCase(configItem, prefixRegExp);
+        typeOrmConfig[configKey] = validatedEnvConfig[configItem];
+      }
     }
   }
   const returnConfig = typeOrmConfig as TypeOrmModuleOptions;

@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from "@nestjs/common";
+import {
+  Injectable,
+  BeforeApplicationShutdown,
+  Logger,
+  Inject,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import {
   HealthCheckResult,
@@ -8,6 +13,8 @@ import {
   HttpHealthIndicator,
   TypeOrmHealthIndicator,
 } from "@nestjs/terminus";
+import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
+import { OPENFEATURE_CLIENT } from "config";
 
 @Injectable()
 export class AppService {
@@ -31,9 +38,25 @@ export class AppService {
           );
       }),
       // // if you use TypeORM, you can use this to check the database connection
-      (): Promise<HealthIndicatorResult> =>
-        this.typeOrmHealthIndicator.pingCheck("database"),
+      this.configService.get("DATABASE_TYPE") !== "none"
+        ? (): Promise<HealthIndicatorResult> =>
+            this.typeOrmHealthIndicator.pingCheck("database")
+        : (): Promise<HealthIndicatorResult> => Promise.resolve({}),
     ]);
+  }
+}
+
+@Injectable()
+export class AppCloseService implements BeforeApplicationShutdown {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly logger: Logger = new Logger(AppCloseService.name),
+    @Inject(OPENFEATURE_CLIENT) private openFeature: openfeature
+  ) {}
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  beforeApplicationShutdown(_signal: string) {
+    this.openFeature.close();
+    this.logger.log(`Application is shutdown with signal $(_signal)....`);
   }
 }
 
