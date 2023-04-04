@@ -82,7 +82,7 @@ export default registerAs("database", (): TypeOrmModuleOptions => {
   const typeOrmConfig: TypeOrmConfig = {
     type: typeOfDatabase,
   };
-  if (typeOfDatabase === "postgres") {
+  if (typeOfDatabase !== "none") {
     typeOrmConfig.entities = [`${__dirname}/../**/*.entity{.ts,.js}`];
     typeOrmConfig.migrations = [`${__dirname}/../migrations/*{.ts,.js}`];
     typeOrmConfig.autoLoadEntities = true;

@@ -1,25 +1,11 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-04-04 04:45:05",
+  "timestamp": "2023-04-04 15:31:10",
   "branch": "## feature/DATABASE_TYPEconfig...origin/feature/DATABASE_TYPEconfig",
-  "files changed": [ "M  .example.env",
- "M  Dockerfile",
- "M  package-lock.json",
- "M  package.json",
- "M  src/app.controller.ts",
- "M  src/example-orm/entities/entity.base.ts",
- "M  src/example-orm/entities/user.entity.ts",
- "M  src/example-orm/example-orm.controller.ts",
- "M  src/migrations/1679874297564-initial.ts",
- "A  src/migrations/1680582091865-add_deletedAt.ts",
- "M  src/utils/entity.base.spec.ts",
- "M  src/utils/openfeature-guard.ts",
- "M  test/e2e/alternative-config.e2e-spec.ts",
- "M  test/e2e/app.e2e-spec.ts",
- "M  test/setup-e2e.ts"]
+  "files changed": [ "M  src/config/db.ts"]
 },
 "previous commits":[
- {"113d29df": " added ORMs"},
- {"1c638907": " Major update to .\/config\/db.ts DATABASE_TYPE"}
+ {"2e4a2b44": " test cases, added deletedAt column Dockerfile"},
+ {"113d29df": " added ORMs"}
  ]
 }
