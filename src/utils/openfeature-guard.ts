@@ -10,7 +10,7 @@ import {
   Type,
 } from "@nestjs/common";
 import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
-import { OPENFEATURE_CLIENT } from "config";
+import { OPENFEATURE_CLIENT } from "../config";
 
 export function OpenFeatureGuard(featureFlagName: string): Type<CanActivate> {
   @Injectable()

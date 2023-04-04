@@ -89,8 +89,8 @@ export const UserEntitySchema = new EntitySchema<User>({
       type: "boolean",
     },
     notes: {
-      type: "varchar",
-      length: 256,
+      type: "text",
+      nullable: true,
     },
   },
   embeddeds: {

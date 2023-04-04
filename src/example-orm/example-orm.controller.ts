@@ -18,6 +18,7 @@ import {
   ApiQuery,
   ApiResponse,
   ApiTags,
+  ApiParam,
 } from "@nestjs/swagger";
 import Joi from "joi";
 import { OpenFeatureGuard } from "utils";
@@ -62,7 +63,7 @@ export class ExampleOrmController {
   @Get("find_one/:uuid")
   @Version("2")
   @ApiOperation({ summary: "Retrieve a user by id" })
-  @ApiQuery({
+  @ApiParam({
     name: "uuid",
     description: "the uuid that uniquely identifies a user",
     required: true,
@@ -84,7 +85,6 @@ export class ExampleOrmController {
     description:
       "The service run into internal trouble, please check error logs for details.",
   })
-  @UseGuards(OpenFeatureGuard("new-end-point"))
   async findOne(@Param("uuid") uuid: string): Promise<User | null> {
     this.logger.log("Calling findOne with info", "findOne");
     const { error } = Joi.string().uuid({}).validate(uuid);
@@ -107,11 +107,6 @@ export class ExampleOrmController {
     description: "User created.",
   })
   @ApiResponse({
-    status: 204,
-    description:
-      "The specified User exists already so no action happened, (and the user still exist).",
-  })
-  @ApiResponse({
     status: 400,
     description:
       "The request sent was invalid or uninterpretable (i.e. the data for the User to be created is not valid).",
@@ -121,14 +116,24 @@ export class ExampleOrmController {
     description:
       "The service run into internal trouble, please check error logs for details.",
   })
-  async create(@Body() user: User): Promise<void> {
+  async create(@Body() user: User): Promise<User> {
     this.logger.log("Calling create user with info", "creating user");
-    this.exampleOrmService.create(user);
+    try {
+      const savedUser = await this.exampleOrmService.create(user);
+      return savedUser;
+    } catch (error) {
+      throw new HttpException(error || `Error saving ${user}`, 400);
+    }
   }
 
   @Delete("delete/:id")
   @Version("1")
   @ApiOperation({ summary: "Delete a user by id" })
+  @ApiParam({
+    name: "uuid",
+    description: "the uuid that uniquely identifies a user",
+    required: true,
+  })
   @ApiResponse({
     status: 200,
     description: "User deleted.",
@@ -147,6 +152,7 @@ export class ExampleOrmController {
     description:
       "The service run into internal trouble, please check error logs for details.",
   })
+  @UseGuards(OpenFeatureGuard("new-end-point"))
   async remove(@Param("uuid") uuid: string): Promise<void> {
     this.logger.log("Calling delete user with info", "delete user");
     return this.exampleOrmService.remove(uuid);

@@ -25,6 +25,7 @@ export class BaseEntity {
   uuid: string;
   createdAt: Date;
   updatedAt: Date;
+  deletedAt?: Date;
 }
 
 /***
@@ -46,5 +47,11 @@ export const BaseColumnSchemaPart = {
     name: "updated_at",
     type: "timestamp with time zone",
     updateDate: true,
+  } as EntitySchemaColumnOptions,
+  deletedAt: {
+    name: "deleted_at",
+    type: "timestamp with time zone",
+    nullable: true,
+    deleteDate: true,
   } as EntitySchemaColumnOptions,
 };

@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
-import { convertSchemaColumnOptionsToTableColumnOptions } from "utils";
 import { NameEntitySchema } from "../example-orm/entities/user.entity";
+import { convertSchemaColumnOptionsToTableColumnOptions } from "../utils";
 
 export class initial1679874297564 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
