@@ -34,11 +34,18 @@ export class ExampleOrmService {
 
   async create(user: User): Promise<User> {
     const savedUser = await this.usersRepository.save(user);
-
     return savedUser;
   }
 
-  async remove(uuid: string): Promise<void> {
-    await this.usersRepository.delete(uuid);
+  async delete(uuid: string): Promise<void> {
+    const user = await this.findOne(uuid);
+    if (user !== null) {
+      await this.usersRepository.delete({
+        uuid: uuid,
+        name: { uuid: user.uuid },
+      });
+    } else {
+      throw new HttpException("User not found", 204);
+    }
   }
 }

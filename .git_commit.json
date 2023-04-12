@@ -1,11 +1,30 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-04-04 15:31:10",
+  "timestamp": "2023-04-12 13:24:44",
   "branch": "## feature/DATABASE_TYPEconfig...origin/feature/DATABASE_TYPEconfig",
-  "files changed": [ "M  src/config/db.ts"]
+  "files changed": [ "M  .devcontainer/devcontainer.json",
+ "M  .npmrc",
+ "A  .vscode/settings.json",
+ "M  package-lock.json",
+ "M  package.json",
+ "M  src/app.controller.ts",
+ "M  src/app.module.ts",
+ "M  src/app.service.ts",
+ "M  src/config/db.ts",
+ "M  src/example-orm/example-orm.controller.spec.ts",
+ "M  src/example-orm/example-orm.controller.ts",
+ "M  src/example-orm/example-orm.service.ts",
+ "M  src/example/example.controller.spec.ts",
+ "M  src/example/example.controller.ts",
+ "M  src/example/example.service.spec.ts",
+ "M  src/example/example.service.ts",
+ "M  src/utils/jwt-guard.spec.ts",
+ "M  src/utils/jwt-guard.ts",
+ "M  src/utils/openfeature-guard.ts",
+ "M  test/e2e/app.e2e-spec.ts"]
 },
 "previous commits":[
- {"2e4a2b44": " test cases, added deletedAt column Dockerfile"},
- {"113d29df": " added ORMs"}
+ {"59e116c1": " improve database type check"},
+ {"2e4a2b44": " test cases, added deletedAt column Dockerfile"}
  ]
 }

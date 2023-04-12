@@ -5,13 +5,13 @@
 import { Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
-import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
+import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { config, dbConfig, OPENFEATURE_CLIENT } from "config";
 import { ExampleController } from "./example.controller";
 import { ExampleService } from "./example.service";
 
 jest.mock(
-  "@AcertaAnalyticsSolutions/acerta-standardnpm/dist/openfeature",
+  "@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature",
   () => {
     return {
       openfeature_client: jest.fn().mockImplementation(() => {

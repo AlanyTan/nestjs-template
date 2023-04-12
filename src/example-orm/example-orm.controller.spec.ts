@@ -6,7 +6,7 @@ import { Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
+import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { Repository } from "typeorm";
 import { config, dbConfig, OPENFEATURE_CLIENT } from "config";
 import configurationDB from "config/db";
@@ -15,7 +15,7 @@ import { ExampleOrmController } from "./example-orm.controller";
 import { ExampleOrmService } from "./example-orm.service";
 
 jest.mock(
-  "@AcertaAnalyticsSolutions/acerta-standardnpm/dist/openfeature",
+  "@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature",
   () => {
     return {
       openfeature_client: jest.fn().mockImplementation(() => {

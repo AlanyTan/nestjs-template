@@ -29,7 +29,7 @@
     "typeorm": "typeorm-ts-node-commonjs -d ormconfig.ts"
   },
   "dependencies": {
-    "@AcertaAnalyticsSolutions/acerta-standardnpm": "github:AcertaAnalyticsSolutions/acerta-standardnpm",
+    "@acertaanalyticssolutions/acerta-standardnpm": "^1.1.9",
     "@nestjs/axios": "0.0.7",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.0.2",
@@ -67,7 +67,7 @@
     "eslint": "^7.30.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-only-warn": "^1.0.3",
-    "husky": "^7.0.4",
+    "husky": "^8.0.3",
     "jest": "^27.0.6",
     "lint-staged": "^11.1.2",
     "pino-pretty": "^8.1.0",

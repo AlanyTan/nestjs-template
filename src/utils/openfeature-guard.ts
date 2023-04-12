@@ -9,7 +9,7 @@ import {
   NotFoundException,
   Type,
 } from "@nestjs/common";
-import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
+import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { OPENFEATURE_CLIENT } from "../config";
 
 export function OpenFeatureGuard(featureFlagName: string): Type<CanActivate> {

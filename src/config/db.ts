@@ -22,7 +22,8 @@ const envVarsSchema: Joi.ObjectSchema = Joi.object({
     "sap",
     "sqlite",
     "sqljs",
-    "spanner"
+    "spanner",
+    "none"
   ),
   POSTGRES_HOST: Joi.string().required(),
   POSTGRES_PORT: Joi.number().required(),

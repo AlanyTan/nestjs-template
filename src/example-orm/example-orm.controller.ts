@@ -126,7 +126,7 @@ export class ExampleOrmController {
     }
   }
 
-  @Delete("delete/:id")
+  @Delete("delete/:uuid")
   @Version("1")
   @ApiOperation({ summary: "Delete a user by id" })
   @ApiParam({
@@ -153,8 +153,8 @@ export class ExampleOrmController {
       "The service run into internal trouble, please check error logs for details.",
   })
   @UseGuards(OpenFeatureGuard("new-end-point"))
-  async remove(@Param("uuid") uuid: string): Promise<void> {
+  async delete(@Param("uuid") uuid: string): Promise<void> {
     this.logger.log("Calling delete user with info", "delete user");
-    return this.exampleOrmService.remove(uuid);
+    await this.exampleOrmService.delete(uuid);
   }
 }

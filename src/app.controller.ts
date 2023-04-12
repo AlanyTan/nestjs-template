@@ -14,7 +14,7 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";
-import { validateAadJwt } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
+import { AadJwtValidator } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { AppService } from "app.service";
 import { JwtGuard } from "utils/jwt-guard";
 
@@ -46,7 +46,11 @@ export class AppController {
   async version(@Req() request: Request): Promise<unknown> {
     let commitJson = {};
     try {
-      const jwtIsValid = await validateAadJwt(request);
+      const aadJwtValidator = new AadJwtValidator(
+        this.configService.get("TENANT_ID", ""),
+        this.configService.get("CLIENT_ID", "")
+      );
+      const jwtIsValid = await aadJwtValidator.validateAadJwt(request);
       commitJson = { commits: this.configService.get("commits") };
     } catch (err) {
       commitJson = { commits: "Unauthorized to view commit info" };
@@ -64,9 +68,6 @@ export class AppController {
   @ApiBearerAuth("JWT-auth")
   @UseGuards(JwtGuard)
   config(): unknown {
-    return {
-      config: this.configService.get("_PROCESS_ENV_VALIDATED"),
-      database: this.configService.get("database"),
-    };
+    return this.appService.configuration();
   }
 }

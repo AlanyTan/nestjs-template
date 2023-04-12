@@ -4,7 +4,7 @@ import { Module, RequestMethod, Logger, Global } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
+import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import {
   PrometheusModule,
   PrometheusController,
@@ -42,10 +42,12 @@ import configurationDB from "./config/db";
         SVC_2_ENDPOINT: Joi.string().uri().required(),
         PINO_PRETTY: Joi.boolean().default(true),
         SWAGGER_ON: Joi.boolean().default(false),
-        DATABSE_TYPE: Joi.string().default("none"),
+        DATABASE_TYPE: Joi.string().default("none"),
         LOG_LEVEL: Joi.string().default("info"),
         LOGGING_REDACT_PATTERNS: Joi.string(),
         SERVICE_PREFIX: Joi.string(),
+        TENANT_ID: Joi.string().default(""),
+        CLIENT_ID: Joi.string(),
         LINEPULSE_SVC_VERSION: Joi.string(),
       }).options({ stripUnknown: true }),
     }),

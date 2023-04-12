@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Injectable,
@@ -13,8 +14,8 @@ import {
   HttpHealthIndicator,
   TypeOrmHealthIndicator,
 } from "@nestjs/terminus";
-import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
-import { OPENFEATURE_CLIENT } from "config";
+import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
+import { OPENFEATURE_CLIENT } from "./config";
 
 @Injectable()
 export class AppService {
@@ -43,6 +44,37 @@ export class AppService {
             this.typeOrmHealthIndicator.pingCheck("database")
         : (): Promise<HealthIndicatorResult> => Promise.resolve({}),
     ]);
+  }
+
+  configuration(): unknown {
+    const rawConfig: any = {}; //this.configService.get("_PROCESS_ENV_VALIDATED");
+    for (const key in this.configService["internalConfig"]) {
+      //if (this.configService.hasOwnProperty(key)) {
+      if (key == "_PROCESS_ENV_VALIDATED") {
+        rawConfig["core_config"] = this.configService.get(key);
+      } else {
+        rawConfig[key] = this.configService.get(key) || {};
+      }
+      //}
+    }
+
+    function redactPasswords(obj: any): unknown {
+      if (typeof obj !== "object" || obj === null) {
+        return obj; // base case
+      }
+      const regex = /password|secret/i;
+      const redactedObj: any = {};
+
+      for (const key in obj) {
+        if (regex.test(key)) {
+          redactedObj[key] = "=[REDACTED]=";
+        } else {
+          redactedObj[key] = redactPasswords(obj[key]);
+        }
+      }
+      return redactedObj;
+    }
+    return redactPasswords(rawConfig);
   }
 }
 

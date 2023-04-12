@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Controller, Get, Version, Logger, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Version,
+  Logger,
+  UseGuards,
+  Headers,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { OpenFeatureGuard } from "utils";
@@ -34,7 +41,9 @@ export class ExampleController {
     description:
       "The service run into internal trouble, please check error logs for details.",
   })
-  async getExample(): Promise<string> {
+  async getExample(
+    @Headers("customer_uuid") sessionToken?: string
+  ): Promise<string> {
     this.logger.log("Calling getExample with info", "ExampleController:info");
     return this.exampleService.getExample();
   }

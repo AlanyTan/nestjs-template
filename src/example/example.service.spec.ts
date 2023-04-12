@@ -5,11 +5,11 @@
 // using the mocked value, so I can make sure "when the feature flag is on, my service shows the new behavior, when the feature flag is off, my service shows the old behavior"
 import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { openfeature_client } from "@AcertaAnalyticsSolutions/acerta-standardnpm/dist/openfeature";
+import { openfeature_client } from "@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature";
 import { ExampleService } from "./example.service";
 
 jest.mock(
-  "@AcertaAnalyticsSolutions/acerta-standardnpm/dist/openfeature",
+  "@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature",
   () => {
     return {
       openfeature_client: jest.fn().mockImplementation(() => {
