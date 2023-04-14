@@ -8,6 +8,7 @@
       "dockerBuild": {
         "dockerfile": "${workspaceFolder}/Dockerfile",
         "context": "${workspaceFolder}",
+        "buildArgs": { "NPM_TOKEN": "${env:NPM_TOKEN}" },
         "pull": true
       }
     },

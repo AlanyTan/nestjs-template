@@ -1,30 +1,14 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-04-12 13:24:44",
+  "timestamp": "2023-04-14 01:04:53",
   "branch": "## feature/DATABASE_TYPEconfig...origin/feature/DATABASE_TYPEconfig",
-  "files changed": [ "M  .devcontainer/devcontainer.json",
- "M  .npmrc",
- "A  .vscode/settings.json",
- "M  package-lock.json",
- "M  package.json",
- "M  src/app.controller.ts",
- "M  src/app.module.ts",
- "M  src/app.service.ts",
- "M  src/config/db.ts",
- "M  src/example-orm/example-orm.controller.spec.ts",
- "M  src/example-orm/example-orm.controller.ts",
- "M  src/example-orm/example-orm.service.ts",
- "M  src/example/example.controller.spec.ts",
- "M  src/example/example.controller.ts",
- "M  src/example/example.service.spec.ts",
- "M  src/example/example.service.ts",
- "M  src/utils/jwt-guard.spec.ts",
- "M  src/utils/jwt-guard.ts",
- "M  src/utils/openfeature-guard.ts",
- "M  test/e2e/app.e2e-spec.ts"]
+  "files changed": [ "M  .npmrc",
+ "M  .vscode/tasks.json",
+ "M  Dockerfile",
+ "M  package-lock.json"]
 },
 "previous commits":[
- {"59e116c1": " improve database type check"},
- {"2e4a2b44": " test cases, added deletedAt column Dockerfile"}
+ {"88d6219e": " updated to use AadJwtValidator Obj"},
+ {"59e116c1": " improve database type check"}
  ]
 }
