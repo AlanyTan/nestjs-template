@@ -8,8 +8,8 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 #RUN npm install husky --save-dev 
 #RUN npm run prepare
 
-#RUN --mount=type=ssh npm ci
-RUN npm ci
+RUN --mount=type=ssh npm ci
+#RUN npm ci
 
 COPY . .
 
