@@ -1,11 +1,11 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-04-22 01:13:56",
+  "timestamp": "2023-04-22 01:41:29",
   "branch": "## main...origin/main",
-  "files changed": [ "M  Dockerfile"]
+  "files changed": [ "M  azure-pipelines.yml"]
 },
 "previous commits":[
- {"985df64e": " update git for ado pipeline"},
- {"7189f076": " include git in Docker"}
+ {"2962236a": " try --mount=type=ssh in Dockerfile"},
+ {"985df64e": " update git for ado pipeline"}
  ]
 }

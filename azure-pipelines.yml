@@ -14,6 +14,7 @@ variables:
   imageRepository: 'nestjsexample'
   containerRegistry: 'azrdevcregcac1lp30.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  DOCKER_BUILDKIT: 1
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
