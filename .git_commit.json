@@ -1,12 +1,11 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-04-22 03:50:27",
+  "timestamp": "2023-04-22 06:00:21",
   "branch": "## main...origin/main",
-  "files changed": [ "M  azure-pipelines.yml",
- "M  package-lock.json"]
+  "files changed": [ "M  azure-pipelines.yml"]
 },
 "previous commits":[
- {"3667f6c4": " DOCKER_BUILDKIT=1"},
- {"2962236a": " try --mount=type=ssh in Dockerfile"}
+ {"e16f2cf1": " trying taskNpm@1"},
+ {"3667f6c4": " DOCKER_BUILDKIT=1"}
  ]
 }
