@@ -5,7 +5,6 @@ ARG NPM_TOKEN=default_value
 #ENV NPM_TOKEN_env_var=$NPM_TOKEN
 
 WORKDIR /usr/src/app
-
 COPY package*.json ./
 COPY .npmrc ./
 RUN apk add --no-cache openssh-client git

@@ -1,14 +1,11 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-04-22 00:23:36",
-  "branch": "## feature/DATABASE_TYPEconfig...origin/feature/DATABASE_TYPEconfig",
-  "files changed": [ "D  .npmrc",
- "M  package-lock.json",
- "M  package.json",
- "M  src/utils/index.ts"]
+  "timestamp": "2023-04-22 00:34:54",
+  "branch": "## main...origin/main [ahead 1]",
+  "files changed": [ "M  Dockerfile"]
 },
 "previous commits":[
- {"4bb2874c": " Update for .npmrc"},
- {"88d6219e": " updated to use AadJwtValidator Obj"}
+ {"1c638907": " Major update to .\/config\/db.ts DATABASE_TYPE"},
+ {"c3def6f6": " Merge pull request #3 from AcertaAnalyticsSolutions\/feature\/updateTestCases"}
  ]
 }
