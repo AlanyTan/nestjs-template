@@ -1,11 +1,13 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-04-22 06:16:16",
+  "timestamp": "2023-04-22 06:43:06",
   "branch": "## main...origin/main",
-  "files changed": [ "M  azure-pipelines.yml"]
+  "files changed": [ "M  README.md",
+ "M  azure-pipelines.yml",
+ "M  local_db_setup.sh"]
 },
 "previous commits":[
- {"fbb12720": " remove non-docker NPM"},
- {"61a18efd": " add ssh default to docker arg"}
+ {"177b079b": " attempt buildAndPush"},
+ {"fbb12720": " remove non-docker NPM"}
  ]
 }

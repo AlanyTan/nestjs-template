@@ -33,7 +33,7 @@ The .vscode config allows the VSCode to be able to debug, build container and ru
 - - dockerized postgres db setup script (optional)
 - - rename script (to change all instances of "nestjs-example" to whatever you call the repo)
 
-## Requirements
+### Requirements
 
 - Node.js - v16.x.x
 - npm - v9.x.x
@@ -41,6 +41,99 @@ The .vscode config allows the VSCode to be able to debug, build container and ru
 - VSCode, docker extension, remote-container extention
 
 ## How to use this repo
+
+### The Acerta_StandardNpm package
+
+This repo imports `acerta_standardnpm` as a dependency.
+`acerta_standardnpm` is a package for Acerta's standard tools.
+It currently includes 3 features:
+
+- OpenFeature client
+- Acerta Object Storage
+- Azure AD based JWT validation
+
+To use this package, which is private, the following is needed:
+As developer, `npm install github acertaanalyticssolutions/acerta_standardnpm`
+because it is a github repo, it uses the same authentication (should be github's ssh) to pull this package down. You should also be able to use `npm upgrade` to upgrade this package just like any npm packages.
+
+To deploy, this repo needs to be enabled to pull from github while running inside the build docker in the Azure piepline build agent. This is accomplished by:
+
+- generate a key pair (openssh)
+- upload public key to the github repo `acerta_standardnpm` (already done by SRE)
+- upload private key to Azure Pipleline secret files (already done by SRE)
+- update the azure-pipelines.yml file to include the following lines:
+
+```yaml
+- task: InstallSSHKey@0
+  inputs:
+    knownHostsEntry: github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
+    sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQSn8pAAAl+4DymlM67yOPjjgvXAXz1i8imLm0phiK434+B9fhar6LC5zgKlZj0JJ5SWyywL5vyawsIbHXUf5jgfQuSf9YMawNE0LGiLn5KnAfDl2i8Yd/a0TzFj7TbQzEqDXoOuPrvqw7ZER54kD3cXfHv1ffQn4gFw4qeKjlWtPols3uB1zSK01CzfaSYea5APy1jNn9V/CMyP+LRItRlBznu+mlOWOmOtN/a6L7jn9zFceRoTDz9Rid1kqWvmWfAQSu9+CHAwRL4sbHujmJD+gGKRmNLVYuuMqzuvjSLK1Ij0M76FiVJuna4VDs8q/vSiOsihmrsERkwEkeD0pqUZkhrAHt+JP8dqlTk4Nh41WT5ZNAWbB3Dls7E+SoyUmp4V1Y7x9yEVvd4WXqOV/AwxSEoBH2xih7hp/z2ozqYcVz4oE+4Wl4bLcSLuTew4KKmzLuRAyZkr83MT0yfGnsc/7iFSRQ3Rsg/7hkyIDhxfOKv5sew9wb8MTWVpSZPj8=
+    sshKeySecureFile: "gh_deploy.id_rsa"
+- task: Docker@2
+  displayName: Build
+  inputs:
+    command: build
+    repository: $(imageRepository)
+    dockerfile: $(dockerfilePath)
+    containerRegistry: "$(dockerRegistryServiceConnection)"
+    arguments: --ssh default
+    tags: |
+      $(tag)
+```
+
+The knownHostEntry is well known public key of github.com, the sshPublicKey is the public key that has been uploaded to githup `acerta_standardnpm` repo.
+The sshKeySecureFile is the file that has been uploaded to Azure Pipeline.
+
+You need to use build and push separately in this pipeline because the ssh-key agent only works with build, but not buildAndPush.
+
+#### OpenFeature
+
+_Please ask the Product Manager responsible for your service to provide you the LaunchDarkly sdkKey._
+
+This repo uses OpenFeature as server-side feature toggle.
+It has two Feature Flag function providers:
+
+- a locally implemented OpenFeature Provider that reads environment variables (an Environment Variable that is all capital, replace "-" with "\_" will be read, and its value retruned as the value for the flag. e.g. if you look up a flag "a-flag", and you have set up an Env Var "A_FLAG=true", then the lookup will return "true")
+- a Launch Darkly that connects to Launch Darkly and requires a "sdkKey", please ask the Product Management group for the key for local development
+
+To switch which Feature Toggle provider to be used, change the Environment Varialbe {OPENFEATURE_PROVIDER} to "ENV" or "LaunchDarkly".
+
+It is recommended for you to use the local Env-Provider and change the flag setting as often as you like first, then test with LaunchDarkly in collaboration with Product Management, once you are ready to commit.
+
+Two feature toggling was demonstrated:
+in ExampleService, a new-feature-flag was used to control the content of the returned message
+in ExampleController, a new-end-point was used to control if the v2 of the end-point would be available or not (return 404) using the Guard decorator
+
+In the env-provider case, to change the value of the flags, update the .env (or EnVar) to have `NEW_FEATURE_FLAG=true` or `NEW_END_POINT=false`
+
+You can find example of how to use OpenFeature in the example.controller.ts where `  @UseGuards(OpenFeatureGuard("new-end-point"))`, and also in example.service.ts where
+
+```typescript
+const newFeatureFlag = await this.openFeature.client.getBooleanValue(
+  "new-feature-flag",
+  false,
+  { transactionContext: "specific context for this particular transation" }
+);
+```
+
+#### Acerta Object Store
+
+This is for storing non-volatile, non-relational data object. The library accept any valid javascript object, convert it to JSON and store the JSON object to Azure Blob Storage.
+
+This is not for high throughput, high frequency access though. We are talking abou 0.1-0.2 sec latency to retrieve the JSON and load them into Object.
+
+#### Azure AD based JWT validation
+
+This is for validating the Bearer token.
+You can find sample code how to use this in app.controller.ts where `  @UseGuards(JwtGuard)`, and
+
+```typescript
+const aadJwtValidator = new AadJwtValidator(
+  this.configService.get("TENANT_ID", ""),
+  this.configService.get("CLIENT_ID", "")
+);
+const jwtIsValid = await aadJwtValidator.validateAadJwt(request);
+```
 
 ### If you are starting a new repo based on this template
 
@@ -76,41 +169,15 @@ Update the local_setup.sh to use new name of the Database you'd like to use (if 
 ./local_setup.sh
 ```
 
-This script can be configured to your needs:
+This script reads your environment variables (and .env file if exist):
 
 ```bash
-# config
-SERVER_NAME=nestjs_example
-SERVER_PORT=9080
-DB_PORT=5432
+POSTGRES_DATABASE=nestjs_example
+POSTGRES_PORT=5432
+POSTGRES_USERNAME=postgres
 ```
 
-This script will create a dockerized postgres container named `postgres_local` if it does not exist and create run & test databases for this server in that postgres container
-
-### OpenFeature
-
-_Please ask the Product Manager responsible for your service to provide you the LaunchDarkly sdkKey._
-
-This repo uses OpenFeature as server-side feature toggle.
-It has two Feature Flag function providers:
-
-- a locally implemented OpenFeature Provider that reads environment variables (an Environment Variable that is all capital, replace "-" with "\_" will be read, and its value retruned as the value for the flag. e.g. if you look up a flag "a-flag", and you have set up an Env Var "A_FLAG=true", then the lookup will return "true")
-- a Launch Darkly that connects to Launch Darkly and requires a "sdkKey", please ask the Product Management group for the key for local development
-
-To switch which Feature Toggle provider to be used, change the Environment Varialbe {OPENFEATURE_PROVIDER} to "ENV" or "LaunchDarkly".
-
-It is recommended for you to use the local Env-Provider and change the flag setting as often as you like first, then test with LaunchDarkly in collaboration with Product Management, once you are ready to commit.
-
-Two feature toggling was demonstrated:
-in ExampleService, a new-feature-flag was used to control the content of the returned message
-in ExampleController, a new-end-point was used to control if the v2 of the end-point would be available or not (return 404) using the Guard decorator
-
-In the env-provider case, to change the value of the flags, update the .env (or EnVar) to have `NEW_FEATURE_FLAG=true` or `NEW_END_POINT=false`
-
-#### how to "copy"" feature toggle functionality to your own nest.js repo?
-
-copy the `openfeature` dir and import `openfeature.module` to your code.
-to use the end-point guard, you should import the guard to the controller that you use them, see the example.controller.ts for code how to accomplish it.
+It will then create a dockerized postgres container named `postgres_local` if it does not exist and create run & test databases for this server in that postgres container.
 
 ### Logging
 
