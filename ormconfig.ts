@@ -1,12 +1,15 @@
 // https://stackoverflow.com/a/68154675/11670977
 
-import { ConfigModule } from "@nestjs/config";
-import configurationDB from "config/configuration-db";
+import { DataSource, DataSourceOptions } from "typeorm";
+import { dbConfig } from "./src/config";
+console.log(JSON.stringify(dbConfig()));
 
-ConfigModule.forRoot({
-  isGlobal: true,
-  load: [configurationDB],
-});
-
-export default configurationDB();
-// new ConfigService(new NestConfigService())
+export const datasource = new DataSource(dbConfig() as DataSourceOptions);
+datasource
+  .initialize()
+  .then(() => {
+    console.log("Data Source has been initialized!");
+  })
+  .catch((err) => {
+    console.log("Data Source has not been initialized!" + err);
+  });

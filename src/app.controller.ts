@@ -14,9 +14,9 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";
-import { validateAadJwt } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
+import { AadJwtValidator } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { AppService } from "app.service";
-import JwtGuard from "utils/jwt-guard";
+import { JwtGuard } from "utils/jwt-guard";
 
 @ApiTags("standard")
 @Controller()
@@ -46,16 +46,19 @@ export class AppController {
   async version(@Req() request: Request): Promise<unknown> {
     let commitJson = {};
     try {
-      const jwtIsValid = await validateAadJwt(request);
+      const aadJwtValidator = new AadJwtValidator(
+        this.configService.get("TENANT_ID", ""),
+        this.configService.get("CLIENT_ID", "")
+      );
+      const jwtIsValid = await aadJwtValidator.validateAadJwt(request);
       commitJson = { commits: this.configService.get("commits") };
     } catch (err) {
       commitJson = { commits: "Unauthorized to view commit info" };
     }
     return {
       version: this.configService.get("version"),
-      runtime_version_env: JSON.parse(
-        this.configService.get<string>("LINEPULSE_SVC_VERSION") || "{}"
-      ),
+      runtime_version_env:
+        this.configService.get("LINEPULSE_SVC_VERSION") || "{}",
       ...commitJson,
     };
   }
@@ -63,13 +66,8 @@ export class AppController {
   @Get("config")
   @Version(VERSION_NEUTRAL)
   @ApiBearerAuth("JWT-auth")
-  @UseGuards(JwtGuard())
+  @UseGuards(JwtGuard)
   config(): unknown {
-    return {
-      version: this.configService.get("version"),
-      commits: this.configService.get("commits"),
-      database: this.configService.get("database"),
-      config: this.configService.get("_PROCESS_ENV_VALIDATED"),
-    };
+    return this.appService.configuration();
   }
 }

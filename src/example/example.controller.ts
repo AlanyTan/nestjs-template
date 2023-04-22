@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Controller, Get, Version, Logger, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Version,
+  Logger,
+  UseGuards,
+  Headers,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { OpenFeatureGuard } from "utils";
 import { ExampleService } from "./example.service";
 
@@ -15,9 +22,11 @@ export class ExampleController {
   ) {}
   @Get("get_request")
   @Version("1")
+  @ApiOperation({ summary: "A feature controlled example message." })
   @ApiResponse({
     status: 200,
-    description: "Normal run, with sample and calculation returned.",
+    description:
+      "Normal run, returns either old or new messages based on the feature flag value.",
   })
   @ApiResponse({
     status: 204,
@@ -30,9 +39,11 @@ export class ExampleController {
   @ApiResponse({
     status: 500,
     description:
-      "Error processing cap metrics calculation, please check error message for details.",
+      "The service run into internal trouble, please check error logs for details.",
   })
-  async getExample(): Promise<string> {
+  async getExample(
+    @Headers("customer_uuid") sessionToken?: string
+  ): Promise<string> {
     this.logger.log("Calling getExample with info", "ExampleController:info");
     return this.exampleService.getExample();
   }
@@ -52,9 +63,14 @@ export class ExampleController {
     description: "The request sent was invalid or uninterpretable.",
   })
   @ApiResponse({
+    status: 404,
+    description:
+      "The requested resource is not found (i.e. being turned off by the feature flag).",
+  })
+  @ApiResponse({
     status: 500,
     description:
-      "Error processing cap metrics calculation, please check error message for details.",
+      "The service run into internal trouble, please check error logs for details.",
   })
   @UseGuards(OpenFeatureGuard("new-end-point"))
   async getNewExample(): Promise<string> {

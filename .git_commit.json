@@ -1,30 +1,14 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-03-22 03:49:54",
-  "branch": "## feature/updateTestCases",
-  "files changed": [ "M  src/app.module.ts",
- "M  src/example/example.controller.spec.ts",
- "M  src/example/example.controller.ts",
- "M  src/example/example.service.spec.ts",
- "M  src/example/example.service.ts",
- "D  src/metrics/index.ts",
- "D  src/metrics/metrics.controller.ts",
- "D  src/metrics/metrics.module.ts",
- "D  src/openfeature/index.ts",
- "D  src/openfeature/js-env-provider.spec.ts",
- "D  src/openfeature/js-env-provider.ts",
- "D  src/openfeature/js-launchdarkly-provider.spec.ts",
- "D  src/openfeature/js-launchdarkly-provider.ts",
- "D  src/openfeature/openfeature-guard.ts",
- "D  src/openfeature/openfeature.module.ts",
- "M  src/utils/index.ts",
- "M  src/utils/jwt-guard.ts",
- "M  src/utils/openfeature-guard.ts",
- "M  test/e2e/app.e2e-spec.ts",
- "M  test/setup-e2e.ts"]
+  "timestamp": "2023-04-22 00:23:36",
+  "branch": "## feature/DATABASE_TYPEconfig...origin/feature/DATABASE_TYPEconfig",
+  "files changed": [ "D  .npmrc",
+ "M  package-lock.json",
+ "M  package.json",
+ "M  src/utils/index.ts"]
 },
 "previous commits":[
- {"766327f0": " Merge pull request #2 from AcertaAnalyticsSolutions\/feature\/precommit"},
- {"883b0a36": " Merge branch 'main' into feature\/precommit"}
+ {"4bb2874c": " Update for .npmrc"},
+ {"88d6219e": " updated to use AadJwtValidator Obj"}
  ]
 }

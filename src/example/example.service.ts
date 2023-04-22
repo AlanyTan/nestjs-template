@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
+import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { OPENFEATURE_CLIENT } from "config";
 
 //we will use the standard logger from nestjs, but it is actually pino writting the logs (set up in main.ts and app.module.ts)

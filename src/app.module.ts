@@ -4,8 +4,7 @@ import { Module, RequestMethod, Logger, Global } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { openfeature } from "@AcertaAnalyticsSolutions/acerta-standardnpm";
-import { Client } from "@openfeature/js-sdk";
+import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import {
   PrometheusModule,
   PrometheusController,
@@ -14,35 +13,43 @@ import Joi from "joi";
 import { LoggerModule } from "nestjs-pino";
 import { OPENFEATURE_CLIENT, config, dbConfig } from "config";
 import { ExampleModule } from "example/example.module";
+import { ExampleOrmModule } from "example-orm/example-orm.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import configurationDB from "./config/configuration-db";
+import configurationDB from "./config/db";
 
 @Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: [`.env.${process.env.NODE_ENV}`, ".env"],
-      load: [config, configurationDB],
+      load: [config, configurationDB], //configurationDB is a structured config obj, can be accessed like get('database.host')
       //load: [configurationDB], //configurationDB is a structured config obj, can be accessed like get('database.host')
       expandVariables: true,
+      cache: true,
       isGlobal: true,
       validationSchema: Joi.object({
-        //add configuration validation here,
+        //add *ALL* configuration that your application need here, even if they are "optional" (other than DB config, which you should do in the db.ts)
         //if ".required()" then application will abort starting if that configuration was not provided.
         //if ".default(value)" then the value is used if the expected EnVar does not exist
+        //if neither ".required()" nor ".default(value)" then the EnVar is optional, and will be processed by the ConfigService.get() method
+        //if you do not list a configuration here, then it will not be available as part of the ConfigService to the application at all
         LINEPULSE_ENV: Joi.string().required(),
         OPENFEATURE_PROVIDER: Joi.string().required(),
-        SWAGGER_ON: Joi.boolean().default(false),
         PORT: Joi.number().required(),
         HOST: Joi.string().required(),
-        HAS_DATABSE: Joi.boolean().default(false),
+        SVC_1_ENDPOINT: Joi.string().uri().required(),
+        SVC_2_ENDPOINT: Joi.string().uri().required(),
         PINO_PRETTY: Joi.boolean().default(true),
-        SVC_1_ENDPOINT: Joi.string().required(),
-        SVC_2_ENDPOINT: Joi.string().required(),
+        SWAGGER_ON: Joi.boolean().default(false),
+        DATABASE_TYPE: Joi.string().default("none"),
+        LOG_LEVEL: Joi.string().default("info"),
         LOGGING_REDACT_PATTERNS: Joi.string(),
         SERVICE_PREFIX: Joi.string(),
-      }),
+        TENANT_ID: Joi.string().default(""),
+        CLIENT_ID: Joi.string(),
+        LINEPULSE_SVC_VERSION: Joi.string(),
+      }).options({ stripUnknown: true }),
     }),
     // we setup pino logger options here, and in main.ts.  once it's set up here and in main.ts, we can use it in any other file by using the standard nestjs Logger
     LoggerModule.forRootAsync({
@@ -104,12 +111,6 @@ import configurationDB from "./config/configuration-db";
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        configService.get("database") as TypeOrmModuleOptions,
-    }),
     PrometheusModule.register({
       controller: PrometheusController,
       path: "/metrics",
@@ -117,6 +118,18 @@ import configurationDB from "./config/configuration-db";
     HttpModule,
     TerminusModule,
     ExampleModule,
+    ...((process.env.DATABASE_TYPE ?? "none") == "none"
+      ? []
+      : [
+          TypeOrmModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => {
+              return configService.get("database") as TypeOrmModuleOptions;
+            },
+          }),
+          ExampleOrmModule,
+        ]),
   ],
   controllers: [AppController],
   providers: [

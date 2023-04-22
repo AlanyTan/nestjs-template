@@ -40,19 +40,37 @@ The .vscode config allows the VSCode to be able to debug, build container and ru
 - Nest CLI - v8.x.x
 - VSCode, docker extension, remote-container extention
 
-## Getting Started
+## How to use this repo
 
 ### If you are starting a new repo based on this template
 
-You shall change the package.json to reflect the new name of your repo:
+To start, you shall create a new repo using this (nestjs-example) as template.
+Once you fetch this repo down to your local development environment, change the following key files:
+
+- `package.json` to reflect the new name, description, version info of your repo:
 
 ```
-  "name": "nestjs-example",
+  "name": "not nestjs-example anymore",
+  "version": "0.9.0",
+  "description": "New repo that follows Acerta standard Nest.JS requirements",
 ```
 
-### Run Local PostgreSQL Setup Script (optional, if you need Postgresql in a container) _currently disabled_
+- `.devcontainer/devcontainer.json` it is **strongly** recommended that you use devcontainers to develop the new repo, it allows you to use standard confiugured IDE
 
-Update teh local_setup.sh to use new name of the Database you'd like to use (if you use Database)
+```
+  "name": "Not Nest.js Example with DevContainer",
+  "portsAttributes": {
+    "9080": {
+      "label": "Not NestJS Example",
+      "onAutoForward": "notify"
+    }
+  },
+
+```
+
+### Setup Postgres Database (optional, if you need Postgresql in a container)
+
+Update the local_setup.sh to use new name of the Database you'd like to use (if you use Database)
 
 ```
 ./local_setup.sh
@@ -129,41 +147,106 @@ the SER team can append (but can't disable these 3) by setting Environment Varia
 Log message verboseness
 to balance amount of characters logged and details of info needed, LOG_LEVEL will also influence how much HTTP request/response details are logged with each log message, trace as all info (other than redacted), debug will have most, and info for higher will only have req.id , req.method + req.url in the log
 
-#### version endpoint
+## Standard Endpoints
 
-a `/version` end-point should be standard, and an Environment Variable LINEPULSE_SVC_VERSION will be returned. SRE team will set the value of the EnVar as a JSON string, the parsed JSON is returned as response to this end-point
+### version endpoint
 
-#### health endpoint
+The `/version` end-point provide 3 key info
 
-the app.service.ts include the health() function which is called when `/health` endpoint is called.
-the health service should perform pingCheck against all further backend services that are crucial to the operation of itself. In this example 2 pingCheck were performed, to SVC_1_ENDPOINT and SVC_2_ENDPOINT.  
-This means the service status will only report 200 if both backed services are responding properly. Similarly if your services needs a database, you shall uncomment the database check.
-This is to avoid situations where some services reported health status as healthy, but were actually unable to function because dependencies were up.
+- the version number you set in the `package.json` file, this is the source code version you as the developer set
+  - the first digit is the Major version, which for Linepulse, it should be 3
+  - the second digit is the minor version, typically it means important feature enhancements
+  - the third digit is the patch number, typically these are non-breaking bug fixes, or non-breaking feature updates
+- the value of an Environment Variable `LINEPULSE_SVC_VERSION` that is set by SRE at run time
+  - this is often the build number of the container running, combined with the above, it gives a clear idea of what code was built at what time
+- commit info
+  - this actually requires you to provid a valid JWT (issued by AAD, not Auth0 because these are internal Acerta info) if you don't have a valid JWT, you will see "Unauthorized to view commit info"
+  - assuming you have a valid JWT, this section will show you the timestamp and branch of the latest commit, the list of files changed by this latest commit, and it will also show you the commit hash and description of the previous 2 commits.
 
-#### metrics endpoint
+### health endpoint
 
-`/metrics` will report system metrics to Prometheus.  
-You can copy of the `metrics` dir and import MetricsModule to your app.module.ts
+- The `/health` end-point calls the health() function in app.service.ts
+  You provide an array of strings as the parameter for health() function. Each member of this array is an URL that represents a backend service your current service depends on. The health() function will iterate through the members of the array and perform healthPingCheck of each.
+  - The idea is this service should not report "200 healthy" unless all services it depends on also reports back "200 healthy".
+    In this example 2 pingCheck were performed, to \$SVC_1_ENDPOINT and \$SVC_2_ENDPOINT.
+- The database (if your services needs a database, you should have set DATABASE_TYPE to a valid value like "postgres").
+  - you do not need to provide parameters to the health() function to check the Database, make sure your Environment Variable `DATABASE_TYPE` is set properly (i.e. to "postgres").
+  - if `DATABASE_TYPE` is "none" or not set, then the health() function will not check the Database.
 
-#### Swagger
+### config endpoint
 
-swagger is used for automatically document APIs.
-However, Swagger is DISABLED if Environment Variable SWAGGER_ON=false (which is the default value). This should be the default behavior for all repo unless otherwise required.
+The /config endpoint is JWT protected, if you don't have a valid AAD JWT that gives you permission, this end-point will return 401 instead of any info
 
-#### ConfigService
+- if you do have a valid AAD JWT, you will be able to see the running setting values of all the configuration you set in the validationSchema section of the app.module.ts and your database configure in the ./config/db.ts
 
-We use **standard** Nestjs ConfigService (a change from previous version of the Nestjs.Example). The required Environment Variables are listed in the app.module.ts files under the `validationSchema` section under imports:[ConfigModule.forRoot] using Joi notions.  
-This ensures the service will fail on start if the required Environment Variable has not been set. You can also provide default values in here as well so that instead of fail to start, ConfigService can use that default value if the EnVar is missing.
+### metrics endpoint
+
+`/metrics` will report system metrics to Prometheus.
+
+## Swagger
+
+Swagger is used for automatically document APIs following OpenAPI standards.
+However, Swagger is DISABLED if Environment Variable SWAGGER_ON=false (which is the default value). This should be the default behavior for all services running in production unless otherwise required.
+
+Please note that Swagger uses the name, description, and version info you update in your package.json
+
+- An optional `SERVICE_PREFIX` Environment Variable allows the SRE to add a prefix to all controllers this service listens to.
+  - the 4 standard services are not affected by this SERVICE_PREFIX
+- @ApiTags, @ApiOperation, @ApiResponse are used to describe your endpoints.
+- @ApiBearerAuth is used to allow Swagger to call those tagged end-points with a JWT that you can set in the Swagger ui
+
+## ConfigService
+
+We use **standard** Nestjs ConfigService. The required Environment Variables are listed in the app.module.ts files in the `validationSchema` section under `imports:[ConfigModule.forRoot]` using Joi notions.  
+This ensures the service will fail on start if the required Environment Variable has not been set. You can also provide default values in here as well so that instead of fail to start, ConfigService can use that default value if the EnVar is not set.
+
+You should list **all** Environment Variables your code use here, even if they are completely optional. The only exception is for Database configuration should be listed in the config/db.ts (see below).
 
 This also centralize all environment variables in one place and help documenting them. Please remember, it is your responsibility to clearly list all the required Environment Variables that your service needs, and your service should fail starting up if such environment variable do not exist.
 
-### debug and test
+### Database Config
 
-#### debug nestjs using npm
+If your service requires database, please use TypeOrm.
+To configure your database, first make sure you set `DATABASE_TYPE` to "postgres" or any other valide database provider. Then use the src/config/db.ts for further configurations.
+
+The convention is if your `DATABASE_TYPE=postgres` then all POSTGRES related configuration should be configured with `POSTGRES_` as prefix. The current db.ts actually will try to map Environemnt Variables to Postgres config with these rules:
+
+- all DATABASE related config should be listed in the src/config/db.ts file, the Joi.ObjectSchema variable
+- all POSTGRES\_ prefix will be removed, and variable will be converted to camelCase. i.e. POSTGRES_DROP_SCHEMA Environment Variable will be mapped to dropSchema option of the postgres option.
+- you are able to add other postgres options that are not controled by Environment Variables in the `registerAs` section.
+  - for example entities and migrations files are stored per our choice, and will not be differ at run time, so they are added here.
+
+#### Database Migration
+
+It is expected that all database changes are handled by migration scripts so existing data are preserved and converted to the new format without the risk of data loss.
+
+TypeOrm has migration capability built in. Long story short, you should always keep synchrinization off unless you are running some PoC and expect a lot of changes, and lots of changes that need to be discarded.
+
+Normally turn synchronization off, keep Migration on, and once you make changes to your entities, use
+
+```
+npm run typeorm  migration:generate migration/name_of_this_migration
+```
+
+or us the following command as an alternative
+
+```
+npx typeorm-ts-node-commonjs migration:generate migration/{mig_name} -d ormconfig.ts
+```
+
+to let TypeOrm generate migration scripts for you.
+
+**Note** you should review the contents of the migration scripts and make sure they are correct.
+Migration scripts should be incremental, meaning they are applied according the their timestamp (which is the prefix of their file name). You shall always keep all migration scripts, which means playing all these migration scripts from scratch (an empty database) should bring a working copy of the database with the latest database structure that is needed by your latest application code.
+
+## debug and run
+
+### debug nestjs using npm
 
 You should be able to use the "Run" menu and debug function. Click the sidebar Debug icon, and select "Launch via NPM" to the right of "RUN and DEBUG" label. You can also use menu "Run"->"Start Debug", VSCode should start nmp for you, and ask you if you want to open web browser. Open the web broswer, you should be able to see swagger and make testing API call.
+These are configured using the package.json, and .vscode/launch.json and .vscode/task.json
 
-#### launch using runtime container
+### launch using runtime container
 
 You can also test it in a docker container, select "Docker Node.js Launch" next the "RUN and DEBUG" label, You can also use menu "Run"->"Start debugging" (it launches what you select in the previous drop down), this time, VScode should build docker container for you.  
 Once the image is built and started, you should be able to see it running in the Docker explorer window within VSCode, your default browser should pop up and open the main page of the Nestjs application.
@@ -171,15 +254,38 @@ Once the image is built and started, you should be able to see it running in the
 Troubleshoot:
 If the Nest application is running, you should at least be able to open a terminal inside VSCode, and run:
 ` docker exec nestjsexample-dev curl http://localhost:9080/health`
-(Note, the nest server runs inside the runtime container, out of the devcontainer, that's why you need to call the docker exec nestjsexample-dev that exec the curl inside the debug container.
+_Note,_ the nest server runs inside the runtime container, out of the devcontainer, that's why you need to call the docker exec nestjsexample-dev that exec the curl inside the debug container.
 Next, SSH to the remote host where the docker container runs, and do
 `curl http://localhost:<map-port>/health`
 should show you the same results. <map-port> is the port docker used to map host port to docker exposed port, you can get this port number by calling `docker ps | grep 9080`, the default is 9080 (we mapped container port 9080 to host port 9080)
 
-#### test with jest
+### test with jest
 
 You can and should also test your code using automated tests. Jest is standard in this repo. Select "Docker Node.js Launch" next the "RUN and DEBUG" label, You can also use menu "Run"->"Start debugging" (it launches what you select in the previous drop down), chose either "Test with npm test" or "Test with npm test:e2e" the differences is the e2e test will test the app.module (the root module for your application) while the non-e2e will test each module independently only. So most likely in early stages of development work, only the non-e2e tests will work, but closer to PR, you should test using e2e one.
 The jest testing coverage report is turned on, and at `All files` level the %statement, %Funcs %Lines coverage should be 75% or higher.
+
+## Test
+
+As a developer, it is your responsibility to write unit testing and service level end-2-end testing that are repeatable.
+It is expected that
+
+- Automated testing code coverage should be >80%
+- If automated testing cannot pass, you should **NOT** create a PR to try to merge your code to any major branches
+- You should add test cases whenever you address a bug, as part of the bug fixes, you should produce automated test cases to tes the bug has been fixed, and it can be used to test in the future, the bug would not return
+
+Tests are created as `*.spec.ts`. When jest runs (either via the Debug and RUn menu, or manually), it will look for all the directories and run the \*.spec.ts files.
+
+### Unit testing
+
+Unit testing are usually stored next to the functions they test. Typically you can think of your goal is to call those functions, and make sure however, you call them, they return you expected values.
+
+### e2e testing
+
+End-2-end testing are tests that "put all components, modules together", in some cases, that even involves making connections to other services.
+e2e testing are stored under the `test` directory that is next to the `src` dir.
+
+You probalby noticed that next to our main.ts file, there is a main.config.ts file. This is because when we run test, we create a testing App Module which allows us to look deeper into the execution. However, this means we are _not_ using the main app.  
+That's why we move most of the configuration into the main.config.ts so that we can re-use the setup of the app when we set up the testing App Module. As you can see in the setup-e2e.ts we are able to turn Logging off after the mainConfig(app), which is a demonstration of the benefit of this setup.
 
 ## Technical explainations
 
@@ -222,6 +328,8 @@ await app.listen(port, host, () => Logger.log("Listening on port " + port));
 ```
 
 The `Logger.log("Listening on port" + port)` part is to make sure a log output from the nest.js app is written to the log, where Docker extention monitors. This allows VSCode to know when the application is ready, and which port the application runs on.
+
+You probably noticed that the main.ts file is very short and concise. Most of the actual configuration of the main app is done in main.config.ts This allows us to test the mainconfig of the app in our e2e test scripts. The main.ts is actually not used during e2e test (so that test can interject the app and calcuate test coverage, mocks, etc)
 
 #### to use the Acerta DevLab VMs
 
@@ -297,3 +405,10 @@ the important part is:
 ```
 
 Here, the line `"ports": [{"containerPort": 9080,"hostPort": 9080}]` tells docker map container port 9080 to host port 9080. Without this line, docker will assign a random host port map to container port 9080, which means each run could need a different URL (port number is different) in the testing browser. If relying on VSCode to bring up the browser automatically, then it might not be too big a hassle to skip this line.
+
+## References
+
+- supportingmultitenancy with nest-js-typeorm
+  https://thomasvds.com/schema-based-multitenancy-with-nest-js-type-orm-and-postgres-sql/
+  TypeORM technical vocabulary
+  https://typeorm.delightful.studio/globals.html
