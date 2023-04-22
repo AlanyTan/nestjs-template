@@ -29,7 +29,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-    - InstallSSHKey@0
+    - task: InstallSSHKey@0
       inputs:
         knownHostsEntry: github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
         sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQSn8pAAAl+4DymlM67yOPjjgvXAXz1i8imLm0phiK434+B9fhar6LC5zgKlZj0JJ5SWyywL5vyawsIbHXUf5jgfQuSf9YMawNE0LGiLn5KnAfDl2i8Yd/a0TzFj7TbQzEqDXoOuPrvqw7ZER54kD3cXfHv1ffQn4gFw4qeKjlWtPols3uB1zSK01CzfaSYea5APy1jNn9V/CMyP+LRItRlBznu+mlOWOmOtN/a6L7jn9zFceRoTDz9Rid1kqWvmWfAQSu9+CHAwRL4sbHujmJD+gGKRmNLVYuuMqzuvjSLK1Ij0M76FiVJuna4VDs8q/vSiOsihmrsERkwEkeD0pqUZkhrAHt+JP8dqlTk4Nh41WT5ZNAWbB3Dls7E+SoyUmp4V1Y7x9yEVvd4WXqOV/AwxSEoBH2xih7hp/z2ozqYcVz4oE+4Wl4bLcSLuTew4KKmzLuRAyZkr83MT0yfGnsc/7iFSRQ3Rsg/7hkyIDhxfOKv5sew9wb8MTWVpSZPj8=
