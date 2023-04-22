@@ -41,11 +41,11 @@ stages:
         tags: |
           $(tag)
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build 
       inputs:
-        command: buildAndPush
+        command: build
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
+        arguments: --ssh default
         tags: |
           $(tag)
