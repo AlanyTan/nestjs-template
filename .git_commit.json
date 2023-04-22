@@ -1,14 +1,14 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-04-14 01:04:53",
+  "timestamp": "2023-04-22 00:23:36",
   "branch": "## feature/DATABASE_TYPEconfig...origin/feature/DATABASE_TYPEconfig",
-  "files changed": [ "M  .npmrc",
- "M  .vscode/tasks.json",
- "M  Dockerfile",
- "M  package-lock.json"]
+  "files changed": [ "D  .npmrc",
+ "M  package-lock.json",
+ "M  package.json",
+ "M  src/utils/index.ts"]
 },
 "previous commits":[
- {"88d6219e": " updated to use AadJwtValidator Obj"},
- {"59e116c1": " improve database type check"}
+ {"4bb2874c": " Update for .npmrc"},
+ {"88d6219e": " updated to use AadJwtValidator Obj"}
  ]
 }
