@@ -31,12 +31,8 @@ export class AppController {
   @HealthCheck()
   health(): Promise<HealthCheckResult> {
     const backendServicesToCheck: string[] = [];
-    backendServicesToCheck.push(
-      this.configService.get<string>("SVC_1_ENDPOINT") ?? ""
-    );
-    backendServicesToCheck.push(
-      this.configService.get<string>("SVC_2_ENDPOINT") ?? ""
-    );
+    backendServicesToCheck.push(this.configService.get("SVC_1_ENDPOINT", ""));
+    backendServicesToCheck.push(this.configService.get("SVC_2_ENDPOINT", ""));
     return this.appService.health(backendServicesToCheck);
   }
 

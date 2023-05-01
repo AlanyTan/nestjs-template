@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "type": "pwa-node",
+      "type": "node",
       "name": "Launch via NPM",
       "request": "launch",
       "runtimeExecutable": "npm",
@@ -43,11 +43,10 @@
       "name": "Docker Node.js Launch",
       "type": "docker",
       "request": "launch",
-      "preLaunchTask": "docker-run: debug",
+      "preLaunchTask": "docker-run:debug",
       "platform": "node",
       "dockerServerReadyAction": {
         "action": "openExternally",
-
         "pattern": "Listening on port (\\d+)",
         "uriFormat": "http://localhost:%s"
       }

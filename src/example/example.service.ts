@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { HttpService } from "@nestjs/axios";
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
@@ -10,6 +11,7 @@ export class ExampleService {
   constructor(
     private readonly configService: ConfigService,
     private readonly logger: Logger = new Logger(ExampleService.name),
+    private readonly httpService: HttpService,
     @Inject(OPENFEATURE_CLIENT) private openFeature: openfeature
   ) {}
 

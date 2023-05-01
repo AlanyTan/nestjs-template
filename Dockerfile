@@ -1,35 +1,42 @@
+################
+# Run-time image
+################
 FROM node:16-alpine AS build
-
-WORKDIR /usr/src/app
-COPY package*.json ./
 
 RUN apk add --no-cache openssh-client git
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-#RUN npm install husky --save-dev 
-#RUN npm run prepare
 
+WORKDIR /usr/app
+COPY --chown=node:node package*.json ./
 RUN --mount=type=ssh npm ci
-#RUN npm ci
 
-COPY . .
-
+COPY --chown=node:node . .
 RUN npm run build
 
-#COPY .example.env ./
+ENV NODE_ENV=production
+### currently the Acerta-standardnpm requires prepublish script to compile and be functional, so --ignore scripts can't be used
+RUN npm pkg delete scripts.prepare
+RUN --mount=type=ssh npm ci --omit=dev && npm cache clean --force
 
-#RUN env $(grep -vE "^[  ]*#"  .example.env) npm run test
+USER node
 
+################
+# Run-time image
+################
 FROM node:16-alpine
+ENV NODE_ENV=production
 
-WORKDIR /usr/src/app
+#RUN apk update && apk add git openssh-client
 
-COPY package*.json ./
-COPY .git_commit.json ./
+WORKDIR /usr/app
 
-#RUN npm ci --only=production --ignore-scripts
-
-COPY --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node --from=build /usr/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/app/dist ./dist
+COPY --chown=node:node .git_commit.json ./
 
 EXPOSE 9080
 
-CMD ["npm","run","start:prod"]
+USER node
+
+ENTRYPOINT ["npm","run","start:prod"]

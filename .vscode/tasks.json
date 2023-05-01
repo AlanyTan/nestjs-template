@@ -8,21 +8,22 @@
       "dockerBuild": {
         "dockerfile": "${workspaceFolder}/Dockerfile",
         "context": "${workspaceFolder}",
-        "buildArgs": { "NPM_TOKEN": "${env:NPM_TOKEN}" },
-        "pull": true
+        "pull": true,
+        "customOptions": "--ssh default"
       }
     },
     {
       "type": "docker-run",
-      "label": "docker-run: release",
+      "label": "docker-run:release",
       "dependsOn": ["docker-build"],
       "platform": "node"
     },
     {
       "type": "docker-run",
-      "label": "docker-run: debug",
+      "label": "docker-run:debug",
       "dependsOn": ["docker-build"],
       "dockerRun": {
+        "envFiles": [".env"],
         "env": {
           "DEBUG": "*",
           "NODE_ENV": "development"

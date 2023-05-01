@@ -6,14 +6,17 @@ import {
   Logger,
   UseGuards,
   Headers,
+  UseInterceptors,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { OpenFeatureGuard } from "utils";
+import { forwardHeaderAuthInterceptor } from "utils/forward.header.auth";
 import { ExampleService } from "./example.service";
 
 @ApiTags("example")
 @Controller({ path: "example", version: "1" })
+@UseInterceptors(forwardHeaderAuthInterceptor)
 export class ExampleController {
   constructor(
     private readonly exampleService: ExampleService,
