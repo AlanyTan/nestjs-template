@@ -21,19 +21,31 @@
       "onAutoForward": "notify"
     }
   },
-  // Set *default* container specific settings.json values on container create.
-  "settings": {},
+  "customizations": {
+    "vscode": {
+      "settings": {},
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "ms-azuretools.vscode-docker",
+        "mindaro-dev.file-downloader",
+        "github.vscode-pull-request-github",
+        "redhat.vscode-yaml"
+      ],      
+    },
+    "codespaces": {
+      "repositories": {
+        "acertaanalyticssolutions/acerta-standardnpm": {
+          "permissions": {
+            "contents": "read"
+          }
+        }
+      }
+    }
+  },
 
   // Add the IDs of extensions you want installed when the container is created.
-  "extensions": [
-    "dbaeumer.vscode-eslint",
-    "mtxr.sqltools",
-    "mtxr.sqltools-driver-pg",
-    "ms-azuretools.vscode-docker",
-    "mindaro-dev.file-downloader",
-    "github.vscode-pull-request-github",
-    "redhat.vscode-yaml"
-  ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
