@@ -1,29 +1,31 @@
-# NestJS Example
+# Acerta NestJS Example
 
-## Purpose
+## Background
 
 To provide a standardized starting point for our backend node.js microservices.
 Database (Postgresql) optional.
-(\*note, Postgresql is currently turned off while we are solving a technical challenge to allow different user data to be stored in different physical tables)
 
-Standard logging, testing, /health, /version, metrics and Feature Toggle are included in this repo, and should be used in all Nest.js based repos for Acerta products.
+Standard logging, testing, /health, /version, /metrics, /config and Feature Toggle are included in this repo, and should be used in all Nest.js based repos for Acerta products.
 
 This repo also includes VSCode assets including .devcontainer config and .vscode config so that development environment requirements can be built into a design-time container which allows multiple repo to respect their different lib/tool/package requirements that can co-exist on a single host concurrently .devcontainer works on Linux host, or remotely on a Linux VM running in the cloud (you should also be able to use local docker on WSL if you prefer Windows, although it's not thoroughly tested).
 The .vscode config allows the VSCode to be able to debug, build container and run, and execute automated test scripts (jest based) all in an VSCode integrated fashion.
 
 ## Key features in this Template
 
-- Standardized logging, logging format, redact, dynamic verbosness
+- Importing acerta-standardnpm packages and being able to deploy using Azure Pipeline (azure-pipelines.yml)
+- Dockerized, Dockerfile builds Docker image that can be executed in local & Azure pipeline build Agent
 - OPENFEATURE feature toggle
 - - two feature toggle providers Environment Variable & LaunchDarkly
 - - standard OPENFEATURE client that can be easily switched between the two providers using EnVar without changing application code
+- AAD protected meta info end-points
+- - /config endpoint - protected by AAD JWT guard
+- - partial /version content are hidden if no AAD JWT provided
+- health check end-point (checks dependending services and DB)
+- metrics end-point
+- config service, with standard Joi validation using .env file or environment vars (.env is ignored in .gitignore and .dockerignore, check .example.env for example)
+- Standardized logging, logging format, redact, dynamic verbosness
 - Jest based unit test and app e2e test templates, and vscode integrated test execution
 - openapi/swagger-ui (can be turned on/off using EnVar via ConfigService)
-- health check end-point (checks dependending services)
-- version end-point
-- metrics end-point
-- dockerfile
-- .env config files for environment vars (are ignored in .gitignore and .dockerignore, check .example.env for example)
 - VSCode usability enhancements
 - - remote-container ready repo, all design time requirements can be built into the devcontainer
 - - .vscode/launch.json & .vscode/tasks.json that enables VSCode integrated "run and debug" and test function.
@@ -42,6 +44,32 @@ The .vscode config allows the VSCode to be able to debug, build container and ru
 
 ## How to use this repo
 
+### create new Nest.JS based repo using this repo as the template.
+
+To start, you shall create a new repo using this (nestjs-example) as template.
+Once you fetch this repo down to your local development environment, change the following key files:
+
+- `package.json` to reflect the new `name`, `description`, `version` info of your repo:
+
+```
+  "name": "not nestjs-example anymore",
+  "version": "0.9.0",
+  "description": "New repo that follows Acerta standard Nest.JS requirements",
+```
+
+- `.devcontainer/devcontainer.json` it is **strongly** recommended that you use devcontainers to develop the new repo, it allows you to use standard confiugured IDE
+
+```
+  "name": "Not Nest.js Example anymore with DevContainer",
+  "portsAttributes": {
+    "9080": {
+      "label": "Not NestJS Example",
+      "onAutoForward": "notify"
+    }
+  },
+
+```
+
 ### The Acerta_StandardNpm package
 
 This repo imports `acerta_standardnpm` as a dependency.
@@ -52,39 +80,86 @@ It currently includes 3 features:
 - Acerta Object Storage
 - Azure AD based JWT validation
 
+#### install and deploy with acerta_standardnpm private package
+
+##### npm install this private package
+
 To use this package, which is private, the following is needed:
-As developer, `npm install github acertaanalyticssolutions/acerta_standardnpm`
+As developer, `npm install github:acertaanalyticssolutions/acerta_standardnpm`
 because it is a github repo, it uses the same authentication (should be github's ssh) to pull this package down. You should also be able to use `npm upgrade` to upgrade this package just like any npm packages.
+This is all you need to use this package, also build and run your code locally.
+
+##### docker build with this package
+
+Because this private package relies on SSH key credential to pull it as part of `npm i` or `npm ci`, you need to make sure your credential is "forwarded" to the docker build process, otherwise, the regular docker build process do not have access to your credentials (btw, this is a feature, not a bug)
+
+To build docker image of a repo calling the standardnpm, update the Dockerfile to include (at the begining)
+
+```Dockerfile
+RUN apk add --no-cache openssh-client git
+RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+RUN --mount=type=ssh npm ci
+```
+
+Then, you can use `DOCKER_BUILDKIT=1 docker build . -t nestjs.example:latest --ssh default` to build docker image on your PC (or VM).
+You should be able to run your docker image on your PC as well, although you might need to fiddle with your docker network settings to enable connectivity between your postgres docker and your service's docker.
+
+##### CI/CD deploying
 
 To deploy, this repo needs to be enabled to pull from github while running inside the build docker in the Azure piepline build agent. This is accomplished by:
 
-- generate a key pair (openssh)
+- generate a key pair (openssh) (already doen by SRE)
 - upload public key to the github repo `acerta_standardnpm` (already done by SRE)
 - upload private key to Azure Pipleline secret files (already done by SRE)
-- update the azure-pipelines.yml file to include the following lines:
+- update the azure-pipelines.yml file to add the following lines:
 
 ```yaml
-- task: InstallSSHKey@0
-  inputs:
-    knownHostsEntry: github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
-    sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQSn8pAAAl+4DymlM67yOPjjgvXAXz1i8imLm0phiK434+B9fhar6LC5zgKlZj0JJ5SWyywL5vyawsIbHXUf5jgfQuSf9YMawNE0LGiLn5KnAfDl2i8Yd/a0TzFj7TbQzEqDXoOuPrvqw7ZER54kD3cXfHv1ffQn4gFw4qeKjlWtPols3uB1zSK01CzfaSYea5APy1jNn9V/CMyP+LRItRlBznu+mlOWOmOtN/a6L7jn9zFceRoTDz9Rid1kqWvmWfAQSu9+CHAwRL4sbHujmJD+gGKRmNLVYuuMqzuvjSLK1Ij0M76FiVJuna4VDs8q/vSiOsihmrsERkwEkeD0pqUZkhrAHt+JP8dqlTk4Nh41WT5ZNAWbB3Dls7E+SoyUmp4V1Y7x9yEVvd4WXqOV/AwxSEoBH2xih7hp/z2ozqYcVz4oE+4Wl4bLcSLuTew4KKmzLuRAyZkr83MT0yfGnsc/7iFSRQ3Rsg/7hkyIDhxfOKv5sew9wb8MTWVpSZPj8=
-    sshKeySecureFile: "gh_deploy.id_rsa"
-- task: Docker@2
-  displayName: Build
-  inputs:
-    command: build
-    repository: $(imageRepository)
-    dockerfile: $(dockerfilePath)
-    containerRegistry: "$(dockerRegistryServiceConnection)"
-    arguments: --ssh default
-    tags: |
-      $(tag)
+variable:
+  DOCKER_BUILDKIT: 1
+  ...
+stages:
+- stage: BuildAndPush
+  ...
+  jobs:
+  - job: Lint
+    ...
+  - deployment: BuildAndPush
+    dependsOn: Lint
+    ...
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: InstallSSHKey@0
+            inputs:
+              knownHostsEntry: github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
+              sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQSn8pAAAl+4DymlM67yOPjjgvXAXz1i8imLm0phiK434+B9fhar6LC5zgKlZj0JJ5SWyywL5vyawsIbHXUf5jgfQuSf9YMawNE0LGiLn5KnAfDl2i8Yd/a0TzFj7TbQzEqDXoOuPrvqw7ZER54kD3cXfHv1ffQn4gFw4qeKjlWtPols3uB1zSK01CzfaSYea5APy1jNn9V/CMyP+LRItRlBznu+mlOWOmOtN/a6L7jn9zFceRoTDz9Rid1kqWvmWfAQSu9+CHAwRL4sbHujmJD+gGKRmNLVYuuMqzuvjSLK1Ij0M76FiVJuna4VDs8q/vSiOsihmrsERkwEkeD0pqUZkhrAHt+JP8dqlTk4Nh41WT5ZNAWbB3Dls7E+SoyUmp4V1Y7x9yEVvd4WXqOV/AwxSEoBH2xih7hp/z2ozqYcVz4oE+4Wl4bLcSLuTew4KKmzLuRAyZkr83MT0yfGnsc/7iFSRQ3Rsg/7hkyIDhxfOKv5sew9wb8MTWVpSZPj8=
+              sshKeySecureFile: "gh_deploy.id_rsa"
+          - task: Docker@2
+            displayName: Build
+            inputs:
+              command: build
+              repository: $(imageRepository)
+              dockerfile: $(dockerfilePath)
+              containerRegistry: "$(dockerRegistryServiceConnection)"
+              arguments: --ssh default
+              tags: |
+                $(tag)
+          - task: Docker@2
+            displayName: Push
+            inputs:
+              containerRegistry: "$(dockerRegistryServiceConnection)"
+              repository: $(imageRepository)
+              command: push
+              tags: $(containerName)
 ```
 
 The knownHostEntry is well known public key of github.com, the sshPublicKey is the public key that has been uploaded to githup `acerta_standardnpm` repo.
-The sshKeySecureFile is the file that has been uploaded to Azure Pipeline.
+The sshKeySecureFile is the name of the secret file that has been uploaded to Azure Pipeline.
 
-You need to use build and push separately in this pipeline because the ssh-key agent only works with build, but not buildAndPush.
+Note: You need to use build and push separately in this pipeline because the ssh-key agent only works with build, but not buildAndPush.
 
 #### OpenFeature
 
@@ -132,34 +207,26 @@ const aadJwtValidator = new AadJwtValidator(
   this.configService.get("TENANT_ID", ""),
   this.configService.get("CLIENT_ID", "")
 );
-const jwtIsValid = await aadJwtValidator.validateAadJwt(request);
+const jwtIsValid = await aadJwtValidator.validateAadJwt(request, [
+  "AZR-Stg-AdAp-Scop-FTog",
+]);
 ```
 
-### If you are starting a new repo based on this template
+The tenant_id and client_id are AAD app register provided info. Depends on which application and scope it should be validated against, these can be set to different values.
+For development time testing you can use the following sandbox info (until further noticed by SRE)
 
-To start, you shall create a new repo using this (nestjs-example) as template.
-Once you fetch this repo down to your local development environment, change the following key files:
-
-- `package.json` to reflect the new name, description, version info of your repo:
-
-```
-  "name": "not nestjs-example anymore",
-  "version": "0.9.0",
-  "description": "New repo that follows Acerta standard Nest.JS requirements",
+```bash
+TENANT_ID="7b6440b3-493d-4eb7-9f99-0afc3b8b4ab3"
+CLIENT_ID="4ba65009-f28f-4898-8284-8bcdd56961c3"
 ```
 
-- `.devcontainer/devcontainer.json` it is **strongly** recommended that you use devcontainers to develop the new repo, it allows you to use standard confiugured IDE
+To acquire a valid token, you can use azure cli `az` tool like this:
 
+```bash
+az account get-access-token --scope "api://4ba65009-f28f-4898-8284-8bcdd56961c3/AZR-Stg-AdAp-Scop-FTog"  --query accessToken
 ```
-  "name": "Not Nest.js Example with DevContainer",
-  "portsAttributes": {
-    "9080": {
-      "label": "Not NestJS Example",
-      "onAutoForward": "notify"
-    }
-  },
 
-```
+As you can see, the scopy you requested is the `api://${CLIENT_ID}/${SCOPE_NAME}`, and this token will satify the above example
 
 ### Setup Postgres Database (optional, if you need Postgresql in a container)
 
@@ -169,13 +236,15 @@ Update the local_setup.sh to use new name of the Database you'd like to use (if 
 ./local_setup.sh
 ```
 
-This script reads your environment variables (and .env file if exist):
+This script reads your environment variables (if .env file exist, it's content will be loaded as Environment variables), to get the following info:
 
 ```bash
 POSTGRES_DATABASE=nestjs_example
 POSTGRES_PORT=5432
 POSTGRES_USERNAME=postgres
 ```
+
+So, it is recommended for you to decide what POSTGRES_DATABASE name you want to use and udpate your .env file, so that your local db uses the same database config as when it is deployed. Although in theory, this should not be a problem, it's good development hygiene.
 
 It will then create a dockerized postgres container named `postgres_local` if it does not exist and create run & test databases for this server in that postgres container.
 
@@ -186,8 +255,8 @@ Pino logging format is set in the app.module.ts, and should be considered Loggin
 
 There are 3 environment Variables that influence logging:
 
-- LOG_LEVEL : determines how verbose the logging will be (i.e. when LOG_LEVEL=info, trace and debug messages won't be added to the log) see below for valid values
-- PINO_PRETTY : boolean value determines if the logs will be written in pretty format or JSON
+- LOG_LEVEL : determines how verbose the logging will be (i.e. when LOG_LEVEL=info, trace and debug messages won't be added to the log).
+- PINO_PRETTY : boolean value determines if the logs will be written in pretty format or JSON, default is pretty formet
 - LINEPULSE_ENV : only if LINEPULSE_ENV=lcl (which you should keep when you are developing in your local PC IDE), the colorization will be used in pino-pretty, and it affects redactation as well.
 
 LOG_LEVEL default is "info", valid values are (and their internal numerical values) are:
@@ -209,7 +278,7 @@ We shall redact sensitive informations in logs, by default the following are red
 "req.headers.authorization",
 "req.headers.cookie",
 ]
-the SER team can append (but can't disable these 3) by setting Environment Variable LOGGING_REDACT_PATTERS as a JSON string -- the code will append by doing .concat(JSON.parse(configService.get<string>("LOGGING_REDACT_PATTERNS") || "[]" ))
+the SRE team can append (but can't disable these 3) by setting Environment Variable LOGGING_REDACT_PATTERS as a JSON string -- the code will append by doing .concat(JSON.parse(configService.get("LOGGING_REDACT_PATTERNS","[]" )))
 
 Log message verboseness
 to balance amount of characters logged and details of info needed, LOG_LEVEL will also influence how much HTTP request/response details are logged with each log message, trace as all info (other than redacted), debug will have most, and info for higher will only have req.id , req.method + req.url in the log
@@ -274,14 +343,16 @@ This also centralize all environment variables in one place and help documenting
 ### Database Config
 
 If your service requires database, please use TypeOrm.
-To configure your database, first make sure you set `DATABASE_TYPE` to "postgres" or any other valide database provider. Then use the src/config/db.ts for further configurations.
+To configure your database, first make sure you set `DATABASE_TYPE` to "postgres" (or whatever valide database provider you need, then update the src/config/db.ts for further configurations.)
 
 The convention is if your `DATABASE_TYPE=postgres` then all POSTGRES related configuration should be configured with `POSTGRES_` as prefix. The current db.ts actually will try to map Environemnt Variables to Postgres config with these rules:
 
-- all DATABASE related config should be listed in the src/config/db.ts file, the Joi.ObjectSchema variable
-- all POSTGRES\_ prefix will be removed, and variable will be converted to camelCase. i.e. POSTGRES_DROP_SCHEMA Environment Variable will be mapped to dropSchema option of the postgres option.
-- you are able to add other postgres options that are not controled by Environment Variables in the `registerAs` section.
-  - for example entities and migrations files are stored per our choice, and will not be differ at run time, so they are added here.
+- all POSTGRES related config should be listed in the src/config/db.ts file, the Joi.ObjectSchema variable.
+- - this is also where you can check all the required DATABASE configuration that you should set in the .env files
+- all POSTGRES related configuration environement variables are prefixed with "POSTGRES\_" and mapped to Postgress configuration
+- - all POSTGRES\_ prefix of the environment varuables will be removed, and variable will be converted to camelCase. i.e. POSTGRES_DROP_SCHEMA Environment Variable will be mapped to dropSchema option of the postgres option.
+- you are able to add other DATABASE options that are not controled by Environment Variables in the `registerAs` section of the config/db.ts.
+- - for example entities and migrations files are stored per our choice, and will not be differ at run time, so they are added in config/db.ts file directly.
 
 #### Database Migration
 

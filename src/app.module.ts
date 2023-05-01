@@ -57,24 +57,21 @@ import configurationDB from "./config/db";
       useFactory: async (configService: ConfigService) => ({
         pinoHttp: {
           enabled: true,
-          uselevel: configService.get<string>("LOG_LEVEL") || "info",
+          uselevel: configService.get("LOG_LEVEL", "info"),
           // by default, we redact the Authorization header and the cookie header, if you'd like to customize it, you can do so by editting the logg_config.yaml file.
           redact: [
             "req.headers.Authorization",
             "req.headers.authorization",
             "req.headers.cookie",
           ].concat(
-            JSON.parse(
-              configService.get<string>("LOGGING_REDACT_PATTERNS") || "[]"
-            )
+            JSON.parse(configService.get("LOGGING_REDACT_PATTERNS", "[]"))
           ),
-          transport: configService.get<string>("PINO_PRETTY")
+          transport: configService.get("PINO_PRETTY")
             ? {
                 // if this is non production env, then use pino-pretty to format the log
                 target: "pino-pretty",
                 options: {
-                  colorize:
-                    configService.get<string>("LINEPULSE_ENV") === "lcl",
+                  colorize: configService.get("LINEPULSE_ENV", "lcl") === "lcl",
                   singleLine: true,
                   levelFirst: false,
                   translateTime: "UTC:yyyy-mm-dd HH:MM:ss.l Z",
@@ -85,11 +82,11 @@ import configurationDB from "./config/db";
                 target: "pino/file",
               },
           serializers:
-            configService.get<string>("LOG_LEVEL") === "trace"
+            configService.get("LOG_LEVEL") === "trace"
               ? {
                   req: (req) => req,
                 }
-              : configService.get<string>("LOG_LEVEL") === "debug"
+              : configService.get("LOG_LEVEL") === "debug"
               ? {
                   req: (req) => ({
                     id: req.id,

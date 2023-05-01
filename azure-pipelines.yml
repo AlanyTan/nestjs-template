@@ -21,7 +21,7 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-- stage: Build
+- stage: BuildAndPush
   displayName: Build and push stage
   jobs:
   - job: Build
@@ -37,10 +37,18 @@ stages:
     - task: Docker@2
       displayName: Build 
       inputs:
-        command: build
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
         containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: $(imageRepository)
+        command: build
+        Dockerfile: $(dockerfilePath)
         arguments: --ssh default
+        tags: |
+          $(tag)
+    - task: Docker@2
+      displayName: Push 
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: $(imageRepository)
+        command: push
         tags: |
           $(tag)

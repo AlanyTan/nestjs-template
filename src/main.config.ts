@@ -1,6 +1,6 @@
 import {
   INestApplication,
-  RequestMethod,
+  // RequestMethod,
   ValidationPipe,
   VersioningType,
   VERSION_NEUTRAL,
@@ -20,35 +20,36 @@ export function mainConfig(app: INestApplication): {
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
   app.useGlobalPipes(new ValidationPipe());
-  if (typeof configService.get<string>("SERVICE_PREFIX") === "string") {
-    app.setGlobalPrefix(configService.get<string>("SERVICE_PREFIX") || "", {
-      exclude: [
-        { path: "health", method: RequestMethod.GET },
-        { path: "version", method: RequestMethod.GET },
-        { path: "metrics", method: RequestMethod.GET },
-        { path: "config", method: RequestMethod.GET },
-      ],
-    });
+  if (typeof configService.get("SERVICE_PREFIX") === "string") {
+    app.setGlobalPrefix(
+      configService.get("SERVICE_PREFIX", "")
+      // , {
+      //   exclude: [
+      //     { path: "health", method: RequestMethod.GET },
+      //     { path: "version", method: RequestMethod.GET },
+      //     { path: "metrics", method: RequestMethod.GET },
+      //     { path: "config", method: RequestMethod.GET },
+      //   ],
+      // }
+    );
   }
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: VERSION_NEUTRAL,
   });
-  if (configService.get<boolean>("SWAGGER_ON")) {
+  if (configService.get("SWAGGER_ON")) {
     // can we log Swagger usage???
     const config = new DocumentBuilder()
-      .setTitle(configService.get<string>("title") || "No Title")
-      .setDescription(
-        configService.get<string>("description") || "No description"
-      )
-      .setVersion(configService.get<string>("version") || "0.0.0")
+      .setTitle(configService.get("title", "No Title"))
+      .setDescription(configService.get("description", "No description"))
+      .setVersion(configService.get("version", "0.0.0"))
       .addBearerAuth(
         {
           type: "http",
           scheme: "bearer",
           bearerFormat: "JWT",
           name: "JWT",
-          description: "Enter JWT token",
+          description: "Bearer JWT token",
           in: "header",
         },
         "JWT-auth"
@@ -56,15 +57,15 @@ export function mainConfig(app: INestApplication): {
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup(
-      `${configService.get<string>("SERVICE_PREFIX") || ""}/docs`,
+      `${configService.get("SERVICE_PREFIX", "")}/docs`,
       app,
       document
     );
   }
 
   return {
-    host: configService.get<string>("HOST") || "",
-    port: configService.get<number>("PORT") || 0,
+    host: configService.get("HOST", ""),
+    port: configService.get("PORT", 9080),
   };
 }
 
