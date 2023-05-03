@@ -5,9 +5,6 @@ export class addDeletedAt1680582091865 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE "name" ADD "deleted_at" TIMESTAMP WITH TIME ZONE`
-    );
-    await queryRunner.query(
       `ALTER TABLE "user1" ADD "deleted_at" TIMESTAMP WITH TIME ZONE`
     );
     await queryRunner.query(
