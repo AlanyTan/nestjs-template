@@ -12,13 +12,20 @@ import request from "supertest";
 import { app } from "../setup-e2e";
 
 describe("AppController (e2e) testing wrong settings.", () => {
+  const servicePrefix = process.env.SERVICE_PREFIX
+    ? "/" + process.env.SERVICE_PREFIX
+    : "";
   describe("standard end-points", () => {
     it("health check should return 503 if expected service can't be reached", async () => {
-      const response = await request(app.getHttpServer()).get("/health");
+      const response = await request(app.getHttpServer()).get(
+        `${servicePrefix}/health`
+      );
       expect(response.status).toEqual(503);
     });
     it("should return runtime version EnVar value", async () => {
-      const response = await request(app.getHttpServer()).get("/version");
+      const response = await request(app.getHttpServer()).get(
+        `${servicePrefix}/version`
+      );
       expect(response.status).toEqual(200);
       expect(response.body.runtime_version_env).toBe('{"build":"1.0.0-2"}');
     });

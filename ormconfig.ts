@@ -9,17 +9,6 @@ const datasource = new DataSource({
   name: "default",
   ...dbConfig(),
 } as DataSourceOptions);
-// datasource
-//   .initialize()
-//   .then(() => {
-//     console.log("Data Source has been initialized!");
-//   })
-//   .catch((err) => {
-//     console.log("Data Source has not been initialized!" + err);
-//   });
-console.log(
-  `datasourceName: ${getDataSourceName(dbConfig() as DataSourceOptions)}`
-);
 
 export default (async (): Promise<DataSource> => {
   return getDataSourceName(dbConfig() as DataSourceOptions) === "default"

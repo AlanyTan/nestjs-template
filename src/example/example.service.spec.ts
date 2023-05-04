@@ -3,6 +3,7 @@
 // often, you will need to mock the dependencies so that what you are testing is not affected by the dependencies
 // in this example, we are mocking the openfeature_client, I use mock implementation to return a true or false and then test the service
 // using the mocked value, so I can make sure "when the feature flag is on, my service shows the new behavior, when the feature flag is off, my service shows the old behavior"
+import { HttpService } from "@nestjs/axios";
 import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { openfeature_client } from "@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature";
@@ -24,7 +25,7 @@ jest.mock(
 describe("ExampleService", () => {
   const configService = new ConfigService();
   const logger = new Logger();
-  const service = new ExampleService(configService, logger, {
+  const service = new ExampleService(configService, logger, new HttpService(), {
     client: { getBooleanValue: jest.fn().mockResolvedValue(true) },
   } as unknown as openfeature_client);
   it("should be defined", () => {
@@ -48,6 +49,7 @@ describe("ExampleService", () => {
   const serviceFeatureFlagOff = new ExampleService(
     configService,
     new Logger(),
+    new HttpService(),
     {
       client: { getBooleanValue: jest.fn().mockResolvedValue(false) },
     } as unknown as openfeature_client

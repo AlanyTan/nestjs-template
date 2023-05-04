@@ -22,7 +22,7 @@ import configurationDB from "./config/db";
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [`.env.${process.env.NODE_ENV}`, ".env"],
+      ignoreEnvFile: true,
       load: [config, configurationDB], //configurationDB is a structured config obj, can be accessed like get('database.host')
       //load: [configurationDB], //configurationDB is a structured config obj, can be accessed like get('database.host')
       expandVariables: true,

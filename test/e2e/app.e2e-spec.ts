@@ -3,25 +3,36 @@ import { User } from "../../src/example-orm/entities/user.entity";
 import { app } from "../setup-e2e";
 
 describe("Application Controllers (e2e)", () => {
+  const servicePrefix = process.env.SERVICE_PREFIX
+    ? "/" + process.env.SERVICE_PREFIX
+    : "";
   describe("standard end-points", () => {
     it("should perform health check", async () => {
       process.env.SVC_1_ENDPOINT = "http://localhost:3002";
-      const response = await request(app.getHttpServer()).get("/health");
+      const response = await request(app.getHttpServer()).get(
+        `${servicePrefix}/health`
+      );
       expect(response.status).toEqual(200);
     });
     it("should return version", async () => {
-      const response = await request(app.getHttpServer()).get("/version");
+      const response = await request(app.getHttpServer()).get(
+        `${servicePrefix}/version`
+      );
       expect(response.status).toEqual(200);
       expect(response.body.commits).toContain(
         "Unauthorized to view commit info"
       );
     });
     it("should provide metrics", async () => {
-      const response = await request(app.getHttpServer()).get("/metrics");
+      const response = await request(app.getHttpServer()).get(
+        `${servicePrefix}/metrics`
+      );
       expect(response.status).toEqual(200);
     });
     it("should return 401 for config due to no valid JWT", async () => {
-      const response = await request(app.getHttpServer()).get("/config");
+      const response = await request(app.getHttpServer()).get(
+        `${servicePrefix}/config`
+      );
       expect(response.status).toEqual(401);
     });
   });

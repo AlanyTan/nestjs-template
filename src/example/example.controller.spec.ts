@@ -2,6 +2,7 @@
 // try to test the logic of the controler as independent as possible (i.e. query parameter processing, etc)
 // try test if you controller returns error code correctly as well
 // keep your module.ts file simple, as it should only be used to describe the dependency of the module and export your providers
+import { HttpModule } from "@nestjs/axios";
 import { Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
@@ -29,6 +30,7 @@ describe("ExampleController", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        HttpModule,
         ConfigModule.forRoot({
           ignoreEnvFile: true,
           ignoreEnvVars: true,
