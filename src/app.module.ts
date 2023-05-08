@@ -57,7 +57,7 @@ import configurationDB from "./config/db";
       useFactory: async (configService: ConfigService) => ({
         pinoHttp: {
           enabled: true,
-          uselevel: configService.get("LOG_LEVEL", "info"),
+          level: configService.get("LOG_LEVEL", "info"),
           // by default, we redact the Authorization header and the cookie header, if you'd like to customize it, you can do so by editting the logg_config.yaml file.
           redact: [
             "req.headers.Authorization",

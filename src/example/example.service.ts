@@ -10,7 +10,7 @@ import { OPENFEATURE_CLIENT } from "config";
 export class ExampleService {
   constructor(
     private readonly configService: ConfigService,
-    private readonly logger: Logger = new Logger(ExampleService.name),
+    private readonly logger: Logger,
     private readonly httpService: HttpService,
     @Inject(OPENFEATURE_CLIENT) private openFeature: openfeature
   ) {}
