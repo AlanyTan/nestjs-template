@@ -109,5 +109,8 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx,html,css,scss,less,json,yaml,md}": "prettier --write",
     "*.{ts,tsx,js,jsx}": "eslint --max-warnings 0"
+  },
+  "script": {
+    "prepare": "husky install"
   }
 }

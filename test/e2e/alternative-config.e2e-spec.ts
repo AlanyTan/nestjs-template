@@ -1,8 +1,8 @@
 jest.resetModules();
 process.env.SVC_1_ENDPOINT = "http://wronghost:3002";
 process.env.LINEPULSE_SVC_VERSION = '{"build":"1.0.0-2"}';
-process.env.HOST = "0.0.0.0";
-process.env.PORT = "9081";
+process.env.LINEPULSE_SVC_HOSTNAME = "0.0.0.0";
+process.env.LINEPULSE_SVC_PORT = "9081";
 process.env.OPENFEATURE_PROVIDER = "ENV";
 process.env.NEW_END_POINT = "false";
 process.env.NEW_FEATURE_FLAG = "false";
@@ -51,8 +51,12 @@ describe("AppController (e2e) testing wrong settings.", () => {
 
 describe("AppController Config Service (e2e)", () => {
   test("ConfigService:Known Configuration value of Host, Ports and LOG Level should be 0.0.0.0  80 info", async () => {
-    expect((await app.resolve(ConfigService)).get("HOST")).toBe("0.0.0.0");
-    expect((await app.resolve(ConfigService)).get("PORT")).toBe(9081);
+    expect(
+      (await app.resolve(ConfigService)).get("LINEPULSE_SVC_HOSTNAME")
+    ).toBe("0.0.0.0");
+    expect((await app.resolve(ConfigService)).get("LINEPULSE_SVC_PORT")).toBe(
+      9081
+    );
     process.env.LOG_LEVEL = "info";
     expect((await app.resolve(ConfigService)).get("LOG_LEVEL")).toBe("info");
   });

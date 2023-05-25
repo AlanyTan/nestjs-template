@@ -43,8 +43,8 @@ export class AppController {
     let commitJson = {};
     try {
       const aadJwtValidator = new AadJwtValidator(
-        this.configService.get("TENANT_ID", ""),
-        this.configService.get("CLIENT_ID", "")
+        this.configService.get("AAD_TENANT_ID", ""),
+        this.configService.get("AAD_CLIENT_ID", "")
       );
       const jwtIsValid = await aadJwtValidator.validateAadJwt(request);
       commitJson = { commits: this.configService.get("commits") };

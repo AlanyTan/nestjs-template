@@ -64,8 +64,8 @@ export function mainConfig(app: INestApplication): {
   }
 
   return {
-    host: configService.get("HOST", ""),
-    port: configService.get("PORT", 9080),
+    host: configService.get("LINEPULSE_SVC_HOST", "0.0.0.0"),
+    port: configService.get("LINEPULSE_SVC_PORT", 9080),
   };
 }
 

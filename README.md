@@ -204,8 +204,8 @@ You can find sample code how to use this in app.controller.ts where `  @UseGuard
 
 ```typescript
 const aadJwtValidator = new AadJwtValidator(
-  this.configService.get("TENANT_ID", ""),
-  this.configService.get("CLIENT_ID", "")
+  this.configService.get("AAD_TENANT_ID", ""),
+  this.configService.get("AAD_CLIENT_ID", "")
 );
 const jwtIsValid = await aadJwtValidator.validateAadJwt(request, [
   "AZR-Stg-AdAp-Scop-FTog",
@@ -216,8 +216,8 @@ The tenant_id and client_id are AAD app register provided info. Depends on which
 For development time testing you can use the following sandbox info (until further noticed by SRE)
 
 ```bash
-TENANT_ID="7b6440b3-493d-4eb7-9f99-0afc3b8b4ab3"
-CLIENT_ID="4ba65009-f28f-4898-8284-8bcdd56961c3"
+AAD_TENANT_ID="7b6440b3-493d-4eb7-9f99-0afc3b8b4ab3"
+AAD_CLIENT_ID="4ba65009-f28f-4898-8284-8bcdd56961c3"
 ```
 
 To acquire a valid token, you can use azure cli `az` tool like this:

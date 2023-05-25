@@ -21,8 +21,8 @@ export class JwtGuard implements CanActivate {
     } else {
       try {
         const aadJwtValidator = new AadJwtValidator(
-          this.configService.get("TENANT_ID", ""),
-          this.configService.get("CLIENT_ID", "")
+          this.configService.get("AAD_TENANT_ID", ""),
+          this.configService.get("AAD_CLIENT_ID", "")
         );
         const jwtIsValid = await aadJwtValidator.validateAadJwt(request);
         if (jwtIsValid) {

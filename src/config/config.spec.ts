@@ -24,8 +24,8 @@ describe("ConfigSerivce show error out if required Environments are missing", ()
             //if you do not list a configuration here, then it will not be available as part of the ConfigService to the application at all
             LINEPULSE_ENV: Joi.string().required(),
             OPENFEATURE_PROVIDER: Joi.string().required(),
-            PORT: Joi.number().required(),
-            HOST: Joi.string().required(),
+            LINEPULSE_SVC_PORT: Joi.number().required(),
+            LINEPULSE_SVC_HOSTNAME: Joi.string().default("0.0.0.0"),
             SVC_1_ENDPOINT: Joi.string().uri().required(),
             SVC_2_ENDPOINT: Joi.string().uri().required(),
             PINO_PRETTY: Joi.boolean().default(true),
@@ -37,12 +37,12 @@ describe("ConfigSerivce show error out if required Environments are missing", ()
           }),
         })
       ).rejects.toThrowError(
-        'Config validation error: "LINEPULSE_ENV" is required. "OPENFEATURE_PROVIDER" is required. "PORT" is required. "HOST" is required. "SVC_1_ENDPOINT" is required. "SVC_2_ENDPOINT" is required'
+        'Config validation error: "LINEPULSE_ENV" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required. "SVC_2_ENDPOINT" is required'
       );
     } catch (err) {
       expect(err).toMatchObject(
         new Error(
-          'Config validation error: "LINEPULSE_ENV" is required. "OPENFEATURE_PROVIDER" is required. "PORT" is required. "HOST" is required. "SVC_1_ENDPOINT" is required. "SVC_2_ENDPOINT" is required'
+          'Config validation error: "LINEPULSE_ENV" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required. "SVC_2_ENDPOINT" is required'
         )
       );
     }
@@ -71,8 +71,8 @@ describe("Config Service check configurations", () => {
             //if you do not list a configuration here, then it will not be available as part of the ConfigService to the application at all
             LINEPULSE_ENV: Joi.string().required(),
             OPENFEATURE_PROVIDER: Joi.string().required(),
-            PORT: Joi.number().required(),
-            HOST: Joi.string().required(),
+            LINEPULSE_SVC_PORT: Joi.number().required(),
+            LINEPULSE_SVC_HOSTNAME: Joi.string().default("0.0.0.0"),
             SVC_1_ENDPOINT: Joi.string().uri().required(),
             SVC_2_ENDPOINT: Joi.string().uri().required(),
             PINO_PRETTY: Joi.boolean().default(true),
@@ -92,9 +92,11 @@ describe("Config Service check configurations", () => {
   });
 
   test("Required Configuration values should resolve to values", () => {
-    expect(configService.get<string>("HOST")).toBe(process.env.HOST);
-    expect(configService.get<number>("PORT")).toBe(
-      parseInt(process.env.PORT ?? "0")
+    expect(configService.get<string>("LINEPULSE_SVC_HOSTNAME")).toBe(
+      process.env.LINEPULSE_SVC_HOSTNAME
+    );
+    expect(configService.get<number>("LINEPULSE_SVC_PORT")).toBe(
+      parseInt(process.env.LINEPULSE_SVC_PORT ?? "0")
     );
     expect(configService.get<string>("LINEPULSE_ENV")).toBe(
       process.env.LINEPULSE_ENV
@@ -155,9 +157,9 @@ describe("Config Service check configurations", () => {
 
   test("Only Environment Variables that are listed in the ValidationSchema will be considered, not-listed will be excluded in the config object", () => {
     expect(configService.get("_PROCESS_ENV_VALIDATED.PATH")).toBe(undefined);
-    expect(configService.get("_PROCESS_ENV_VALIDATED.HOST")).toBe(
-      process.env.HOST
-    );
+    expect(
+      configService.get("_PROCESS_ENV_VALIDATED.LINEPULSE_SVC_HOSTNAME")
+    ).toBe(process.env.LINEPULSE_SVC_HOSTNAME);
   });
 
   it("Function ConfigService.get() can be mocked to throw an error", () => {
