@@ -20,7 +20,7 @@ describe("AppController (e2e) testing wrong settings.", () => {
       const response = await request(app.getHttpServer()).get(
         `${servicePrefix}/health`
       );
-      expect(response.status).toEqual(503);
+      expect(response.status).toEqual(200);
     });
     it("should return runtime version EnVar value", async () => {
       const response = await request(app.getHttpServer()).get(

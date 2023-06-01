@@ -147,7 +147,8 @@ import configurationDB from "./config/db";
         logger: Logger
       ): Promise<openfeature> => {
         const client = await new openfeature(
-          configService.get("OPENFEATURE_PROVIDER") || ""
+          configService.get("OPENFEATURE_PROVIDER") || "",
+          new AcertaLogger(new NestLogger())
         ).initialized();
         return client as openfeature;
       },
