@@ -1,16 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpModule } from "@nestjs/axios";
-import { Module, RequestMethod, Logger, Global } from "@nestjs/common";
+import {
+  Module,
+  RequestMethod,
+  Global,
+  Logger as NestLogger,
+} from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
+import {
+  openfeature,
+  AcertaLogger,
+} from "@acertaanalyticssolutions/acerta-standardnpm";
 import {
   PrometheusModule,
   PrometheusController,
 } from "@willsoto/nestjs-prometheus";
 import Joi from "joi";
-import { LoggerModule } from "nestjs-pino";
+import { LoggerModule, Logger } from "nestjs-pino";
 import { OPENFEATURE_CLIENT, config, dbConfig } from "config";
 import { ExampleModule } from "example/example.module";
 import { ExampleOrmModule } from "example-orm/example-orm.module";
@@ -133,9 +141,10 @@ import configurationDB from "./config/db";
     AppService,
     {
       provide: OPENFEATURE_CLIENT,
-      inject: [ConfigService],
+      inject: [ConfigService, Logger],
       useFactory: async (
-        configService: ConfigService
+        configService: ConfigService,
+        logger: Logger
       ): Promise<openfeature> => {
         const client = await new openfeature(
           configService.get("OPENFEATURE_PROVIDER") || ""

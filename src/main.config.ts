@@ -9,7 +9,7 @@ import { ConfigService } from "@nestjs/config";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 //we use pino logger here.  once it's set up here and in app.module.ts, we can use it in any other file by using the standard nestjs Logger
-import { Logger, LoggerErrorInterceptor } from "nestjs-pino";
+import { LoggerErrorInterceptor } from "nestjs-pino";
 
 export function mainConfig(app: INestApplication): {
   host: string;
@@ -17,7 +17,6 @@ export function mainConfig(app: INestApplication): {
 } {
   const configService = app.get(ConfigService);
 
-  app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
   app.useGlobalPipes(new ValidationPipe());
   if (typeof configService.get("SERVICE_PREFIX") === "string") {

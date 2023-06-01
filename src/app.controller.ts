@@ -31,8 +31,17 @@ export class AppController {
   @HealthCheck()
   health(): Promise<HealthCheckResult> {
     const backendServicesToCheck: string[] = [];
-    backendServicesToCheck.push(this.configService.get("SVC_1_ENDPOINT", ""));
-    backendServicesToCheck.push(this.configService.get("SVC_2_ENDPOINT", ""));
+    return this.appService.health(backendServicesToCheck);
+  }
+
+  @Get("readiness")
+  @Version(VERSION_NEUTRAL)
+  @HealthCheck()
+  readiness(): Promise<HealthCheckResult> {
+    const backendServicesToCheck: string[] = [];
+    // // in RARE situations, this service might have a HARD dependency on another END-POINT (i.e. user service & OPENFGA)
+    // // you can set the END-POINT of OPENFGA as "SVC_1_ENDPOINT" and this service will respond 503 if the service it depends on is not available
+    //backendServicesToCheck.push(this.configService.get("SVC_1_ENDPOINT", ""));
     return this.appService.health(backendServicesToCheck);
   }
 
