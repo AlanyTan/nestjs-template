@@ -13,9 +13,7 @@ export class creation1679883851035 implements MigrationInterface {
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE "user"`);
-    //await queryRunner.query(`DROP TABLE "name"`);
-    await queryRunner.query(`DROP TABLE "person"`);
+  public async down(/* queryRunner: QueryRunner */): Promise<void> {
+    // down implementation is optional
   }
 }
