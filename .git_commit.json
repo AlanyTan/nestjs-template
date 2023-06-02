@@ -1,16 +1,12 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-06-02 06:07:18",
-  "branch": "## main...origin/main [ahead 2]",
-  "files changed": [ "M  README.md",
- "M  package.json",
- "M  src/app.controller.ts",
- "M  src/app.service.ts",
- "M  src/main.config.ts",
- "M  src/main.ts"]
+  "timestamp": "2023-06-02 15:39:09",
+  "branch": "## main...origin/main",
+  "files changed": [ "M  .eslintrc.json",
+ "M  .vscode/settings.json"]
 },
 "previous commits":[
- {"287d8dd4": " upgrade to jest 29, nest9"},
- {"3f37989c": " readiness end-point and logger improvement"}
+ {"06ab4114": " Add startup probe end-point"},
+ {"287d8dd4": " upgrade to jest 29, nest9"}
  ]
 }
