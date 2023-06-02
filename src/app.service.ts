@@ -5,6 +5,7 @@ import {
   BeforeApplicationShutdown,
   Logger,
   Inject,
+  OnApplicationBootstrap,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import {
@@ -18,13 +19,46 @@ import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { OPENFEATURE_CLIENT } from "./config";
 
 @Injectable()
-export class AppService {
+export class AppService implements OnApplicationBootstrap {
   constructor(
     private readonly healthCheckService: HealthCheckService,
     private readonly configService: ConfigService,
     private readonly typeOrmHealthIndicator: TypeOrmHealthIndicator,
     private readonly httpHealthIndicator: HttpHealthIndicator
   ) {}
+
+  async onApplicationBootstrap(): Promise<void> {
+    // don't updata this function...
+    // this function is defined as an async but it calls another async function (initialize)
+    // this approach allows the initialize() to be executed in parallel (none-blocking this function)
+    // the app will start listening, but the /initialized end-point will return 503 until the initialization is done
+    // you can update the initialized() function to carry out long running initialization tasks
+    this.initialize();
+  }
+
+  async initialize(): Promise<void> {
+    // this is where you can do some long running initialization tasks
+    // NOTE initialize() runs every time the app is restarted,
+    // so you should check if the initialization tasks are already done
+    async function sleep(ms: number): Promise<void> {
+      // this is just an example of a long running task
+      // you can remove this function if you don't need it
+      // this is used to demostrate how to use the initialize function below
+      // can be executed asynchronously, and the startup probe of the k8s will be
+      // able to get a response of 200, but it won't forward traffic to this service yet
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    // here you await the long running initialization tasks
+    await sleep(10000);
+    // then set _initialized to true after the initialization tasks are done
+    this._initialized = true;
+  }
+
+  private _initialized = false;
+  get initialized(): boolean {
+    return this._initialized;
+  }
 
   health(servicesToCheck: string[]): Promise<HealthCheckResult> {
     return this.healthCheckService.check([

@@ -299,15 +299,40 @@ The `/version` end-point provide 3 key info
   - this actually requires you to provid a valid JWT (issued by AAD, not Auth0 because these are internal Acerta info) if you don't have a valid JWT, you will see "Unauthorized to view commit info"
   - assuming you have a valid JWT, this section will show you the timestamp and branch of the latest commit, the list of files changed by this latest commit, and it will also show you the commit hash and description of the previous 2 commits.
 
-### health endpoint
+### kubernetes probe (health) endpoints
+
+#### /health
+
+The `/health` end-point is meant for Kubernetes liveliness probe. This probe work this way: if after n attemps with m seconds interval and the liveliness probe still do cannot receive a 200 response, k8s will try to restart this pod.
 
 - The `/health` end-point calls the health() function in app.service.ts
-  You provide an array of strings as the parameter for health() function. Each member of this array is an URL that represents a backend service your current service depends on. The health() function will iterate through the members of the array and perform healthPingCheck of each.
-  - The idea is this service should not report "200 healthy" unless all services it depends on also reports back "200 healthy".
-    In this example 2 pingCheck were performed, to \$SVC_1_ENDPOINT and \$SVC_2_ENDPOINT.
 - The database (if your services needs a database, you should have set DATABASE_TYPE to a valid value like "postgres").
   - you do not need to provide parameters to the health() function to check the Database, make sure your Environment Variable `DATABASE_TYPE` is set properly (i.e. to "postgres").
   - if `DATABASE_TYPE` is "none" or not set, then the health() function will not check the Database.
+
+#### /readiness
+
+The `/readiness` end-point is for Kubernetes readiness probe. This probe works this way: if this probe cannot get a 200 response, k8s will avoid sending trafics to this pod, however, it will not try to kill and restart this pod, rather will allow thid pod to recover.
+
+- The `readiness` end-point should check "needed but not critical" dependencies, so that if those dependencies can't be met, k8s readiness probe detects it and will stop sending traffic to this pod.
+- You provide an array of strings as the parameter for readiness() function. Each member of this array is an URL that represents a backend service your current service depends on. The health() function will iterate through the members of the array and perform healthPingCheck of each.
+  - The idea is this service should not report "200 healthy" unless all services it depends on also reports back "200 healthy".
+    In this example 2 pingCheck were performed, to \$SVC_1_ENDPOINT and \$SVC_2_ENDPOINT.
+
+#### /initialized
+
+The `/initialized` end-point is for Kubernetes startup probe. This probe works this way: Kubernetes will not check liveliness and readiness probe until the startup probe returns 200. This allows slow initializing services to have time at the startup. Once the startup probe gets 200, it will start liveliness and readiness probe to work their normal way.
+
+- The `/initialized` end-point respond 200 and {"status":"ok"} if the appService.initialized is true.
+
+  - appService.initialized starts with default value `false`
+  - the appService.onApplicationBootstrap() allows you to run initialization tasks like this:
+  - - appService implements OnApplicationBootstrap
+  - - the appService.onApplicationBootstrap is set up as async and it calls this.initialize() to perform long running initialization tasks that needs to be completed before the service accept requests. (don't change this function, it is intentionally setup as an async function but calls this.initialize() without await, so that the initialize() actually runs in parallel, not awaits it to finish)
+  - - the this.initialize() function is where you put long-running tasks in. and it should await those long-running tasks to complete properly, and set this_initialized to true
+      After which, the `/initialize` end-point will return 200 and k8s will consider this service up.
+
+  **Please note** all 3 health check end-point are meant to work together with the Kubernetes probes. Not setting up the probes properly will result in these end-points not working as designed here.
 
 ### config endpoint
 

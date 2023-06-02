@@ -32,6 +32,7 @@ export function mainConfig(app: INestApplication): {
       // }
     );
   }
+  app.enableShutdownHooks();
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: VERSION_NEUTRAL,
