@@ -8,7 +8,6 @@ export class initial1679874297564 implements MigrationInterface {
       convertSchemaColumnOptionsToTableColumnOptions(NameEntitySchema);
     const newTable = new Table(tableOptions);
 
-    // console.log("NameEntitySchema.options: " + JSON.stringify(NameEntitySchema.options))
     await queryRunner.createTable(newTable, true);
   }
 
