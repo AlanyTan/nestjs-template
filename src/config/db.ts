@@ -35,14 +35,6 @@ const envVarsSchema: Joi.ObjectSchema = Joi.object({
   POSTGRES_DROP_SCHEMA: Joi.boolean().default(false),
 }).options({ stripUnknown: true });
 
-const { error, value: validatedEnvConfig } = envVarsSchema.validate(
-  process.env,
-  { allowUnknown: true }
-);
-if (error) {
-  throw new Error(`Config validation error: ${error.message}`);
-}
-
 /***
  * This function takes an environment variable name and an optional prefix to remove,
  * and returns the name of the config variable that the environment variable maps to.
@@ -76,7 +68,19 @@ function ENVARToCamelCase(
 }
 
 export default registerAs("database", (): TypeOrmModuleOptions => {
+  const { error, value: validatedEnvConfig } = envVarsSchema.validate(
+    process.env,
+    { allowUnknown: true }
+  );
   const typeOfDatabase = validatedEnvConfig.DATABASE_TYPE ?? "none";
+  console.log("typeOfDatabase", typeOfDatabase);
+  if (typeOfDatabase === "none") {
+    return {} as TypeOrmModuleOptions;
+  } else {
+    if (error) {
+      throw new Error(`Config validation error: ${error.message}`);
+    }
+  }
   interface TypeOrmConfig {
     [key: string]: unknown;
   }
