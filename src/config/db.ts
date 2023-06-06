@@ -73,7 +73,6 @@ export default registerAs("database", (): TypeOrmModuleOptions => {
     { allowUnknown: true }
   );
   const typeOfDatabase = validatedEnvConfig.DATABASE_TYPE ?? "none";
-  console.log("typeOfDatabase", typeOfDatabase);
   if (typeOfDatabase === "none") {
     return {} as TypeOrmModuleOptions;
   } else {

@@ -5,7 +5,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import Joi from "joi";
 import { config, dbConfig } from "config";
 
-describe("ConfigSerivce show error out if required Environments are missing", () => {
+describe("ConfigSerivce should error out if required Environments are missing", () => {
   test("Required Configuration values should resolve to values", async () => {
     jest.resetAllMocks();
     jest.requireActual("@nestjs/config");
@@ -58,10 +58,36 @@ describe("Config Service check configurations", () => {
   // and this directory contains the recommended way to use the ConfigModule
   // this spec.ts file is testing the result of config as close as to when it's used in the app.module.ts
   beforeAll(async () => {
+    process.env.LINEPULSE_SVC_HOSTNAME = "0.0.0.0";
+    process.env.LINEPULSE_SVC_PORT = "9080";
+    process.env.LOG_LEVEL = "info";
+    process.env.SVC_1_ENDPOINT = "https://api.linepulse-dev.ai/health";
+    process.env.SVC_2_ENDPOINT = "https://api.linepulse-dev.ai/auth/docs";
+    process.env.PINO_PRETTY = "true";
+    process.env.SWAGGER_ON = "true";
+    process.env.LINEPULSE_ENV = "lcl";
+    process.env.OPENFEATURE_PROVIDER =
+      "LD:sdk-bac5b783-a327-4e14-9a5b-8da478c08156";
+    process.env.NEW_FEATURE_FLAG = "true";
+    process.env.NEW_END_POINT = "true";
+    process.env.LINEPULSE_SVC_VERSION = '{"build":"1.0.0-1"}';
+    process.env.SERVICE_PREFIX = "nestjs-example";
+    process.env.AAD_TENANT_ID = "secret";
+    process.env.AAD_CLIENT_ID = "secret";
+    process.env.DATABASE_TYPE = "postgres";
+    process.env.POSTGRES_HOST = "localhost";
+    process.env.POSTGRES_PORT = "5432";
+    process.env.POSTGRES_USERNAME = "postgres";
+    process.env.POSTGRES_PASSWORD = "postgres";
+    process.env.POSTGRES_DATABASE = "postgres";
+    process.env.AOS_ACCOUNT_NAME = "secret";
+    process.env.AOS_ACCOUNT_KEY = "secret";
+    process.env.AOS_CONTAINER_NAME = "secret";
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
           load: [config, dbConfig],
+          ignoreEnvFile: true,
           expandVariables: true,
           validationSchema: Joi.object({
             //add *ALL* configuration that your application need here, even if they are "optional" (other than DB config, which you should do in the db.ts)
