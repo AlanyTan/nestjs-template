@@ -14,15 +14,7 @@ export class addDeletedAt1680582091865 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "user1" ADD "notes" text`);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "user1" DROP COLUMN "notes"`);
-    await queryRunner.query(
-      `ALTER TABLE "user1" ADD "notes" character varying(256) NOT NULL`
-    );
-    await queryRunner.query(
-      `ALTER TABLE "user1" DROP COLUMN "name_Deleted_at"`
-    );
-    await queryRunner.query(`ALTER TABLE "user1" DROP COLUMN "deleted_at"`);
-    await queryRunner.query(`ALTER TABLE "name" DROP COLUMN "deleted_at"`);
+  public async down(/* queryRunner: QueryRunner */): Promise<void> {
+    throw Error("down is not supported. It must not be implemented.");
   }
 }

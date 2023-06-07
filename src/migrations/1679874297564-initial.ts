@@ -12,7 +12,7 @@ export class initial1679874297564 implements MigrationInterface {
     await queryRunner.createTable(newTable, true);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable(NameEntitySchema.options as Table);
+  public async down(/* queryRunner: QueryRunner */): Promise<void> {
+    throw Error("down is not supported. It must not be implemented.");
   }
 }

@@ -9,9 +9,7 @@ export class Removebasefromname1683086853351 implements MigrationInterface {
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "name" ALTER COLUMN "deleted_at" SET NOT NULL`
-    );
+  public async down(/* queryRunner: QueryRunner */): Promise<void> {
+    throw Error("down is not supported. It must not be implemented.");
   }
 }
