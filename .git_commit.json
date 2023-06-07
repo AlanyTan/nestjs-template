@@ -1,17 +1,15 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-06-02 18:22:48",
+  "timestamp": "2023-06-07 13:03:14",
   "branch": "## AB#7692-remove-orm-down",
-  "files changed": [ "A  .github/CODEOWNERS",
- "M  package-lock.json",
- "M  src/migrations/1679874297564-initial.ts",
+  "files changed": [ "M  src/migrations/1679874297564-initial.ts",
  "M  src/migrations/1679883851035-creation.ts",
  "M  src/migrations/1680395900991-change_table_nameuser1.ts",
  "M  src/migrations/1680582091865-add_deletedAt.ts",
  "M  src/migrations/1683086853351-removebasefromname.ts"]
 },
 "previous commits":[
- {"06ab4114": " Add startup probe end-point"},
- {"287d8dd4": " upgrade to jest 29, nest9"}
+ {"ae5f0628": " AB#7692 remove TypeORM down migration requirement"},
+ {"06ab4114": " Add startup probe end-point"}
  ]
 }

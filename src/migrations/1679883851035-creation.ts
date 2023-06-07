@@ -14,6 +14,6 @@ export class creation1679883851035 implements MigrationInterface {
   }
 
   public async down(/* queryRunner: QueryRunner */): Promise<void> {
-    // down implementation is optional
+    throw Error("down is not supported. It must not be implemented.");
   }
 }

@@ -10,6 +10,6 @@ export class Removebasefromname1683086853351 implements MigrationInterface {
   }
 
   public async down(/* queryRunner: QueryRunner */): Promise<void> {
-    // down implementation is optional
+    throw Error("down is not supported. It must not be implemented.");
   }
 }
