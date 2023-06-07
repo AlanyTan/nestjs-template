@@ -1,15 +1,12 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-06-07 13:03:14",
-  "branch": "## AB#7692-remove-orm-down",
-  "files changed": [ "M  src/migrations/1679874297564-initial.ts",
- "M  src/migrations/1679883851035-creation.ts",
- "M  src/migrations/1680395900991-change_table_nameuser1.ts",
- "M  src/migrations/1680582091865-add_deletedAt.ts",
- "M  src/migrations/1683086853351-removebasefromname.ts"]
+  "timestamp": "2023-06-07 21:54:27",
+  "branch": "## AB#7692-remove-orm-down...origin/AB#7692-remove-orm-down",
+  "files changed": [ "M  .eslintrc.json",
+ "M  .vscode/settings.json"]
 },
 "previous commits":[
- {"ae5f0628": " AB#7692 remove TypeORM down migration requirement"},
- {"06ab4114": " Add startup probe end-point"}
+ {"1a5201da": " AB#7692 avoid down invocations"},
+ {"ae5f0628": " AB#7692 remove TypeORM down migration requirement"}
  ]
 }
