@@ -21,10 +21,10 @@
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:all": "jest --testRegex \".*\\..*spec\\.ts\" --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json --verbose",
-    "test:e2e:watch": "jest --config ./test/jest-e2e.json --runInBand --verbose --watch",
-    "test:e2e:cov": "jest --config ./test/jest-e2e.json --runInBand --verbose --coverage",
+    "test:e2e:watch": "jest --config ./test/jest-e2e.json --verbose --watch",
+    "test:e2e:cov": "jest --config ./test/jest-e2e.json --verbose --coverage",
     "prepare": "husky install",
     "typeorm": "eval $(xargs < .env) typeorm-ts-node-commonjs -d ormconfig.ts"
   },
@@ -78,37 +78,30 @@
     "typescript": "^4.3.5"
   },
   "jest": {
+    "rootDir": ".",
     "verbose": true,
     "moduleDirectories": [
-      "node_modules",
-      "src"
+      "./node_modules",
+      "./src"
     ],
-    "moduleNameMapper": {
-      "axios": "axios/dist/node/axios.cjs"
-    },
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!axios)/"
     ],
     "moduleFileExtensions": [
       "js",
-      "cjs",
       "json",
       "ts"
     ],
-    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t)s$": "ts-jest"
     },
     "collectCoverage": true,
     "collectCoverageFrom": [
       "<rootDir>/src/**/*.(t|j)s"
     ],
     "coveragePathIgnorePatterns": [
-      "<rootDir>/node_modules",
-      "<rootDir>/migrations",
-      "<rootDir>/dist",
-      "<rootDir>/test"
+      "<rootDir>/src/migrations"
     ],
     "coverageDirectory": "<rootDir>/test/coverage",
     "testEnvironment": "node"

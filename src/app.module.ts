@@ -24,15 +24,13 @@ import { ExampleModule } from "example/example.module";
 import { ExampleOrmModule } from "example-orm/example-orm.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import configurationDB from "./config/db";
 
 @Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
       ignoreEnvFile: true,
-      load: [config, configurationDB], //configurationDB is a structured config obj, can be accessed like get('database.host')
-      //load: [configurationDB], //configurationDB is a structured config obj, can be accessed like get('database.host')
+      load: [config, dbConfig], //dbConfig is a structured config obj, can be accessed like get('database.host')
       expandVariables: true,
       cache: true,
       isGlobal: true,
@@ -47,7 +45,7 @@ import configurationDB from "./config/db";
         LINEPULSE_SVC_PORT: Joi.number().required(),
         LINEPULSE_SVC_HOSTNAME: Joi.string().required(),
         SVC_1_ENDPOINT: Joi.string().uri().required(),
-        SVC_2_ENDPOINT: Joi.string().uri().required(),
+        SVC_2_ENDPOINT: Joi.string().uri(),
         PINO_PRETTY: Joi.boolean().default(true),
         SWAGGER_ON: Joi.boolean().default(false),
         DATABASE_TYPE: Joi.string().default("none"),

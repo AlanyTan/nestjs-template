@@ -1,13 +1,17 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-06-06 23:14:31",
+  "timestamp": "2023-06-08 00:02:16",
   "branch": "## feature/unittest_openfeatureguard...origin/feature/unittest_openfeatureguard",
-  "files changed": [ "M  src/config/config.spec.ts",
- "M  src/config/db.ts",
- "M  src/migrations/1679874297564-initial.ts"]
+  "files changed": [ "M  package.json",
+ "M  src/app.module.ts",
+ "M  src/config/config.spec.ts",
+ "M  src/example-orm/example-orm.controller.spec.ts",
+ "M  test/e2e/alternative-config.e2e-spec.ts",
+ " M test/e2e/app.e2e-spec.ts",
+ "M  test/jest-e2e.json"]
 },
 "previous commits":[
- {"a3a917c1": " unit test openfeature_guard"},
- {"d465c501": " eslint trailing-space warn"}
+ {"49d76d08": " remove .env dependency in config.spec.ts"},
+ {"a3a917c1": " unit test openfeature_guard"}
  ]
 }
