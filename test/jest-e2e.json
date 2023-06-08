@@ -6,11 +6,8 @@
   "testEnvironment": "node",
   "collectCoverage": true,
   "collectCoverageFrom": ["<rootDir>/src/**/*.(t|j)s"],
-  "coveragePathIgnorePatterns": [
-    "<rootDir>/node_modules",
-    "<rootDir>/migrations"
-  ],
-  "testRegex": ".*spec.ts$",
+  "coveragePathIgnorePatterns": ["<rootDir>/src/migrations"],
+  "testRegex": ".*e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   }
