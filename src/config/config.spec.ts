@@ -61,28 +61,27 @@ describe("Config Service check configurations", () => {
     process.env.LINEPULSE_SVC_HOSTNAME = "0.0.0.0";
     process.env.LINEPULSE_SVC_PORT = "9080";
     process.env.LOG_LEVEL = "info";
-    process.env.SVC_1_ENDPOINT = "https://api.linepulse-dev.ai/health";
-    process.env.SVC_2_ENDPOINT = "https://api.linepulse-dev.ai/auth/docs";
+    process.env.SVC_1_ENDPOINT = "https://this.needs.to.be.a.valid.url/health";
+    process.env.SVC_2_ENDPOINT = "https://this.needs.to.be.a.valid.url/docs";
     process.env.PINO_PRETTY = "true";
     process.env.SWAGGER_ON = "true";
     process.env.LINEPULSE_ENV = "lcl";
-    process.env.OPENFEATURE_PROVIDER =
-      "LD:sdk-bac5b783-a327-4e14-9a5b-8da478c08156";
+    process.env.OPENFEATURE_PROVIDER = "ENV";
     process.env.NEW_FEATURE_FLAG = "true";
     process.env.NEW_END_POINT = "true";
     process.env.LINEPULSE_SVC_VERSION = '{"build":"1.0.0-1"}';
     process.env.SERVICE_PREFIX = "nestjs-example";
-    process.env.AAD_TENANT_ID = "secret";
-    process.env.AAD_CLIENT_ID = "secret";
+    process.env.AAD_TENANT_ID = "==secret==";
+    process.env.AAD_CLIENT_ID = "==secret==";
     process.env.DATABASE_TYPE = "postgres";
     process.env.POSTGRES_HOST = "localhost";
     process.env.POSTGRES_PORT = "5432";
     process.env.POSTGRES_USERNAME = "postgres";
     process.env.POSTGRES_PASSWORD = "postgres";
     process.env.POSTGRES_DATABASE = "postgres";
-    process.env.AOS_ACCOUNT_NAME = "secret";
-    process.env.AOS_ACCOUNT_KEY = "secret";
-    process.env.AOS_CONTAINER_NAME = "secret";
+    process.env.AOS_ACCOUNT_NAME = "==secret==";
+    process.env.AOS_ACCOUNT_KEY = "==secret==";
+    process.env.AOS_CONTAINER_NAME = "==secret==";
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
