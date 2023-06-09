@@ -1,17 +1,19 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-06-08 00:02:16",
+  "timestamp": "2023-06-09 04:39:19",
   "branch": "## feature/unittest_openfeatureguard...origin/feature/unittest_openfeatureguard",
-  "files changed": [ "M  package.json",
- "M  src/app.module.ts",
- "M  src/config/config.spec.ts",
+  "files changed": [ "M  .devcontainer/devcontainer.json",
+ "M  local_db_setup.sh",
+ "M  package-lock.json",
+ "M  package.json",
+ "M  src/config/db.ts",
+ "M  src/example-orm/entities/entity.base.ts",
  "M  src/example-orm/example-orm.controller.spec.ts",
- "M  test/e2e/alternative-config.e2e-spec.ts",
- " M test/e2e/app.e2e-spec.ts",
+ "A  test.env",
  "M  test/jest-e2e.json"]
 },
 "previous commits":[
- {"49d76d08": " remove .env dependency in config.spec.ts"},
- {"a3a917c1": " unit test openfeature_guard"}
+ {"76f3aa42": " e2e non-db runs without EnVars"},
+ {"49d76d08": " remove .env dependency in config.spec.ts"}
  ]
 }
