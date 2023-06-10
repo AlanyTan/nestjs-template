@@ -1,3 +1,4 @@
+[![Build Status](https://dev.azure.com/acerta/Line%20Pulse/_apis/build/status%2Fnestjs-example?branchName=refs%2Fpull%2F7%2Fmerge)](https://dev.azure.com/acerta/Line%20Pulse/_build/latest?definitionId=197&branchName=refs%2Fpull%2F7%2Fmerge)
 # Acerta NestJS Example
 
 ## Background
