@@ -1,3 +1,32 @@
+# Environment Variables for nestjs-example repo
+
+## The ultimate source of truth is...
+
+There are 2 files that are critical for Environment variable settings:
+
+### `src/app.module.ts`
+
+The main (sometimes called root) module file takes in the main configuration (environment variables) in this section:
+
+```
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      ignoreEnvFile: true,
+      load: [config, dbConfig], //dbConfig is a structured config obj, can be accessed like get('database.host')
+      expandVariables: true,
+      cache: true,
+      isGlobal: true,
+      validationSchema: Joi.object({
+        ...
+```
+
+The data type of each environment variable and if they are required is listed here.
+
+and,
+
+### `src/config/db.ts`
+
 ## Sample Environment variable settings:
 
 ```
@@ -6,7 +35,7 @@ LINEPULSE_SVC_PORT=9080
 LOG_LEVEL=info
 #LOGGING_REDACT_PATTERNS=["value1", "value2"]
 SVC_1_ENDPOINT=https://api.linepulse-dev.ai/health
-SVC_2_ENDPOINT=https://api.linepulse-dev.ai/auth/docs
+SVC_2_ENDPOINT=https://api.linepulse-dev.ai/task-manager
 PINO_PRETTY=true
 SWAGGER_ON=true
 LINEPULSE_ENV=lcl
@@ -36,4 +65,4 @@ Please ask Product Managers (SRE as backup) the `local` launch darkly key, and y
 
 ## Kubernetes deployment
 
-The above environment variables should be set in the Kub
+The above environment variables should be set in the Kubernets deployment file or the overlays ()

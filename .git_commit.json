@@ -1,12 +1,12 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-06-13 15:12:51",
-  "branch": "## feature/unittest_openfeatureguard...origin/feature/unittest_openfeatureguard",
-  "files changed": [ "A  docs/PULL_REQUEST_TEMPLATE.md",
- "R  .example.env -> env.md"]
+  "timestamp": "2023-06-13 23:36:14",
+  "branch": "## feature/unittest_openfeatureguard...origin/feature/unittest_openfeatureguard [ahead 1]",
+  "files changed": [ "M  env.md",
+ "M  src/config/db.ts"]
 },
 "previous commits":[
- {"0f8627cf": " Merge branch 'main' into feature\/unittest_openfeatureguard"},
- {"40dbcc7d": " allow e2e test without .env"}
+ {"bfc26b05": " update PR template and require env.md"},
+ {"0f8627cf": " Merge branch 'main' into feature\/unittest_openfeatureguard"}
  ]
 }
