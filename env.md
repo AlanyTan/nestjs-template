@@ -1,4 +1,6 @@
-#copy this file to .env and change the values as needed
+## Sample Environment variable settings:
+
+```
 LINEPULSE_SVC_HOSTNAME=0.0.0.0
 LINEPULSE_SVC_PORT=9080
 LOG_LEVEL=info
@@ -9,7 +11,7 @@ PINO_PRETTY=true
 SWAGGER_ON=true
 LINEPULSE_ENV=lcl
 #OPENFEATURE_PROVIDER=ENV
-OPENFEATURE_PROVIDER=LD:sdk-bac5b783-a327-4e14-9a5b-8da478c08156
+OPENFEATURE_PROVIDER=ENV
 NEW_FEATURE_FLAG=true
 NEW_END_POINT=true
 LINEPULSE_SVC_VERSION="{\"build\":\"1.0.0-1\"}"
@@ -22,3 +24,16 @@ POSTGRES_PORT=5432
 POSTGRES_USERNAME=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_DATABASE=postgres
+```
+
+## Local testing
+
+for **local only**, you can create a `.env` file in the project root and make sure the content matches the above.
+
+### Feature Toggle
+
+Please ask Product Managers (SRE as backup) the `local` launch darkly key, and you set `OPENFEATURE_PROVIDER=LD:sdkkey....`
+
+## Kubernetes deployment
+
+The above environment variables should be set in the Kub
