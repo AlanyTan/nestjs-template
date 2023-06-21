@@ -8,8 +8,8 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { Repository } from "typeorm";
+// eslint-disable-next-line import/order
 import { config, dbConfig, OPENFEATURE_CLIENT } from "config";
-import configurationDB from "config/db";
 import { User } from "./entities/user.entity";
 import { ExampleOrmController } from "./example-orm.controller";
 import { ExampleOrmService } from "./example-orm.service";
@@ -40,7 +40,7 @@ describe("ExampleController", () => {
           load: [config, dbConfig],
         }),
         TypeOrmModule.forRootAsync({
-          imports: [ConfigModule.forRoot({ load: [configurationDB] })],
+          imports: [ConfigModule.forRoot({ load: [dbConfig] })],
           inject: [ConfigService],
           useFactory: async (configService: ConfigService) => {
             return configService.get("database") as TypeOrmModuleOptions;
