@@ -10,19 +10,40 @@ import {
   Response,
   HttpException,
   UseGuards,
+  LoggerService,
+  Query,
+  LogLevel,
+  Param,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";
 import { AadJwtValidator } from "@acertaanalyticssolutions/acerta-standardnpm";
+import { PinoLogger } from "nestjs-pino";
 import { AppService } from "app.service";
 import { JwtGuard } from "utils/jwt-guard";
+
+enum LogLevels {
+  trace = "trace",
+  debug = "debug",
+  info = "info",
+  warn = "warn",
+  error = "error",
+  fatal = "fatal",
+}
 
 @ApiTags("standard")
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
+    private readonly loggerService: PinoLogger,
     private readonly configService: ConfigService
   ) {}
 
@@ -100,5 +121,24 @@ export class AppController {
   @UseGuards(JwtGuard)
   config(): unknown {
     return this.appService.configuration();
+  }
+
+  @Get("update_log_level")
+  @Version(VERSION_NEUTRAL)
+  @ApiOperation({ summary: "update log level" })
+  @ApiQuery({
+    name: "loglevel",
+    description: "new log level to be set to",
+    enum: LogLevels,
+    required: true,
+  })
+  @UseGuards(JwtGuard)
+  updateLogLevel(@Query("loglevel") logLevel: LogLevels): string {
+    if (this.loggerService !== undefined) {
+      PinoLogger.root.level = logLevel;
+      return `log level set to ${logLevel}`;
+    } else {
+      return "loggerService is undefined";
+    }
   }
 }
