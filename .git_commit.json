@@ -1,12 +1,12 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-06-07 21:54:27",
-  "branch": "## AB#7692-remove-orm-down...origin/AB#7692-remove-orm-down",
-  "files changed": [ "M  .eslintrc.json",
- "M  .vscode/settings.json"]
+  "timestamp": "2023-06-13 23:36:14",
+  "branch": "## feature/unittest_openfeatureguard...origin/feature/unittest_openfeatureguard [ahead 1]",
+  "files changed": [ "M  env.md",
+ "M  src/config/db.ts"]
 },
 "previous commits":[
- {"1a5201da": " AB#7692 avoid down invocations"},
- {"ae5f0628": " AB#7692 remove TypeORM down migration requirement"}
+ {"bfc26b05": " update PR template and require env.md"},
+ {"0f8627cf": " Merge branch 'main' into feature\/unittest_openfeatureguard"}
  ]
 }

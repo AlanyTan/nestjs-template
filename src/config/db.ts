@@ -33,15 +33,8 @@ const envVarsSchema: Joi.ObjectSchema = Joi.object({
   POSTGRES_SYNCHRONIZE: Joi.boolean().default(false),
   POSTGRES_MIGRATIONS_RUN: Joi.boolean().default(true),
   POSTGRES_DROP_SCHEMA: Joi.boolean().default(false),
+  //SQLITE_DATABASE: Joi.string(),
 }).options({ stripUnknown: true });
-
-const { error, value: validatedEnvConfig } = envVarsSchema.validate(
-  process.env,
-  { allowUnknown: true }
-);
-if (error) {
-  throw new Error(`Config validation error: ${error.message}`);
-}
 
 /***
  * This function takes an environment variable name and an optional prefix to remove,
@@ -76,7 +69,18 @@ function ENVARToCamelCase(
 }
 
 export default registerAs("database", (): TypeOrmModuleOptions => {
+  const { error, value: validatedEnvConfig } = envVarsSchema.validate(
+    process.env,
+    { allowUnknown: true }
+  );
   const typeOfDatabase = validatedEnvConfig.DATABASE_TYPE ?? "none";
+  if (typeOfDatabase === "none") {
+    return {} as TypeOrmModuleOptions;
+  } else {
+    if (error) {
+      throw new Error(`Config validation error: ${error.message}`);
+    }
+  }
   interface TypeOrmConfig {
     [key: string]: unknown;
   }
