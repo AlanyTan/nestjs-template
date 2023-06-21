@@ -50,9 +50,6 @@
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
 
-  // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "yarn install",
-
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteEnv": { "DOCKER_BUILDKIT": "1" },
   "remoteUser": "node",
@@ -67,6 +64,5 @@
   },
 
   // install all dependent packages after container is built and files copied into
-  "postCreateCommand": "npm install  --userconfig=/dev/null husky --save-dev && npm pkg set scripts.prepare=\"husky install\" && npm run prepare",
-  "postStartCommand": "npm update -g"
+  "postCreateCommand": "npm install  --userconfig=/dev/null husky --save-dev && npm set-script prepare \"husky install\" && npm run prepare"
 }
