@@ -1,12 +1,11 @@
 {"latest commit": {
   "commit hash": "I cannot tell my own commit hash#",
-  "timestamp": "2023-06-13 23:36:14",
-  "branch": "## feature/unittest_openfeatureguard...origin/feature/unittest_openfeatureguard [ahead 1]",
-  "files changed": [ "M  env.md",
- "M  src/config/db.ts"]
+  "timestamp": "2023-06-21 19:18:33",
+  "branch": "## remove-post-start-command",
+  "files changed": [ "M  .devcontainer/devcontainer.json"]
 },
 "previous commits":[
- {"bfc26b05": " update PR template and require env.md"},
- {"0f8627cf": " Merge branch 'main' into feature\/unittest_openfeatureguard"}
+ {"588f66be": " leave only badge for main branch"},
+ {"2794dfdb": " Update pipeline badge"}
  ]
 }
