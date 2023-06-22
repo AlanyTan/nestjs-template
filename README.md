@@ -258,7 +258,7 @@ It will then create a dockerized postgres container named `postgres_local` if it
 
 ### Logging
 
-This repo uses pino logging, including pino-http. This means all incoming HTTP requests are automatically logged.  
+This repo uses pino logging, including pino-http. This means all incoming HTTP requests are automatically logged.
 Pino logging format is set in the app.module.ts, and should be considered Logging standard.
 
 There are 3 environment Variables that influence logging:
@@ -366,7 +366,7 @@ Please note that Swagger uses the name, description, and version info you update
 
 ## ConfigService
 
-We use **standard** Nestjs ConfigService. The required Environment Variables are listed in the app.module.ts files in the `validationSchema` section under `imports:[ConfigModule.forRoot]` using Joi notions.  
+We use **standard** Nestjs ConfigService. The required Environment Variables are listed in the app.module.ts files in the `validationSchema` section under `imports:[ConfigModule.forRoot]` using Joi notions.
 This ensures the service will fail on start if the required Environment Variable has not been set. You can also provide default values in here as well so that instead of fail to start, ConfigService can use that default value if the EnVar is not set.
 
 You should list **all** Environment Variables your code use here, even if they are completely optional. The only exception is for Database configuration should be listed in the config/db.ts (see below).
@@ -419,7 +419,7 @@ These are configured using the package.json, and .vscode/launch.json and .vscode
 
 ### launch using runtime container
 
-You can also test it in a docker container, select "Docker Node.js Launch" next the "RUN and DEBUG" label, You can also use menu "Run"->"Start debugging" (it launches what you select in the previous drop down), this time, VScode should build docker container for you.  
+You can also test it in a docker container, select "Docker Node.js Launch" next the "RUN and DEBUG" label, You can also use menu "Run"->"Start debugging" (it launches what you select in the previous drop down), this time, VScode should build docker container for you.
 Once the image is built and started, you should be able to see it running in the Docker explorer window within VSCode, your default browser should pop up and open the main page of the Nestjs application.
 
 Troubleshoot:
@@ -455,7 +455,7 @@ Unit testing are usually stored next to the functions they test. Typically you c
 Service testing are tests that "put all components, modules together", in some cases, that even involves making connections to other services.
 svc testing are stored under the `test` directory that is next to the `src` dir.
 
-You probalby noticed that next to our main.ts file, there is a main.config.ts file. This is because when we run test, we create a testing App Module which allows us to look deeper into the execution. However, this means we are _not_ using the main app.  
+You probalby noticed that next to our main.ts file, there is a main.config.ts file. This is because when we run test, we create a testing App Module which allows us to look deeper into the execution. However, this means we are _not_ using the main app.
 That's why we move most of the configuration into the main.config.ts so that we can re-use the setup of the app when we set up the testing App Module. As you can see in the setup-svc.ts we are able to turn Logging off after the mainConfig(app), which is a demonstration of the benefit of this setup.
 
 ## Technical explainations
@@ -491,7 +491,7 @@ Here is the features section uses docker-from-docker:
 
 ### the main.ts file
 
-This is the main application.  
+This is the main application.
 The line starts the server listening is:
 
 ```
@@ -516,7 +516,7 @@ docker context use DevLab
 
 This will create context for the remote docker host, and use it as current context.
 
-To make this consistent for VSCode, In VScode, go to Preferences->Settings, and search for "dockerode", then click on the "edit in settings.json" link.  
+To make this consistent for VSCode, In VScode, go to Preferences->Settings, and search for "dockerode", then click on the "edit in settings.json" link.
 add ` "docker.context": "DevLab",`
 
 For the first time opening this repo, use the Ctrl-Shift-P "Remote-containers: clone github repo to Container Volume" function to clone the repo to the remote docker container (instead of to your local PC.)
@@ -526,7 +526,7 @@ After the remote Linux host builds the docker image and runs it, your VSCode sho
 
 ### the .vscode/launch.json
 
-This is one of the two VSCode setting files that are important (could be generated from the package.json by VSCode then customize).  
+This is one of the two VSCode setting files that are important (could be generated from the package.json by VSCode then customize).
 This tells VSCode what debug/run options are avaialble for this application. The docker section is what we are interested in:
 
 ```
