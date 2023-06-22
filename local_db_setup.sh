@@ -13,7 +13,7 @@ while getopts "e:" opt; do
   esac
 done
 
-if [ -f "$envfile" ]; then 
+if [ -f "$envfile" ]; then
   . $envfile
 fi
 
@@ -35,13 +35,13 @@ do
   # go through each running container and check its NetworkSettings.ports
   RUNNING_POSTGRES_DOCKER_PORT=$(docker inspect --format='{{range $key, $value := .NetworkSettings.Ports}}{{$key}}{{end}}' $RUNNING_POSTGRES_DOCKER)
   RUNNING_POSTGRES_DOCKER_PORT=${RUNNING_POSTGRES_DOCKER_PORT%/tcp}
-  if [ "$RUNNING_POSTGRES_DOCKER_PORT" -eq "$POSTGRES_PORT" ]; then 
-    #if the specified POSTGRES_PORT is already in use by a running 
+  if [ "$RUNNING_POSTGRES_DOCKER_PORT" -eq "$POSTGRES_PORT" ]; then
+    #if the specified POSTGRES_PORT is already in use by a running
     break;
   fi
 done < <(docker ps --filter "ancestor=postgres" -q)
 
-if [ -z "$RUNNING_POSTGRES_DOCKER" ]; then 
+if [ -z "$RUNNING_POSTGRES_DOCKER" ]; then
   # check if postgres container does not exist
   if [ ! "$(docker ps -aq -f name=$POSTGRES_DOCKER_NAME)" ]; then
     # create container
