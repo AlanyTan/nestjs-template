@@ -2,7 +2,7 @@
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": "..",
   "moduleDirectories": ["../node_modules", "../src"],
-  "setupFilesAfterEnv": ["<rootDir>/test/setup-e2e.ts"],
+  "setupFilesAfterEnv": ["<rootDir>/test/setup-svc.ts"],
   "testEnvironment": "node",
   "collectCoverage": true,
   "collectCoverageFrom": ["<rootDir>/src/**/*.(t|j)s"],
@@ -11,7 +11,7 @@
     ".*spec.ts$",
     "main.ts"
   ],
-  "testRegex": ".*e2e-spec.ts$",
+  "testRegex": ".*svc-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   }

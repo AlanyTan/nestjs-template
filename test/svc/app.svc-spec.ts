@@ -1,8 +1,8 @@
 import request from "supertest";
 import { User } from "../../src/example-orm/entities/user.entity";
-import { app } from "../setup-e2e";
+import { app } from "../setup-svc";
 
-describe("Application Controllers (e2e)", () => {
+describe("Application Controllers (svc)", () => {
   const servicePrefix = process.env.SERVICE_PREFIX
     ? "/" + process.env.SERVICE_PREFIX
     : "";

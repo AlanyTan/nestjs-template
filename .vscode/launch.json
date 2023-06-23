@@ -27,10 +27,10 @@
       "protocol": "inspector"
     },
     {
-      "name": "Test via NPM test:e2e",
+      "name": "Test via NPM test:svc",
       "type": "node",
       "request": "launch",
-      "runtimeArgs": ["run-script", "test:e2e"],
+      "runtimeArgs": ["run-script", "test:svc"],
       "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
