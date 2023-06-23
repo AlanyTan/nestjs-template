@@ -36,7 +36,7 @@ stages:
       postgresImageName: postgres:15
       sshRepositoryKeyEnabled: true
       unitTestEnabled: true
-      serviceTestEnabled: false
+      serviceTestEnabled: true
   - template: pipelines/azure-pipelines-with-ssh-template.yaml@lp-base
     parameters:
       imageRepository: "nestjs-example"

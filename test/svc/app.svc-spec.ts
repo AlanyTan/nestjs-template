@@ -1,5 +1,4 @@
 import request from "supertest";
-import { User } from "../../src/example-orm/entities/user.entity";
 import { app } from "../setup-svc";
 
 describe("Application Controllers (svc)", () => {
@@ -90,7 +89,7 @@ describe("Application Controllers (svc)", () => {
         `${servicePrefix}/v1/example_orm/find_all`
       );
       const foundUsers = JSON.parse(response.text);
-      foundUsers.forEach(async (savedUser: User) => {
+      for (const savedUser of foundUsers) {
         const response2 = await request(app.getHttpServer()).get(
           `${servicePrefix}/v2/example_orm/find_one/${savedUser?.uuid}`
         );
@@ -99,7 +98,7 @@ describe("Application Controllers (svc)", () => {
         //   `${servicePrefix}/v1/example_orm/delete/${savedUser?.uuid}`
         // );
         // expect(response3.status).toEqual(200);
-      });
+      }
     });
   });
 });
