@@ -10,9 +10,9 @@ process.env.LINEPULSE_ENV = "tst";
 
 import { ConfigService } from "@nestjs/config";
 import request from "supertest";
-import { app } from "../setup-e2e";
+import { app } from "../setup-svc";
 
-describe("AppController (e2e) testing wrong settings.", () => {
+describe("AppController (svc) testing wrong settings.", () => {
   const servicePrefix = process.env.SERVICE_PREFIX
     ? "/" + process.env.SERVICE_PREFIX
     : "";
@@ -50,7 +50,7 @@ describe("AppController (e2e) testing wrong settings.", () => {
   });
 });
 
-describe("AppController Config Service (e2e)", () => {
+describe("AppController Config Service (svc)", () => {
   test("ConfigService:Known Configuration value of Host, Ports and LOG Level should be 0.0.0.0  80 info", async () => {
     expect(
       (await app.resolve(ConfigService)).get("LINEPULSE_SVC_HOSTNAME")

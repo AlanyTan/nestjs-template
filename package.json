@@ -22,9 +22,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:all": "jest --testRegex \".*\\..*spec\\.ts\" --runInBand",
-    "test:e2e": "./local_db_setup.sh -e test.env && eval $(xargs < test.env) jest --config ./test/jest-e2e.json --verbose",
-    "test:e2e:watch": "jest --config ./test/jest-e2e.json --verbose --watch",
-    "test:e2e:cov": "jest --config ./test/jest-e2e.json --verbose --coverage",
+    "test:svc": "./local_db_setup.sh -e test.env && eval $(xargs < test.env) jest --config ./test/jest-svc.json --verbose",
+    "test:svc:watch": "jest --config ./test/jest-svc.json --verbose --watch",
+    "test:svc:cov": "jest --config ./test/jest-svc.json --verbose --coverage",
     "prepare": "husky install",
     "typeorm": "eval $(xargs < .env) typeorm-ts-node-commonjs -d ormconfig.ts"
   },

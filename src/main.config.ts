@@ -69,4 +69,4 @@ export function mainConfig(app: INestApplication): {
   };
 }
 
-// this file allows the e2e test to run without the main module but still is configured as close as the main module
+// this file allows the svc test to run without the main module but still is configured as close as the main module
