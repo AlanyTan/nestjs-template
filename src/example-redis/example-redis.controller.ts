@@ -53,7 +53,7 @@ export class ExampleRedisController {
     return this.redisService.ping();
   }
 
-  @Post("save_object")
+  @Post("save_object:/:key")
   @Version("1")
   @ApiOperation({ summary: "save a JSON object to redis server" })
   @ApiCreatedResponse({
@@ -69,12 +69,21 @@ export class ExampleRedisController {
     description:
       "The service run into internal trouble, please check error logs for details.",
   })
+  @ApiParam({
+    name: "key",
+    description: "the key(id) of the object to be saved",
+    type: String,
+    required: true,
+  })
   @ApiBody({
     description: "the user to be created",
     type: CreateCustomerDto,
     required: true,
   })
-  async redisJsonSet(key: string, @Body() value: string): Promise<string> {
+  async redisJsonSet(
+    @Param("key") key: string,
+    @Body() value: string
+  ): Promise<string> {
     this.logger.log("Calling redisSet with info", "redisSet");
     let keyToUse = key;
     if (!key) {
