@@ -305,7 +305,7 @@ The `/version` end-point provide 3 key info
   - this is often the build number of the container running, combined with the above, it gives a clear idea of what code was built at what time
 - commit info
   - this actually requires you to provid a valid JWT (issued by AAD, not Auth0 because these are internal Acerta info) if you don't have a valid JWT, you will see "Unauthorized to view commit info"
-  - assuming you have a valid JWT, this section will show you the timestamp and branch of the latest commit, the list of files changed by this latest commit, and it will also show you the commit hash and description of the previous 2 commits.
+  - assuming you have a valid JWT, this section will show you the timestamp and branch of the latest commit, the list of files changed by this latest commit, and it will also show you the commit hash and description of the previous 2 commits. This feature is pending a pipeline implementation of the update to the `.git_commit.json` file.
 
 ### kubernetes probe (health) endpoints
 
