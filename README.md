@@ -27,7 +27,7 @@ The .vscode config allows the VSCode to be able to debug, build container and ru
 - config service, with standard Joi validation using .env file or environment vars (.env is ignored in .gitignore and .dockerignore, check .example.env for example)
 - Standardized logging, logging format, redact, dynamic verbosness
   - allowing dynamically change log level using /update_log_level endpoint
-- Jest based unit test and app e2e test templates, and vscode integrated test execution
+- Jest based unit test and app svc test templates, and vscode integrated test execution
 - openapi/swagger-ui (can be turned on/off using EnVar via ConfigService)
 - VSCode usability enhancements
   - remote-container ready repo, all design time requirements can be built into the devcontainer
@@ -432,12 +432,12 @@ should show you the same results. <map-port> is the port docker used to map host
 
 ### test with jest
 
-You can and should also test your code using automated tests. Jest is standard in this repo. Select "Docker Node.js Launch" next the "RUN and DEBUG" label, You can also use menu "Run"->"Start debugging" (it launches what you select in the previous drop down), chose either "Test with npm test" or "Test with npm test:e2e" the differences is the e2e test will test the app.module (the root module for your application) while the non-e2e will test each module independently only. So most likely in early stages of development work, only the non-e2e tests will work, but closer to PR, you should test using e2e one.
+You can and should also test your code using automated tests. Jest is standard in this repo. Select "Docker Node.js Launch" next the "RUN and DEBUG" label, You can also use menu "Run"->"Start debugging" (it launches what you select in the previous drop down), chose either "Test with npm test" or "Test with npm test:svc" the differences is the svc test will test the app.module (the root module for your application) while the non-svc will test each module independently only. So most likely in early stages of development work, only the non-svc tests will work, but closer to PR, you should test using svc one.
 The jest testing coverage report is turned on, and at `All files` level the %statement, %Funcs %Lines coverage should be 75% or higher.
 
 ## Test
 
-As a developer, it is your responsibility to write unit testing and service level end-2-end testing that are repeatable.
+As a developer, it is your responsibility to write unit testing and service level service testing that are repeatable.
 It is expected that
 
 - Automated testing code coverage should be >80%
@@ -450,13 +450,13 @@ Tests are created as `*.spec.ts`. When jest runs (either via the Debug and RUn m
 
 Unit testing are usually stored next to the functions they test. Typically you can think of your goal is to call those functions, and make sure however, you call them, they return you expected values.
 
-### e2e testing
+### service (svc) testing
 
-End-2-end testing are tests that "put all components, modules together", in some cases, that even involves making connections to other services.
-e2e testing are stored under the `test` directory that is next to the `src` dir.
+Service testing are tests that "put all components, modules together", in some cases, that even involves making connections to other services.
+svc testing are stored under the `test` directory that is next to the `src` dir.
 
 You probalby noticed that next to our main.ts file, there is a main.config.ts file. This is because when we run test, we create a testing App Module which allows us to look deeper into the execution. However, this means we are _not_ using the main app.  
-That's why we move most of the configuration into the main.config.ts so that we can re-use the setup of the app when we set up the testing App Module. As you can see in the setup-e2e.ts we are able to turn Logging off after the mainConfig(app), which is a demonstration of the benefit of this setup.
+That's why we move most of the configuration into the main.config.ts so that we can re-use the setup of the app when we set up the testing App Module. As you can see in the setup-svc.ts we are able to turn Logging off after the mainConfig(app), which is a demonstration of the benefit of this setup.
 
 ## Technical explainations
 
@@ -500,7 +500,7 @@ await app.listen(port, host, () => Logger.log("Listening on port " + port));
 
 The `Logger.log("Listening on port" + port)` part is to make sure a log output from the nest.js app is written to the log, where Docker extention monitors. This allows VSCode to know when the application is ready, and which port the application runs on.
 
-You probably noticed that the main.ts file is very short and concise. Most of the actual configuration of the main app is done in main.config.ts This allows us to test the mainconfig of the app in our e2e test scripts. The main.ts is actually not used during e2e test (so that test can interject the app and calcuate test coverage, mocks, etc)
+You probably noticed that the main.ts file is very short and concise. Most of the actual configuration of the main app is done in main.config.ts This allows us to test the mainconfig of the app in our svc test scripts. The main.ts is actually not used during svc test (so that test can interject the app and calcuate test coverage, mocks, etc)
 
 #### to use the Acerta DevLab VMs
 
