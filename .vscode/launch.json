@@ -14,7 +14,7 @@
       "protocol": "inspector"
     },
     {
-      "name": "Test via NPM test",
+      "name": "Unit Test (test:unit)",
       "type": "node",
       "request": "launch",
       "runtimeArgs": ["run-script", "test"],
@@ -27,10 +27,23 @@
       "protocol": "inspector"
     },
     {
-      "name": "Test via NPM test:svc",
+      "name": "Auto Unit Test (upon save)",
       "type": "node",
       "request": "launch",
-      "runtimeArgs": ["run-script", "test:svc"],
+      "runtimeArgs": ["run-script", "test:watch"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true,
+      "envFile": "${workspaceFolder}/.env",
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "protocol": "inspector"
+    },
+    {
+      "name": "AppModule Test (test:service)",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "test:service"],
       "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
