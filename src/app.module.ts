@@ -22,6 +22,7 @@ import { LoggerModule, Logger } from "nestjs-pino";
 import { OPENFEATURE_CLIENT, config, dbConfig } from "config";
 import { ExampleModule } from "example/example.module";
 import { ExampleOrmModule } from "example-orm/example-orm.module";
+import { ExampleRedisModule } from "example-redis/example-redis.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 
@@ -133,6 +134,9 @@ import { AppService } from "./app.service";
           }),
           ExampleOrmModule,
         ]),
+    ...((process.env.REDIS_URL ?? "none") == "none"
+      ? []
+      : [ExampleRedisModule]),
   ],
   controllers: [AppController],
   providers: [

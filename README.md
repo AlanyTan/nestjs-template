@@ -17,24 +17,31 @@ The .vscode config allows the VSCode to be able to debug, build container and ru
 - Importing acerta-standardnpm packages and being able to deploy using Azure Pipeline (azure-pipelines.yml)
 - Dockerized, Dockerfile builds Docker image that can be executed in local & Azure pipeline build Agent
 - OPENFEATURE feature toggle
-- - two feature toggle providers Environment Variable & LaunchDarkly
-- - standard OPENFEATURE client that can be easily switched between the two providers using EnVar without changing application code
+  - two feature toggle providers Environment Variable & LaunchDarkly
+  - standard OPENFEATURE client that can be easily switched between the two providers using EnVar without changing application code
 - AAD protected meta info end-points
-- - /config endpoint - protected by AAD JWT guard
-- - partial /version content are hidden if no AAD JWT provided
+  - /config endpoint - protected by AAD JWT guard
+  - partial /version content are hidden if no AAD JWT provided
 - health check end-point (checks dependending services and DB)
 - metrics end-point
 - config service, with standard Joi validation using .env file or environment vars (.env is ignored in .gitignore and .dockerignore, check .example.env for example)
 - Standardized logging, logging format, redact, dynamic verbosness
+  - allowing dynamically change log level using /update_log_level endpoint
 - Jest based unit test and app svc test templates, and vscode integrated test execution
 - openapi/swagger-ui (can be turned on/off using EnVar via ConfigService)
 - VSCode usability enhancements
-- - remote-container ready repo, all design time requirements can be built into the devcontainer
-- - .vscode/launch.json & .vscode/tasks.json that enables VSCode integrated "run and debug" and test function.
-- - standardized tsconfig and .eslintrc (so vscode intellisense will catch most lint issues that would otherwise fail the build)
-- - database config (optional)
-- - dockerized postgres db setup script (optional)
-- - rename script (to change all instances of "nestjs-example" to whatever you call the repo)
+  - remote-container ready repo, all design time requirements can be built into the devcontainer
+  - .vscode/launch.json & .vscode/tasks.json that enables VSCode integrated "run and debug" and test function.
+  - standardized tsconfig and .eslintrc (so vscode intellisense will catch most lint issues that would otherwise fail the build)
+- husky git hooks to perform pre-commit lint (so CI/CD )
+- database config (optional)
+  - DATABASE_TYPE is used to control what type of DB is used. by default "none", which means no database, and the root module will skip loading TypeORMModule
+  - if DATABASE*TYPE is not "none", (i.e. is set to "postgres") then its upper case (i.e. POSTGRES*) becomes prefix for all other DB settings: like `POSTGRES_PORT` would mean "PORT" property of Postgres connection setup.
+  - all DATABASE related configuration are under /src/config/db.ts
+- redis config (optional)
+  - REDIS_URL by default is "none" which will skip initializing redis module
+- dockerized postgres db setup script (optional)
+- rename script (to change all instances of "nestjs-example" to whatever you call the repo)
 
 ### Requirements
 
