@@ -27,7 +27,7 @@
       "protocol": "inspector"
     },
     {
-      "name": "Auto Unit Test (upon save)",
+      "name": "Auto Test on save (test:unit)",
       "type": "node",
       "request": "launch",
       "runtimeArgs": ["run-script", "test:watch"],
