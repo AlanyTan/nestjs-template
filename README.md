@@ -34,6 +34,7 @@ The .vscode config allows the VSCode to be able to debug, build container and ru
   - .vscode/launch.json & .vscode/tasks.json that enables VSCode integrated "run and debug" and test function.
   - standardized tsconfig and .eslintrc (so vscode intellisense will catch most lint issues that would otherwise fail the build)
 - husky git hooks to perform pre-commit lint (so CI/CD )
+- example of using Server Sent Events to drive dynamic ECharts (/example/progress.html and example/updates end-points)
 - database config (optional)
   - DATABASE_TYPE is used to control what type of DB is used. by default "none", which means no database, and the root module will skip loading TypeORMModule
   - if DATABASE*TYPE is not "none", (i.e. is set to "postgres") then its upper case (i.e. POSTGRES*) becomes prefix for all other DB settings: like `POSTGRES_PORT` would mean "PORT" property of Postgres connection setup.
