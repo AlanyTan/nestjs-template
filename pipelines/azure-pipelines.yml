@@ -32,7 +32,7 @@ variables:
 stages:
   - template: pipelines/ci-test-shell-template.yml@lp-base
     parameters:
-      testRunnerImageName: node:18-bullseye
+      testRunnerImageName: node:16-bullseye
       postgresImageName: postgres:15
       sshRepositoryKeyEnabled: true
       unitTestEnabled: true
