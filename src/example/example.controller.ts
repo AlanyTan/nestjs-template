@@ -84,7 +84,7 @@ export class ExampleController {
   }
 
   @Get("updates")
-  sendUpdates(@Res() res: Response): void {
+  async sendUpdates(@Res() res: Response): Promise<void> {
     res.set({
       "Cache-Control": "no-cache",
       "Content-Type": "text/event-stream",
@@ -98,25 +98,14 @@ export class ExampleController {
     res.write(`data: ${JSON.stringify({ progress: 0 })}\n\n`);
 
     // Just as an example, let's increment the progress every second
+    const eventCount = Infinity;
     let progress = 0;
-    const interval = setInterval(() => {
+    for (let i = 0; i < eventCount; i++) {
+      res.write(`event: message\n`);
       progress++;
-      res.write(`data: ${JSON.stringify({ progress })}\n\n`);
-      this.logger.debug(
-        `Sent progress update: ${progress}`,
-        "ExampleController:debug"
-      );
-      if (progress === 100) {
-        clearInterval(interval);
-        res.write(`event: end\n`);
-        res.write(`data: ${JSON.stringify({ progress })}\n\n`);
-        res.end();
-      }
-      this.logger.debug(
-        `Sent last progress update: ${progress}`,
-        "ExampleController:debug"
-      );
-    }, 1000);
+      const randonNumber = await this.exampleService.getRandonNumber();
+      res.write(`data: ${JSON.stringify({ progress, randonNumber })}\n\n`);
+    }
   }
 
   @Get("progress.html")
@@ -134,13 +123,14 @@ export class ExampleController {
       <h1>Progress Update</h1>
       <div id="chart" style="width: 600px; height: 400px;"></div>
       <progress id="myProgressBar" max="100" value="0"></progress>
-      <div id="output">some data</div>
+      <div id="output">waiting for data...</div>
       <script>
       // Initialize ECharts instance
       const chart = echarts.init(document.getElementById('chart'));
 
       // Define initial series data
       const seriesData = [];
+      const MAX_DATA_POINTS = 30;
 
       // Set chart options
       const options = {
@@ -173,10 +163,16 @@ export class ExampleController {
 
           document.getElementById('output').innerHTML = data;
           myProgressBar.value = parsedData.progress;
-          seriesData.push(parsedData.progress);
+          seriesData.push(parsedData.randonNumber);
+          while (seriesData.length > MAX_DATA_POINTS) {
+            seriesData.shift(); // Remove the oldest element (first in the array)
+          }
         
           // Update x-axis data points
           options.xAxis.data.push(new Date().toLocaleTimeString());
+          while (options.xAxis.data.length > MAX_DATA_POINTS) {
+            options.xAxis.data.shift(); // Remove the oldest element (first in the array)
+          }
         
           // Update chart options
           chart.setOption(options);
