@@ -64,4 +64,18 @@ export class ExampleService {
       );
     } // end of else block, if the old feautre is to be removed, we can remove the else block and the if statement above
   }
+
+  async getRandonNumber(): Promise<number> {
+    const delaySeconds = Math.floor(Math.random() * 10); // Random delay between 1 and 10 seconds
+
+    await this.delay(delaySeconds * 1000); // Convert seconds to milliseconds and wait for the random delay
+
+    const randomNumber = Math.floor(Math.random() * 100) + 1; // Random number between 1 and 100
+
+    return randomNumber;
+  }
+
+  private delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 }

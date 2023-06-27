@@ -7,9 +7,11 @@ import {
   UseGuards,
   Headers,
   UseInterceptors,
+  Res,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Response } from "express";
 import { OpenFeatureGuard } from "utils";
 import { forwardHeaderAuthInterceptor } from "utils/forward.header.auth";
 import { ExampleService } from "./example.service";
@@ -79,5 +81,117 @@ export class ExampleController {
   async getNewExample(): Promise<string> {
     this.logger.log("Calling getExample with info", "ExampleController:info");
     return this.exampleService["newFeature2"];
+  }
+
+  @Get("updates")
+  async sendUpdates(@Res() res: Response): Promise<void> {
+    res.set({
+      "Cache-Control": "no-cache",
+      "Content-Type": "text/event-stream",
+      Connection: "keep-alive",
+    });
+    res.flushHeaders();
+
+    this.logger.debug("Sending progress updates", "ExampleController:debug");
+
+    // Now we can send data to the client whenever we want
+    res.write(`data: ${JSON.stringify({ progress: 0 })}\n\n`);
+
+    // Just as an example, let's increment the progress every second
+    const eventCount = Infinity;
+    let progress = 0;
+    for (let i = 0; i < eventCount; i++) {
+      res.write(`event: message\n`);
+      progress++;
+      const randonNumber = await this.exampleService.getRandonNumber();
+      res.write(`data: ${JSON.stringify({ progress, randonNumber })}\n\n`);
+    }
+  }
+
+  @Get("progress.html")
+  async getHtml(@Res() res: Response): Promise<void> {
+    // Your logic to generate dynamic HTML content
+    this.logger.verbose("Generating dynamic HTML", "ExampleController:verbose");
+    const dynamicHtml = `<!DOCTYPE html>
+    <html>
+    <head>
+      <title>Progress Update</title>
+      <!-- Include ECharts library -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>  
+    </head>
+    <body>
+      <h1>Progress Update</h1>
+      <div id="chart" style="width: 600px; height: 400px;"></div>
+      <progress id="myProgressBar" max="100" value="0"></progress>
+      <div id="output">waiting for data...</div>
+      <script>
+      // Initialize ECharts instance
+      const chart = echarts.init(document.getElementById('chart'));
+
+      // Define initial series data
+      const seriesData = [];
+      const MAX_DATA_POINTS = 30;
+
+      // Set chart options
+      const options = {
+        xAxis: {
+          type: 'category',
+          data: [], // x-axis data points
+        },
+        yAxis: {
+          type: 'value',
+        },
+        series: [
+          {
+            type: 'line',
+            data: seriesData, // initial empty data
+          },
+        ],
+      };
+
+      // Set initial options for the chart
+      chart.setOption(options);
+
+        const source = new EventSource('/${this.configService.get(
+          "SERVICE_PREFIX"
+        )}/v1/example/updates');
+    
+        source.onmessage = function logEvents(event) {
+          const { data } = event;
+          const parsedData = JSON.parse(data);
+          console.log('Server sent:', parsedData);
+
+          document.getElementById('output').innerHTML = data;
+          myProgressBar.value = parsedData.progress;
+          seriesData.push(parsedData.randonNumber);
+          while (seriesData.length > MAX_DATA_POINTS) {
+            seriesData.shift(); // Remove the oldest element (first in the array)
+          }
+        
+          // Update x-axis data points
+          options.xAxis.data.push(new Date().toLocaleTimeString());
+          while (options.xAxis.data.length > MAX_DATA_POINTS) {
+            options.xAxis.data.shift(); // Remove the oldest element (first in the array)
+          }
+        
+          // Update chart options
+          chart.setOption(options);
+
+          // Here, you can update your front-end's progress bar
+          // For example:
+          // myProgressBar.value = parsedData.progress;
+        };
+    
+        source.addEventListener('end', function(event) {
+          console.log('Progress completed');
+          source.close();
+        }, false);
+      </script>
+    </body>
+    </html>`;
+    this.logger.verbose("Sending dynamic HTML", "ExampleController:verbose");
+
+    res.setHeader("Content-Type", "text/html");
+    res.send(dynamicHtml);
   }
 }
