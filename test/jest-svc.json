@@ -6,6 +6,7 @@
   "testEnvironment": "node",
   "collectCoverage": true,
   "collectCoverageFrom": ["<rootDir>/src/**/*.(t|j)s"],
+  "coverageReporters": ["cobertura", "lcov"],
   "coveragePathIgnorePatterns": [
     "<rootDir>/src/migrations",
     ".*spec.ts$",
