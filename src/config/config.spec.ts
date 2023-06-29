@@ -22,7 +22,7 @@ describe("ConfigSerivce should error out if required Environments are missing", 
             //if ".default(value)" then the value is used if the expected EnVar does not exist
             //if neither ".required()" nor ".default(value)" then the EnVar is optional, and will be processed by the ConfigService.get() method
             //if you do not list a configuration here, then it will not be available as part of the ConfigService to the application at all
-            LINEPULSE_ENV: Joi.string().required(),
+            ENV_KEY: Joi.string().required(),
             OPENFEATURE_PROVIDER: Joi.string().required(),
             LINEPULSE_SVC_PORT: Joi.number().required(),
             LINEPULSE_SVC_HOSTNAME: Joi.string().default("0.0.0.0"),
@@ -37,12 +37,12 @@ describe("ConfigSerivce should error out if required Environments are missing", 
           }),
         })
       ).rejects.toThrowError(
-        'Config validation error: "LINEPULSE_ENV" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required. "SVC_2_ENDPOINT" is required'
+        'Config validation error: "ENV_KEY" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required. "SVC_2_ENDPOINT" is required'
       );
     } catch (err) {
       expect(err).toMatchObject(
         new Error(
-          'Config validation error: "LINEPULSE_ENV" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required. "SVC_2_ENDPOINT" is required'
+          'Config validation error: "ENV_KEY" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required. "SVC_2_ENDPOINT" is required'
         )
       );
     }
@@ -65,7 +65,7 @@ describe("Config Service check configurations", () => {
     process.env.SVC_2_ENDPOINT = "https://this.needs.to.be.a.valid.url/docs";
     process.env.PINO_PRETTY = "true";
     process.env.SWAGGER_ON = "true";
-    process.env.LINEPULSE_ENV = "lcl";
+    process.env.ENV_KEY = "lcl";
     process.env.OPENFEATURE_PROVIDER = "ENV";
     process.env.NEW_FEATURE_FLAG = "true";
     process.env.NEW_END_POINT = "true";
@@ -94,7 +94,7 @@ describe("Config Service check configurations", () => {
             //if ".default(value)" then the value is used if the expected EnVar does not exist
             //if neither ".required()" nor ".default(value)" then the EnVar is optional, and will be processed by the ConfigService.get() method
             //if you do not list a configuration here, then it will not be available as part of the ConfigService to the application at all
-            LINEPULSE_ENV: Joi.string().required(),
+            ENV_KEY: Joi.string().required(),
             OPENFEATURE_PROVIDER: Joi.string().required(),
             LINEPULSE_SVC_PORT: Joi.number().required(),
             LINEPULSE_SVC_HOSTNAME: Joi.string().default("0.0.0.0"),
@@ -123,9 +123,7 @@ describe("Config Service check configurations", () => {
     expect(configService.get<number>("LINEPULSE_SVC_PORT")).toBe(
       parseInt(process.env.LINEPULSE_SVC_PORT ?? "0")
     );
-    expect(configService.get<string>("LINEPULSE_ENV")).toBe(
-      process.env.LINEPULSE_ENV
-    );
+    expect(configService.get<string>("ENV_KEY")).toBe(process.env.ENV_KEY);
     expect(configService.get<string>("OPENFEATURE_PROVIDER")).toBe(
       process.env.OPENFEATURE_PROVIDER
     );

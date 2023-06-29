@@ -6,10 +6,9 @@
     "typescript",
     "typescriptreact"
   ],
-  "eslint.workingDirectories": ["."],
   "eslint.alwaysShowStatus": true,
-  "eslint.format.enable": true,
-  "eslint.lintTask.enable": true,
+  "eslint.format.enable": false,
+  "eslint.lintTask.enable": false,
   "eslint.codeAction.showDocumentation": {
     "enable": true
   },
@@ -18,5 +17,11 @@
     "rules": {
       "no-trailing-spaces": "warn"
     }
-  }
+  },
+  "eslint.workingDirectories": ["./src", "./test"],
+  "eslint.useESLintClass": true,
+  "eslint.runtime": "node_modules/eslint/bin/eslint.js",
+  "eslint.debug": true,
+  "eslint.nodeEnv": "development",
+  "eslint.onIgnoredFiles": "warn"
 }

@@ -41,7 +41,7 @@ import { AppService } from "./app.service";
         //if ".default(value)" then the value is used if the expected EnVar does not exist
         //if neither ".required()" nor ".default(value)" then the EnVar is optional, and will be processed by the ConfigService.get() method
         //if you do not list a configuration here, then it will not be available as part of the ConfigService to the application at all
-        LINEPULSE_ENV: Joi.string().required(),
+        ENV_KEY: Joi.string().required(),
         OPENFEATURE_PROVIDER: Joi.string().required(),
         LINEPULSE_SVC_PORT: Joi.number().required(),
         LINEPULSE_SVC_HOSTNAME: Joi.string().required(),
@@ -78,7 +78,7 @@ import { AppService } from "./app.service";
                 // if this is non production env, then use pino-pretty to format the log
                 target: "pino-pretty",
                 options: {
-                  colorize: configService.get("LINEPULSE_ENV", "lcl") === "lcl",
+                  colorize: configService.get("ENV_KEY", "lcl") === "lcl",
                   singleLine: true,
                   levelFirst: false,
                   translateTime: "UTC:yyyy-mm-dd HH:MM:ss.l Z",
@@ -91,11 +91,11 @@ import { AppService } from "./app.service";
           serializers:
             configService.get("LOG_LEVEL") === "trace"
               ? {
-                  req: (req) => req,
+                  req: (req): object => req,
                 }
               : configService.get("LOG_LEVEL") === "debug"
               ? {
-                  req: (req) => ({
+                  req: (req): object => ({
                     id: req.id,
                     method_url: req.method + " " + req.url,
                     query: req.query,
@@ -105,7 +105,7 @@ import { AppService } from "./app.service";
                   }),
                 }
               : {
-                  req: (req) => ({
+                  req: (req): object => ({
                     id: req.id,
                     method_url: req.method + " " + req.url,
                   }),

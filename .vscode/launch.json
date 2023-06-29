@@ -17,8 +17,11 @@
       "name": "Unit Test (test:unit)",
       "type": "node",
       "request": "launch",
-      "runtimeArgs": ["run-script", "test"],
-      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceFolder}/node_modules/.bin/jest",
+        "--runInBand"
+      ],
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
       "envFile": "${workspaceFolder}/.env",
