@@ -6,13 +6,7 @@
   //the reason it shows ${localEnv:USERNAME} is so that it covers both Windwos and *nix systems as frontend VSCode
   "runArgs": ["--init", "--network=host"],
   "build": {
-    "dockerfile": "Dockerfile",
-    // Update 'VARIANT' to pick a Node version: 16, 14, 12.
-    // Append -bullseye or -buster to pin to an OS version.
-    // Use -bullseye variants on local on arm64/Apple Silicon.
-    "args": {
-      "VARIANT": "16-bullseye"
-    }
+    "dockerfile": "Dockerfile"
   },
 
   "portsAttributes": {
@@ -68,5 +62,5 @@
   },
 
   // install all dependent packages after container is built and files copied into
-  "postCreateCommand": "npm install  --userconfig=/dev/null husky --save-dev && npm pkg set scripts.prepare=\"husky install\" && npm run prepare",
+  "postCreateCommand": "npm install  --userconfig=/dev/null husky --save-dev && npm pkg set scripts.prepare=\"husky install\" && npm run prepare"
 }
