@@ -13,12 +13,7 @@
     "enable": true
   },
   "eslint.codeActionsOnSave.mode": "all",
-  "eslint.options": {
-    "rules": {
-      "no-trailing-spaces": "warn"
-    }
-  },
-  "eslint.workingDirectories": ["./src", "./test"],
+  "eslint.workingDirectories": ["."],
   "eslint.useESLintClass": true,
   "eslint.runtime": "node_modules/eslint/bin/eslint.js",
   "eslint.debug": true,
