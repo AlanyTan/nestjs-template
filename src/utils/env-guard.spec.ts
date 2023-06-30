@@ -6,11 +6,18 @@ jest.mock("@nestjs/config", () => {
   return {
     ConfigService: jest.fn().mockImplementation(() => {
       return {
-        get: jest.fn().mockImplementation((input: string) => {
-          if (input == "ENV_KEY") {
-            return "lcl";
-          }
-        }),
+        get: jest
+          .fn()
+          .mockImplementationOnce((input: string) => {
+            if (input == "ENV_KEY") {
+              return "lcl";
+            }
+          })
+          .mockImplementationOnce((input: string) => {
+            if (input == "ENV_KEY") {
+              return "prd";
+            }
+          }),
       };
     }),
   };
@@ -21,29 +28,32 @@ describe("EnvGuard", () => {
     expect(EnvGuard).toBeDefined();
   });
   it("should return CanActivate()", () => {
-    expect(EnvGuard()).toBeInstanceOf(Function);
+    expect(EnvGuard).toBeInstanceOf(Function);
   });
+  const configService = new ConfigService();
   it("should return true in local IDE", async () => {
-    const evaluatedGuardClass = EnvGuard();
-    const evaluatedGuard = new evaluatedGuardClass(new ConfigService());
+    const evaluatedGuardClass = EnvGuard;
+    const evaluatedGuard = new evaluatedGuardClass(configService);
     expect(await evaluatedGuard.canActivate({} as ExecutionContext)).toEqual(
       true
     );
   });
-  it("should return false when forced to check if running in 'mars'", async () => {
-    const evaluatedGuardClass = EnvGuard(["mars"]);
-    const evaluatedGuard = new evaluatedGuardClass(new ConfigService());
+  it("should return false when the ENV_KEY is 'prd'", async () => {
+    const evaluatedGuardClass = EnvGuard;
+    const evaluatedGuard = new evaluatedGuardClass(configService);
     class MockHttpContext {
-      switchToHttp(): object {
+      switchToHttp(): Record<string, unknown> {
         return {
-          getRequest(): object {
+          getRequest(): Record<string, unknown> {
             return { method: "access", url: "mockURL" };
           },
         };
       }
     }
     expect(
-      evaluatedGuard.canActivate(new MockHttpContext() as ExecutionContext)
+      evaluatedGuard.canActivate(
+        new MockHttpContext() as unknown as ExecutionContext
+      )
     ).rejects.toThrow(NotFoundException);
   });
 });
