@@ -27,7 +27,8 @@
         "github.vscode-pull-request-github",
         "redhat.vscode-yaml",
         "ms-azure-devops.azure-pipelines",
-        "timonwong.shellcheck"
+        "timonwong.shellcheck",
+        "GitHub.vscode-pull-request-github"
       ]
     },
     "codespaces": {

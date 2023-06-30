@@ -10,9 +10,15 @@ import {
   Res,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiProperty,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { Response } from "express";
-import { OpenFeatureGuard } from "utils";
+import { OpenFeatureGuard, EnvGuard } from "utils";
 import { forwardHeaderAuthInterceptor } from "utils/forward.header.auth";
 import { ExampleService } from "./example.service";
 
@@ -193,5 +199,51 @@ export class ExampleController {
 
     res.setHeader("Content-Type", "text/html");
     res.send(dynamicHtml);
+  }
+}
+
+enum Env {
+  local = "lcl",
+  develop = "dev",
+  quality = "qas",
+  staging = "stg",
+  production = "prd",
+  default = "dft",
+}
+class EnvDto {
+  @ApiProperty({ enum: Env })
+  env: Env;
+}
+@ApiTags("example_dev_only")
+@UseGuards(EnvGuard)
+@Controller({ path: "example_dev_only", version: "1" })
+export class ExampleDevOnlyController {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly logger: Logger = new Logger(ExampleController.name)
+  ) {}
+  @Get("get_dev_only")
+  @Version("1")
+  @ApiOperation({ summary: "A env-guard controlled example message." })
+  @ApiOkResponse({
+    status: 200,
+    description: "Normal run, returns current running environment.",
+    type: EnvDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: "The end-point is not available.",
+  })
+  @ApiResponse({
+    status: 500,
+    description:
+      "The service run into internal trouble, please check error logs for details.",
+  })
+  async getDevOnlyExample(): Promise<EnvDto> {
+    this.logger.log(
+      "Calling getDevOnlyExample with info",
+      "ExampleController:info"
+    );
+    return { env: this.configService.get("ENV_KEY", Env.default) };
   }
 }

@@ -6,17 +6,17 @@
     "typescript",
     "typescriptreact"
   ],
-  "eslint.workingDirectories": ["."],
   "eslint.alwaysShowStatus": true,
-  "eslint.format.enable": true,
-  "eslint.lintTask.enable": true,
+  "eslint.format.enable": false,
+  "eslint.lintTask.enable": false,
   "eslint.codeAction.showDocumentation": {
     "enable": true
   },
   "eslint.codeActionsOnSave.mode": "all",
-  "eslint.options": {
-    "rules": {
-      "no-trailing-spaces": "warn"
-    }
-  }
+  "eslint.workingDirectories": ["."],
+  "eslint.useESLintClass": true,
+  "eslint.runtime": "node_modules/eslint/bin/eslint.js",
+  "eslint.debug": true,
+  "eslint.nodeEnv": "development",
+  "eslint.onIgnoredFiles": "warn"
 }

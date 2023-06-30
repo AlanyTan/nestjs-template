@@ -266,7 +266,7 @@ There are 3 environment Variables that influence logging:
 
 - LOG_LEVEL : determines how verbose the logging will be (i.e. when LOG_LEVEL=info, trace and debug messages won't be added to the log).
 - PINO_PRETTY : boolean value determines if the logs will be written in pretty format or JSON, default is pretty formet
-- LINEPULSE_ENV : only if LINEPULSE_ENV=lcl (which you should keep when you are developing in your local PC IDE), the colorization will be used in pino-pretty, and it affects redactation as well.
+- ENV : only if ENV_KEY=lcl (which you should keep when you are developing in your local PC IDE), the colorization will be used in pino-pretty, and it affects redactation as well.
 
 LOG_LEVEL default is "info", valid values are (and their internal numerical values) are:
 "trace": 10,
@@ -279,7 +279,7 @@ The higher the LOG_LEVEL numerical value the less verbos the logs will be.
 In your code, you can use `logger.error`, `logger.warn`, `logger.log` (maps to info) `logger.debug`, `logger.verbose` (maps to trace), and depending on the LOG_LEVEL setting, lower numerical log level messages will be supressed, for example if you set LOG_LEVEL=debug, your `logger.trace` messages won't show up in your stdout, while all others will.
 
 Log Colorization
-For local development and debug, colored logs are often helpful, however, for production execution, colorization will introduce special characters into the log stream and make log hard to read. So we configure the log to use colorization when LINEPULSE_ENV=lcl, but turn colorization off for all other cases.
+For local development and debug, colored logs are often helpful, however, for production execution, colorization will introduce special characters into the log stream and make log hard to read. So we configure the log to use colorization when ENV_KEY=lcl, but turn colorization off for all other cases.
 
 Log Redactation
 We shall redact sensitive informations in logs, by default the following are redacted [
