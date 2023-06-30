@@ -123,7 +123,7 @@ export class ExampleController {
     <head>
       <title>Progress Update</title>
       <!-- Include ECharts library -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>  
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
     </head>
     <body>
       <h1>Progress Update</h1>
