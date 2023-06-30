@@ -69,7 +69,6 @@ describe("Config Service check configurations", () => {
     process.env.OPENFEATURE_PROVIDER = "ENV";
     process.env.NEW_FEATURE_FLAG = "true";
     process.env.NEW_END_POINT = "true";
-    process.env.LINEPULSE_SVC_VERSION = '{"build":"1.0.0-1"}';
     process.env.SERVICE_PREFIX = "nestjs-example";
     process.env.AAD_TENANT_ID = "==secret==";
     process.env.AAD_CLIENT_ID = "==secret==";
