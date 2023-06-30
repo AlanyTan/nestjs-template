@@ -11,23 +11,22 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
-export function EnvGuard(incomingValidKeys?: string[]): Type<CanActivate> {
-  @Injectable()
-  class Guard implements CanActivate {
-    constructor(@Inject() private configService: ConfigService) {}
-
-    async canActivate(context: ExecutionContext): Promise<boolean> {
-      const validKeys = incomingValidKeys || ["lcl", "dev", "qas"];
-      const envKey = await this.configService.get("ENV_KEY", "prd");
-      if (validKeys.includes(envKey)) {
-        return true;
-      } else {
-        const httpContext = context.switchToHttp();
-        const request = httpContext.getRequest();
-        throw new NotFoundException(`Cannot ${request.method} ${request.url}`);
-      }
+@Injectable()
+export class EnvGuard implements CanActivate {
+  constructor(private readonly configService: ConfigService) {
+    this.validKeys = ["lcl", "dev", "qas"];
+  }
+  private validKeys: string[];
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const envKey = await this.configService.get("ENV_KEY", "prd");
+    if (this.validKeys.includes(envKey)) {
+      return true;
+    } else {
+      const httpContext = context.switchToHttp();
+      const request = httpContext.getRequest();
+      throw new NotFoundException(`Cannot ${request.method} ${request.url}`);
     }
   }
-  return mixin(Guard);
 }
+
 export default EnvGuard;
