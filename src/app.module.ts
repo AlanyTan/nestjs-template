@@ -16,6 +16,7 @@ import {
 import {
   PrometheusModule,
   PrometheusController,
+  makeGaugeProvider,
 } from "@willsoto/nestjs-prometheus";
 import Joi from "joi";
 import { LoggerModule, Logger } from "nestjs-pino";
@@ -141,6 +142,11 @@ import { AppService } from "./app.service";
   controllers: [AppController],
   providers: [
     AppService,
+    makeGaugeProvider({
+      name: "serviceInfo",
+      help: "Service info metric, labels are created dynamically to reflect running version",
+      labelNames: ["commit", "version", "info"],
+    }),
     {
       provide: OPENFEATURE_CLIENT,
       inject: [ConfigService, Logger],

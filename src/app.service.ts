@@ -16,6 +16,8 @@ import {
   TypeOrmHealthIndicator,
 } from "@nestjs/terminus";
 import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
+import { InjectMetric } from "@willsoto/nestjs-prometheus";
+import { Gauge } from "prom-client";
 import { OPENFEATURE_CLIENT } from "./config";
 
 @Injectable()
@@ -24,7 +26,8 @@ export class AppService implements OnApplicationBootstrap {
     private readonly healthCheckService: HealthCheckService,
     private readonly configService: ConfigService,
     private readonly typeOrmHealthIndicator: TypeOrmHealthIndicator,
-    private readonly httpHealthIndicator: HttpHealthIndicator
+    private readonly httpHealthIndicator: HttpHealthIndicator,
+    @InjectMetric("serviceInfo") public gauge: Gauge<string>
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
@@ -33,6 +36,8 @@ export class AppService implements OnApplicationBootstrap {
     // this approach allows the initialize() to be executed in parallel (none-blocking this function)
     // the app will start listening, but the /initialized end-point will return 503 until the initialization is done
     // you can update the initialized() function to carry out long running initialization tasks
+    this.gauge.set({ version: this.configService.get("version") }, 1);
+    this.gauge.set(this.configService.get("commits") as { commits: string }, 1);
     this.initialize();
   }
 
