@@ -133,11 +133,9 @@ export class ExampleController {
       <script>
       // Initialize ECharts instance
       const chart = echarts.init(document.getElementById('chart'));
-
       // Define initial series data
       const seriesData = [];
       const MAX_DATA_POINTS = 30;
-
       // Set chart options
       const options = {
         xAxis: {
@@ -154,32 +152,26 @@ export class ExampleController {
           },
         ],
       };
-
       // Set initial options for the chart
       chart.setOption(options);
-
         const source = new EventSource('/${this.configService.get(
           "SERVICE_PREFIX"
         )}/v1/example/updates');
-    
         source.onmessage = function logEvents(event) {
           const { data } = event;
           const parsedData = JSON.parse(data);
           console.log('Server sent:', parsedData);
-
           document.getElementById('output').innerHTML = data;
           myProgressBar.value = parsedData.progress;
           seriesData.push(parsedData.randonNumber);
           while (seriesData.length > MAX_DATA_POINTS) {
             seriesData.shift(); // Remove the oldest element (first in the array)
           }
-        
           // Update x-axis data points
           options.xAxis.data.push(new Date().toLocaleTimeString());
           while (options.xAxis.data.length > MAX_DATA_POINTS) {
             options.xAxis.data.shift(); // Remove the oldest element (first in the array)
           }
-        
           // Update chart options
           chart.setOption(options);
 
@@ -187,7 +179,6 @@ export class ExampleController {
           // For example:
           // myProgressBar.value = parsedData.progress;
         };
-    
         source.addEventListener('end', function(event) {
           console.log('Progress completed');
           source.close();
