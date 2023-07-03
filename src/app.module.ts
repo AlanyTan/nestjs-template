@@ -56,7 +56,6 @@ import { AppService } from "./app.service";
         SERVICE_PREFIX: Joi.string(),
         AAD_TENANT_ID: Joi.string().default(""),
         AAD_CLIENT_ID: Joi.string(),
-        LINEPULSE_SVC_VERSION: Joi.string(),
       }).options({ stripUnknown: true }),
     }),
     // we setup pino logger options here, and in main.ts.  once it's set up here and in main.ts, we can use it in any other file by using the standard nestjs Logger

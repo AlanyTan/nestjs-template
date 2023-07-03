@@ -109,8 +109,6 @@ export class AppController {
     }
     return {
       version: this.configService.get("version"),
-      runtime_version_env:
-        this.configService.get("LINEPULSE_SVC_VERSION") || "{}",
       ...commitJson,
     };
   }
