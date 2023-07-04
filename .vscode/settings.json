@@ -15,7 +15,7 @@
   "eslint.codeActionsOnSave.mode": "all",
   "eslint.workingDirectories": ["."],
   "eslint.useESLintClass": true,
-  "eslint.runtime": "node_modules/eslint/bin/eslint.js",
+  "eslint.runtime": "/usr/local/bin/node",
   "eslint.debug": true,
   "eslint.nodeEnv": "development",
   "eslint.onIgnoredFiles": "warn"
