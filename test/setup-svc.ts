@@ -7,8 +7,6 @@ import { mainConfig } from "main.config";
 export let app: INestApplication;
 
 beforeAll(async () => {
-  process.env.OPENFEATURE_PROVIDER = "ENV";
-
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
   }).compile();
