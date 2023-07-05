@@ -37,7 +37,11 @@ export class AppService implements OnApplicationBootstrap {
     // the app will start listening, but the /initialized end-point will return 503 until the initialization is done
     // you can update the initialized() function to carry out long running initialization tasks
     this.gauge.set({ version: this.configService.get("version") }, 1);
-    this.gauge.set(this.configService.get("commits") as { commits: string }, 1);
+    this.gauge.set(
+      this.configService.get("commitInfo") as { commit_hash: string },
+      1
+    );
+    this.gauge.set(this.configService.get("buildInfo") as { build: string }, 1);
     this.initialize();
   }
 

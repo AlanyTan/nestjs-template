@@ -31,7 +31,6 @@ lerna-debug.log*
 #.vscode
 
 # versioning
-.git_commit.json
 
 # Env
 .env*
