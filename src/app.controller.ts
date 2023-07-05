@@ -125,6 +125,7 @@ export class AppController {
 
   @Get("update_log_level")
   @Version(VERSION_NEUTRAL)
+  @ApiBearerAuth("JWT-auth")
   @ApiOperation({ summary: "update log level" })
   @ApiQuery({
     name: "loglevel",
