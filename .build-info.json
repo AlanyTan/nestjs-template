@@ -1,0 +1,12 @@
+{
+  "commitInfo": {
+    "commitTime": "2023-07-06T00:21:07-04:00",
+    "commitHash": "<25e48c0b>",
+    "commitMessage": "Merge pull request #24 from AcertaAnalyticsSolutions/feature/build_commit_info_in_metrics"
+  },
+  "buildInfo": {
+    "build": "2023-07-06_4231386d_124",
+    "buildNumber": 124,
+    "buildTime": "2023-07-06 09:25:30"
+  }
+}

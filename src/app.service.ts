@@ -31,9 +31,9 @@ export class AppService implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
-    // don't updata this function...
+    // don't update this function...
     // this function is defined as an async but it calls another async function (initialize)
-    // this approach allows the initialize() to be executed in parallel (none-blocking this function)
+    // this approach allows the initialize() to be executed in parallel (non-blocking this function)
     // the app will start listening, but the /initialized end-point will return 503 until the initialization is done
     // you can update the initialized() function to carry out long running initialization tasks
     this.gauge.set({ version: this.configService.get("version") }, 1);

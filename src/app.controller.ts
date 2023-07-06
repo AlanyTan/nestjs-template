@@ -104,11 +104,11 @@ export class AppController {
         this.configService.get("AAD_CLIENT_ID", "")
       );
       const jwtIsValid = await aadJwtValidator.validateAadJwt(request);
-      commitJson = { commit_info: this.configService.get("commitInfo") };
-      buildJson = { build_info: this.configService.get("buildInfo") };
+      commitJson = { commitInfo: this.configService.get("commitInfo") };
+      buildJson = { buildInfo: this.configService.get("buildInfo") };
     } catch (err) {
-      commitJson = { commits: "Unauthorized to view commit info" };
-      buildJson = { builds: "Unauthorized to view build info" };
+      commitJson = { commitInfo: "Unauthorized to view commit info" };
+      buildJson = { buildInfo: "Unauthorized to view build info" };
     }
     return {
       version: this.configService.get("version"),
