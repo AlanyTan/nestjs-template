@@ -97,19 +97,23 @@ export class AppController {
   @ApiBearerAuth("JWT-auth")
   async version(@Req() request: Request): Promise<unknown> {
     let commitJson = {};
+    let buildJson = {};
     try {
       const aadJwtValidator = new AadJwtValidator(
         this.configService.get("AAD_TENANT_ID", ""),
         this.configService.get("AAD_CLIENT_ID", "")
       );
       const jwtIsValid = await aadJwtValidator.validateAadJwt(request);
-      commitJson = { commits: this.configService.get("commits") };
+      commitJson = { commit_info: this.configService.get("commitInfo") };
+      buildJson = { build_info: this.configService.get("buildInfo") };
     } catch (err) {
       commitJson = { commits: "Unauthorized to view commit info" };
+      buildJson = { builds: "Unauthorized to view build info" };
     }
     return {
       version: this.configService.get("version"),
       ...commitJson,
+      ...buildJson,
     };
   }
 
