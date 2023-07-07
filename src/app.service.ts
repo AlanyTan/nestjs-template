@@ -28,7 +28,7 @@ export class AppService implements OnApplicationBootstrap {
     private readonly typeOrmHealthIndicator: TypeOrmHealthIndicator,
     private readonly httpHealthIndicator: HttpHealthIndicator,
     @InjectMetric("serviceInfo") public gauge: Gauge<string>
-  ) {}
+  ) { }
 
   async onApplicationBootstrap(): Promise<void> {
     // don't update this function...
@@ -37,11 +37,18 @@ export class AppService implements OnApplicationBootstrap {
     // the app will start listening, but the /initialized end-point will return 503 until the initialization is done
     // you can update the initialized() function to carry out long running initialization tasks
     this.gauge.set({ version: this.configService.get("version") }, 1);
-    this.gauge.set(
-      this.configService.get("commitInfo") as { commit_hash: string },
-      1
-    );
-    this.gauge.set(this.configService.get("buildInfo") as { build: string }, 1);
+    const commitInfo = this.configService.get("commitInfo");
+    this.gauge.set({
+      commit_time: commitInfo.commitTime,
+      commit_hash: commitInfo.commitHash,
+      commit_message: commitInfo.commitMessage,
+    }, 1);
+    const buildInfo = this.configService.get("buildInfo");
+    this.gauge.set({
+      build: buildInfo.build,
+      build_number: buildInfo.buildNumber,
+      build_time: buildInfo.buildTime,
+    }, 1);
     this.initialize();
   }
 
@@ -84,7 +91,7 @@ export class AppService implements OnApplicationBootstrap {
       // // if you use TypeORM, you can use this to check the database connection
       this.configService.get("DATABASE_TYPE") !== "none"
         ? (): Promise<HealthIndicatorResult> =>
-            this.typeOrmHealthIndicator.pingCheck("database")
+          this.typeOrmHealthIndicator.pingCheck("database")
         : (): Promise<HealthIndicatorResult> => Promise.resolve({}),
     ]);
   }
@@ -127,7 +134,7 @@ export class AppCloseService implements BeforeApplicationShutdown {
     private readonly configService: ConfigService,
     private readonly logger: Logger = new Logger(AppCloseService.name),
     @Inject(OPENFEATURE_CLIENT) private openFeature: openfeature
-  ) {}
+  ) { }
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   beforeApplicationShutdown(_signal: string) {
     this.openFeature.close();
