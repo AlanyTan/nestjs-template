@@ -157,6 +157,7 @@ export class ExampleController {
         const source = new EventSource('/${this.configService.get(
           "SERVICE_PREFIX"
         )}/v1/example/updates');
+
         source.onmessage = function logEvents(event) {
           const { data } = event;
           const parsedData = JSON.parse(data);
@@ -167,11 +168,13 @@ export class ExampleController {
           while (seriesData.length > MAX_DATA_POINTS) {
             seriesData.shift(); // Remove the oldest element (first in the array)
           }
+
           // Update x-axis data points
           options.xAxis.data.push(new Date().toLocaleTimeString());
           while (options.xAxis.data.length > MAX_DATA_POINTS) {
             options.xAxis.data.shift(); // Remove the oldest element (first in the array)
           }
+
           // Update chart options
           chart.setOption(options);
 
@@ -179,6 +182,7 @@ export class ExampleController {
           // For example:
           // myProgressBar.value = parsedData.progress;
         };
+
         source.addEventListener('end', function(event) {
           console.log('Progress completed');
           source.close();
