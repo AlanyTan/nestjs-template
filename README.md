@@ -1,9 +1,5 @@
 [![Pipeline Status](https://dev.azure.com/acerta/Line%20Pulse/_apis/build/status%2Fnestjs-example?repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main)](https://dev.azure.com/acerta/Line%20Pulse/_build/latest?definitionId=197&repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main)
 
-[![Test Status](https://dev.azure.com/acerta/Line%20Pulse/_apis/build/status%2Fnestjs-example?repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main&stageName=Tests)](https://dev.azure.com/acerta/Line%20Pulse/_build/latest?definitionId=197&repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main)
-
-[![Build Status](<https://dev.azure.com/acerta/Line%20Pulse/_apis/build/status%2Fnestjs-example?repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main&stageName=Build%20and%20Push%20to%20%20%24(Build.SourceBranchName)%20Registry>)](https://dev.azure.com/acerta/Line%20Pulse/_build/latest?definitionId=197&repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main)
-
 # Acerta NestJS Example
 
 ## Background

@@ -62,7 +62,7 @@ RC=$?
 if [ "$RC" -eq 0 ]; then
   echo "setup local db env complete..."
   exit 0
-else 
+else
   echo "setup local db env failed..."
   exit 1
 fi
