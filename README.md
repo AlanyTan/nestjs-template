@@ -1,4 +1,8 @@
-[![Build Status](https://dev.azure.com/acerta/Line%20Pulse/_apis/build/status%2Fnestjs-example?branchName=main&jobName=Build)](https://dev.azure.com/acerta/Line%20Pulse/_build/latest?definitionId=197&branchName=main)
+[![Pipeline Status](https://dev.azure.com/acerta/Line%20Pulse/_apis/build/status%2Fnestjs-example?repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main)](https://dev.azure.com/acerta/Line%20Pulse/_build/latest?definitionId=197&repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main)
+
+[![Test Status](https://dev.azure.com/acerta/Line%20Pulse/_apis/build/status%2Fnestjs-example?repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main&stageName=Tests)](https://dev.azure.com/acerta/Line%20Pulse/_build/latest?definitionId=197&repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main)
+
+[![Build Status](<https://dev.azure.com/acerta/Line%20Pulse/_apis/build/status%2Fnestjs-example?repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main&stageName=Build%20and%20Push%20to%20%20%24(Build.SourceBranchName)%20Registry>)](https://dev.azure.com/acerta/Line%20Pulse/_build/latest?definitionId=197&repoName=AcertaAnalyticsSolutions%2Fnestjs-example&branchName=main)
 
 # Acerta NestJS Example
 
@@ -242,10 +246,10 @@ As you can see, the scopy you requested is the `api://${CLIENT_ID}/${SCOPE_NAME}
 Update the local_setup.sh to use new name of the Database you'd like to use (if you use Database)
 
 ```
-./local_setup.sh
+./local_setup.sh [-e .env]
 ```
 
-This script reads your environment variables (if .env file exist, it's content will be loaded as Environment variables), to get the following info:
+This script depends on your environment variables (if .env file exist, it's content will be loaded as Environment variables), to get the following info:
 
 ```bash
 POSTGRES_DATABASE=nestjs_example
@@ -256,6 +260,8 @@ POSTGRES_USERNAME=postgres
 So, it is recommended for you to decide what POSTGRES_DATABASE name you want to use and udpate your .env file, so that your local db uses the same database config as when it is deployed. Although in theory, this should not be a problem, it's good development hygiene.
 
 It will then create a dockerized postgres container named `postgres_local` if it does not exist and create run & test databases for this server in that postgres container.
+
+_Note_, the `npm run test:service` script will actually invoke this script to set up postgres instance for the service-level testing.
 
 ### Logging
 

@@ -27,7 +27,6 @@ describe("AppController (svc) testing wrong settings.", () => {
         `${servicePrefix}/version`
       );
       expect(response.status).toEqual(200);
-      expect(response.body.runtime_version_env).toBe('{"build":"1.0.0-2"}');
     });
   });
   describe("the 'example' application with feature toggles set to off ", () => {

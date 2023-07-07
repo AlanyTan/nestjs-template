@@ -1,11 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpModule } from "@nestjs/axios";
-import {
-  Module,
-  RequestMethod,
-  Global,
-  Logger as NestLogger,
-} from "@nestjs/common";
+import { Module, RequestMethod, Global, Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
@@ -19,7 +14,7 @@ import {
   makeGaugeProvider,
 } from "@willsoto/nestjs-prometheus";
 import Joi from "joi";
-import { LoggerModule, Logger } from "nestjs-pino";
+import { LoggerModule } from "nestjs-pino";
 import { OPENFEATURE_CLIENT, config, dbConfig } from "config";
 import { ExampleModule } from "example/example.module";
 import { ExampleOrmModule } from "example-orm/example-orm.module";
@@ -140,6 +135,7 @@ import { AppService } from "./app.service";
   ],
   controllers: [AppController],
   providers: [
+    Logger,
     AppService,
     makeGaugeProvider({
       name: "serviceInfo",
@@ -166,7 +162,7 @@ import { AppService } from "./app.service";
       ): Promise<openfeature> => {
         const client = await new openfeature(
           configService.get("OPENFEATURE_PROVIDER") || "",
-          new AcertaLogger(new NestLogger())
+          new AcertaLogger(new Logger())
         ).initialized();
         return client as openfeature;
       },
