@@ -142,11 +142,21 @@ export class AppController {
     if (this.loggerService !== undefined) {
       PinoLogger.root.level = logLevel;
       this.loggerService.logger.level = logLevel;
-      this.logger.error(`Error messages are shown.`);
-      this.logger.warn(`Warnning messages are shown.`);
-      this.logger.log(`Info messages are shown.`);
-      this.logger.debug(`Debug messages are shown.`);
-      this.logger.verbose(`Trace messages are shown.`);
+      this.logger.error(
+        `Changing LogLevel... this is an confirmation message that Error messages are shown.`
+      );
+      this.logger.warn(
+        `Changing LogLevel... this is an confirmation message that Warnning messages are shown.`
+      );
+      this.logger.log(
+        `Changing LogLevel... this is an confirmation message that Info messages are shown.`
+      );
+      this.logger.debug(
+        `Changing LogLevel... this is an confirmation message that Debug messages are shown.`
+      );
+      this.logger.verbose(
+        `Changing LogLevel... this is an confirmation message that Trace messages are shown.`
+      );
       return `log level set to ${logLevel}`;
     } else {
       return "loggerService is undefined";
