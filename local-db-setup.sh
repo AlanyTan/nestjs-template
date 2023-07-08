@@ -1,5 +1,5 @@
 #!/bin/bash
-
+envfile=".env"
 while getopts "e:" opt; do
   case $opt in
     e)
@@ -54,6 +54,15 @@ if [ -z "$RUNNING_POSTGRES_DOCKER" ]; then
 fi
 sleep 5;
 # create databases
-docker exec -i $RUNNING_POSTGRES_DOCKER psql -h localhost -p ${POSTGRES_PORT:-5432} -U ${POSTGRES_USERNAME:-postgres} <<EOF
+docker exec -i $RUNNING_POSTGRES_DOCKER  psql -h localhost -p ${POSTGRES_PORT:-5432} -U ${POSTGRES_USERNAME:-postgres} <<EOF
 SELECT 'CREATE DATABASE ${POSTGRES_DATABASE:-application};' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '${POSTGRES_DATABASE:-application}')\gexec
 EOF
+
+RC=$?
+if [ "$RC" -eq 0 ]; then
+  echo "setup local db env complete..."
+  exit 0
+else
+  echo "setup local db env failed..."
+  exit 1
+fi

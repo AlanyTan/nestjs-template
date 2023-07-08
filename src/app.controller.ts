@@ -12,6 +12,7 @@ import {
   UseGuards,
   LoggerService,
   Query,
+  Logger,
   LogLevel,
   Param,
 } from "@nestjs/common";
@@ -44,6 +45,7 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly loggerService: PinoLogger,
+    private readonly logger: Logger,
     private readonly configService: ConfigService
   ) {}
 
@@ -139,6 +141,22 @@ export class AppController {
   updateLogLevel(@Query("loglevel") logLevel: LogLevels): string {
     if (this.loggerService !== undefined) {
       PinoLogger.root.level = logLevel;
+      this.loggerService.logger.level = logLevel;
+      this.logger.error(
+        `Changing LogLevel... this is an confirmation message that Error messages are shown.`
+      );
+      this.logger.warn(
+        `Changing LogLevel... this is an confirmation message that Warnning messages are shown.`
+      );
+      this.logger.log(
+        `Changing LogLevel... this is an confirmation message that Info messages are shown.`
+      );
+      this.logger.debug(
+        `Changing LogLevel... this is an confirmation message that Debug messages are shown.`
+      );
+      this.logger.verbose(
+        `Changing LogLevel... this is an confirmation message that Trace messages are shown.`
+      );
       return `log level set to ${logLevel}`;
     } else {
       return "loggerService is undefined";

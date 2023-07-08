@@ -9,21 +9,20 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf dist && npm run build",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "eval $(xargs < .env) nest start --watch",
+    "start": "node dist/src/main",
+    "start:dev": "eval $(grep -vE '^[ \t]*#' .env | xargs -0) nest start --watch",
     "start:debug": "nest start --watch  --debug 0.0.0.0:9229",
-    "start:prod": "node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --testRegex \".*\\..*spec\\.ts\" --runInBand",
     "test:ci": "JEST_JUNIT_OUTPUT_DIR=test-reports jest --config ./test/jest-svc.json --ci --reporters=default --reporters=jest-junit --coverageDirectory=test-reports/coverage",
     "test:unit": "jest --detectOpenHandles --inspect-brk",
-    "test:service": "./local-db-setup.sh && eval $(xargs < test.env) jest --config ./test/jest-svc.json --verbose",
+    "test:service": "./local-db-setup.sh && eval $(grep -vE '^[ \t]*#' .env | xargs -0) jest --config ./test/jest-svc.json --verbose",
     "test:watch": "jest --watchAll",
     "prepare": "husky install",
-    "typeorm": "eval $(xargs < .env) typeorm-ts-node-commonjs -d ormconfig.ts"
+    "typeorm": "eval $(grep -vE '^[ \t]*#' .env | xargs -0) typeorm-ts-node-commonjs -d ormconfig.ts"
   },
   "dependencies": {
     "@acertaanalyticssolutions/acerta-standardnpm": "github:acertaanalyticssolutions/acerta-standardnpm",

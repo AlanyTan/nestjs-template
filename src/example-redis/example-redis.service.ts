@@ -16,6 +16,7 @@ export class RedisService implements OnModuleDestroy {
   ) {}
 
   async ping(): Promise<string> {
+    this.logger.debug(`Debug message when pinging Redis server`);
     return this.redis.ping();
   }
   onModuleDestroy(): void {
