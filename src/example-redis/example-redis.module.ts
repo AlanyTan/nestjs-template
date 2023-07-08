@@ -13,6 +13,7 @@ import { RedisService } from "./example-redis.service";
     {
       provide: REDIS_CLIENT,
       inject: [ConfigService],
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       useFactory: async (configService: ConfigService) => {
         const client = createClient({
           url: configService.get("REDIS_URL", "redis://localhost:6379") + "/0",

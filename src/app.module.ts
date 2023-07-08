@@ -146,15 +146,12 @@ import { AppService } from "./app.service";
       help: "Service info metric, labels are created dynamically to reflect running version",
       labelNames: [
         "build",
-        "build_info",
         "build_time",
         "build_number",
-        "commit",
         "commit_time",
         "commit_hash",
         "commit_message",
         "version",
-        "info",
       ],
     }),
     {
