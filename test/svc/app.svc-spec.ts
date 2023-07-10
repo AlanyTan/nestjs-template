@@ -26,7 +26,7 @@ describe("Application Controllers (svc)", () => {
         `${servicePrefix}/version`
       );
       expect(response.status).toEqual(200);
-      expect(response.body.commits).toContain(
+      expect(response.body.commitInfo).toContain(
         "Unauthorized to view commit info"
       );
     });
