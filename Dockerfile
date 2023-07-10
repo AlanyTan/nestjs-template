@@ -33,7 +33,7 @@ WORKDIR /usr/app
 COPY --chown=node:node package*.json ./
 COPY --chown=node:node --from=build /usr/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/app/dist ./dist
-COPY --chown=node:node .git_commit.json ./
+COPY --chown=node:node .build_info.json ./
 
 EXPOSE 9080
 
