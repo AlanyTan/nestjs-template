@@ -2,25 +2,17 @@
 import {
   Controller,
   Get,
-  Version,
-  VERSION_NEUTRAL,
   Req,
   Request,
-  Res,
-  Response,
   HttpException,
   UseGuards,
-  LoggerService,
   Query,
   Logger,
-  LogLevel,
-  Param,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import {
   ApiBearerAuth,
   ApiOperation,
-  ApiParam,
   ApiQuery,
   ApiTags,
 } from "@nestjs/swagger";
@@ -50,7 +42,6 @@ export class AppController {
   ) {}
 
   @Get("health")
-  @Version(VERSION_NEUTRAL)
   @HealthCheck()
   health(): Promise<HealthCheckResult> {
     const backendServicesToCheck: string[] = [];
@@ -58,7 +49,6 @@ export class AppController {
   }
 
   @Get("readiness")
-  @Version(VERSION_NEUTRAL)
   @HealthCheck()
   readiness(): Promise<HealthCheckResult> {
     const backendServicesToCheck: string[] = [];
@@ -70,7 +60,6 @@ export class AppController {
   }
 
   @Get("initialized")
-  @Version(VERSION_NEUTRAL)
   @HealthCheck()
   async initialized(): Promise<unknown> {
     // // in RARE situations, this service might have a HARD dependency on another END-POINT (i.e. user service & OPENFGA)
@@ -95,7 +84,6 @@ export class AppController {
   }
 
   @Get("version")
-  @Version(VERSION_NEUTRAL)
   @ApiBearerAuth("JWT-auth")
   async version(@Req() request: Request): Promise<unknown> {
     let commitJson = {};
@@ -120,7 +108,6 @@ export class AppController {
   }
 
   @Get("config")
-  @Version(VERSION_NEUTRAL)
   @ApiBearerAuth("JWT-auth")
   @UseGuards(JwtGuard)
   config(): unknown {
@@ -128,7 +115,6 @@ export class AppController {
   }
 
   @Get("update_log_level")
-  @Version(VERSION_NEUTRAL)
   @ApiBearerAuth("JWT-auth")
   @ApiOperation({ summary: "update log level" })
   @ApiQuery({

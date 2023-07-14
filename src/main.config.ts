@@ -1,10 +1,4 @@
-import {
-  INestApplication,
-  Logger,
-  ValidationPipe,
-  VersioningType,
-  VERSION_NEUTRAL,
-} from "@nestjs/common";
+import { INestApplication, Logger, ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
@@ -32,10 +26,7 @@ export function mainConfig(app: INestApplication): {
     );
   }
   app.enableShutdownHooks();
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: VERSION_NEUTRAL,
-  });
+  app.enableVersioning();
   if (configService.get("SWAGGER_ON")) {
     configureSwagger(app, configService);
   }
