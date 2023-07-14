@@ -25,7 +25,6 @@ describe("ConfigSerivce should error out if required Environments are missing", 
             ENV_KEY: Joi.string().required(),
             OPENFEATURE_PROVIDER: Joi.string().required(),
             LINEPULSE_SVC_PORT: Joi.number().required(),
-            LINEPULSE_SVC_HOSTNAME: Joi.string().default("0.0.0.0"),
             SVC_1_ENDPOINT: Joi.string().uri().required(),
             SVC_2_ENDPOINT: Joi.string().uri().required(),
             PINO_PRETTY: Joi.boolean().default(true),
@@ -58,7 +57,6 @@ describe("Config Service check configurations", () => {
   // and this directory contains the recommended way to use the ConfigModule
   // this spec.ts file is testing the result of config as close as to when it's used in the app.module.ts
   beforeAll(async () => {
-    process.env.LINEPULSE_SVC_HOSTNAME = "0.0.0.0";
     process.env.LINEPULSE_SVC_PORT = "9080";
     process.env.LOG_LEVEL = "info";
     process.env.SVC_1_ENDPOINT = "https://this.needs.to.be.a.valid.url/health";
@@ -96,7 +94,6 @@ describe("Config Service check configurations", () => {
             ENV_KEY: Joi.string().required(),
             OPENFEATURE_PROVIDER: Joi.string().required(),
             LINEPULSE_SVC_PORT: Joi.number().required(),
-            LINEPULSE_SVC_HOSTNAME: Joi.string().default("0.0.0.0"),
             SVC_1_ENDPOINT: Joi.string().uri().required(),
             SVC_2_ENDPOINT: Joi.string().uri().required(),
             PINO_PRETTY: Joi.boolean().default(true),
@@ -116,9 +113,6 @@ describe("Config Service check configurations", () => {
   });
 
   test("Required Configuration values should resolve to values", () => {
-    expect(configService.get<string>("LINEPULSE_SVC_HOSTNAME")).toBe(
-      process.env.LINEPULSE_SVC_HOSTNAME
-    );
     expect(configService.get<number>("LINEPULSE_SVC_PORT")).toBe(
       parseInt(process.env.LINEPULSE_SVC_PORT ?? "0")
     );
@@ -179,9 +173,6 @@ describe("Config Service check configurations", () => {
 
   test("Only Environment Variables that are listed in the ValidationSchema will be considered, not-listed will be excluded in the config object", () => {
     expect(configService.get("_PROCESS_ENV_VALIDATED.PATH")).toBe(undefined);
-    expect(
-      configService.get("_PROCESS_ENV_VALIDATED.LINEPULSE_SVC_HOSTNAME")
-    ).toBe(process.env.LINEPULSE_SVC_HOSTNAME);
   });
 
   it("Function ConfigService.get() can be mocked to throw an error", () => {
