@@ -76,38 +76,6 @@
     "tsconfig-paths": "^3.10.1",
     "typescript": "^4.3.5"
   },
-  "jest": {
-    "rootDir": ".",
-    "verbose": true,
-    "moduleDirectories": [
-      "./node_modules",
-      "./src"
-    ],
-    "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!axios)/"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t)s$": "ts-jest"
-    },
-    "collectCoverage": true,
-    "coverageReporters": [
-      "cobertura",
-      "lcov"
-    ],
-    "collectCoverageFrom": [
-      "<rootDir>/src/**/*.(t|j)s"
-    ],
-    "coveragePathIgnorePatterns": [
-      "<rootDir>/src/migrations"
-    ],
-    "testEnvironment": "node"
-  },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,html,css,scss,less,json,yaml,md}": "prettier --write",
     "*.{ts,tsx,js,jsx}": "eslint --max-warnings 0"
