@@ -41,7 +41,7 @@ export function mainConfig(app: INestApplication): {
   }
 
   return {
-    port: configService.get("LINEPULSE_SVC_PORT", 9080),
+    port: configService.getOrThrow("LINEPULSE_SVC_PORT"),
   };
 }
 
