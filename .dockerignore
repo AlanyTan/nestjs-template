@@ -20,4 +20,9 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
-README.md
+/.github
+/.husky
+/docs
+/ENV.md
+/README.md
+jest.config.ts
