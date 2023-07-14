@@ -1,5 +1,6 @@
 import {
   INestApplication,
+  Logger,
   ValidationPipe,
   VersioningType,
   VERSION_NEUTRAL,
@@ -36,34 +37,38 @@ export function mainConfig(app: INestApplication): {
     defaultVersion: VERSION_NEUTRAL,
   });
   if (configService.get("SWAGGER_ON")) {
-    // can we log Swagger usage???
-    const config = new DocumentBuilder()
-      .setTitle(configService.get("title", "No Title"))
-      .setDescription(configService.get("description", "No description"))
-      .setVersion(configService.get("version", "0.0.0"))
-      .addBearerAuth(
-        {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-          name: "JWT",
-          description: "Bearer JWT token",
-          in: "header",
-        },
-        "JWT-auth"
-      )
-      .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup(
-      `${configService.get("SERVICE_PREFIX", "")}/docs`,
-      app,
-      document
-    );
+    configureSwagger(app, configService);
   }
 
   return {
     port: configService.get("LINEPULSE_SVC_PORT", 9080),
   };
+}
+
+function configureSwagger(
+  app: INestApplication,
+  configService: ConfigService<unknown, boolean>
+): void {
+  const config = new DocumentBuilder()
+    .setTitle(configService.get("title", "No Title"))
+    .setDescription(configService.get("description", "No description"))
+    .setVersion(configService.get("version", "0.0.0"))
+    .addBearerAuth(
+      {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        name: "JWT",
+        description: "Bearer JWT token",
+        in: "header",
+      },
+      "JWT-auth"
+    )
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  const path = `${configService.get("SERVICE_PREFIX", "")}/docs`;
+  app.get(Logger).log(`Swagger configured - route: /${path}`);
+  SwaggerModule.setup(path, app, document);
 }
 
 // this file allows the svc test to run without the main module but still is configured as close as the main module
