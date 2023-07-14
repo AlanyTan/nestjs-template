@@ -1,6 +1,5 @@
 import {
   INestApplication,
-  // RequestMethod,
   ValidationPipe,
   VersioningType,
   VERSION_NEUTRAL,
@@ -12,7 +11,6 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { LoggerErrorInterceptor } from "nestjs-pino";
 
 export function mainConfig(app: INestApplication): {
-  host: string;
   port: number;
 } {
   const configService = app.get(ConfigService);
@@ -64,7 +62,6 @@ export function mainConfig(app: INestApplication): {
   }
 
   return {
-    host: configService.get("LINEPULSE_SVC_HOST", "0.0.0.0"),
     port: configService.get("LINEPULSE_SVC_PORT", 9080),
   };
 }

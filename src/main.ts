@@ -7,9 +7,9 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   app.useLogger(app.get(Logger));
-  const { host, port } = mainConfig(app);
+  const { port } = mainConfig(app);
 
-  await app.listen(port, host);
+  await app.listen(port);
 }
 
 bootstrap();

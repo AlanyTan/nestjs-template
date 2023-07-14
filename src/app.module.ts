@@ -40,7 +40,6 @@ import { AppService } from "./app.service";
         ENV_KEY: Joi.string().required(),
         OPENFEATURE_PROVIDER: Joi.string().required(),
         LINEPULSE_SVC_PORT: Joi.number().required(),
-        LINEPULSE_SVC_HOSTNAME: Joi.string().required(),
         SVC_1_ENDPOINT: Joi.string().uri().required(),
         SVC_2_ENDPOINT: Joi.string().uri(),
         PINO_PRETTY: Joi.boolean().default(true),

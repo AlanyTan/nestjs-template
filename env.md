@@ -30,7 +30,6 @@ and,
 ## Sample Environment variable settings:
 
 ```
-LINEPULSE_SVC_HOSTNAME=0.0.0.0
 LINEPULSE_SVC_PORT=9080
 LOG_LEVEL=info
 SVC_1_ENDPOINT=https://api.linepulse-dev.ai/health

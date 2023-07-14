@@ -1,5 +1,4 @@
 process.env.SVC_1_ENDPOINT = "http://localhost:3000";
-process.env.LINEPULSE_SVC_HOSTNAME = "0.0.0.0";
 process.env.LINEPULSE_SVC_PORT = "9081";
 process.env.OPENFEATURE_PROVIDER = "ENV";
 process.env.NEW_END_POINT = "true";
