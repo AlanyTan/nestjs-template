@@ -239,6 +239,6 @@ export class ExampleDevOnlyController {
       "Calling getDevOnlyExample with info",
       "ExampleController:info"
     );
-    return { env: this.configService.get("ENV_KEY", Env.default) };
+    return { env: this.configService.getOrThrow("ENV_KEY") };
   }
 }

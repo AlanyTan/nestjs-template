@@ -65,7 +65,7 @@ export class AppController {
     // // readiness prob of K8s if set, would check if this end-point is available,
     // // in RARE situations, this service might have a HARD dependency on another END-POINT (i.e. user service & OPENFGA)
     // // you can set the END-POINT of OPENFGA as "SVC_1_ENDPOINT" and this service will respond 503 if the service it depends on is not available
-    //backendServicesToCheck.push(this.configService.get("SVC_1_ENDPOINT", ""));
+    //backendServicesToCheck.push(this.configService.getOrThrow("SVC_1_ENDPOINT"));
     return this.appService.health(backendServicesToCheck);
   }
 
@@ -75,7 +75,7 @@ export class AppController {
   async initialized(): Promise<unknown> {
     // // in RARE situations, this service might have a HARD dependency on another END-POINT (i.e. user service & OPENFGA)
     // // you can set the END-POINT of OPENFGA as "SVC_1_ENDPOINT" and this service will respond 503 if the service it depends on is not available
-    //backendServicesToCheck.push(this.configService.get("SVC_1_ENDPOINT", ""));
+    //backendServicesToCheck.push(this.configService.getOrThrow("SVC_1_ENDPOINT"));
     if (this.appService.initialized) {
       return { status: "ok", info: { initialized: { status: "up" } } };
     } else {

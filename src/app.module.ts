@@ -72,7 +72,7 @@ import { AppService } from "./app.service";
                 // if this is non production env, then use pino-pretty to format the log
                 target: "pino-pretty",
                 options: {
-                  colorize: configService.get("ENV_KEY", "lcl") === "lcl",
+                  colorize: configService.get("ENV_KEY") === "lcl",
                   singleLine: true,
                   levelFirst: false,
                   translateTime: "UTC:yyyy-mm-dd HH:MM:ss.l Z",
@@ -157,7 +157,7 @@ import { AppService } from "./app.service";
         logger: Logger
       ): Promise<openfeature> => {
         const client = await new openfeature(
-          configService.get("OPENFEATURE_PROVIDER") || "",
+          configService.getOrThrow("OPENFEATURE_PROVIDER"),
           new AcertaLogger(new Logger())
         ).initialized();
         return client as openfeature;

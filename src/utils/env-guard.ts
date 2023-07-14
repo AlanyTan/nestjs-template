@@ -18,7 +18,7 @@ export class EnvGuard implements CanActivate {
   }
   private validKeys: string[];
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const envKey = await this.configService.get("ENV_KEY", "prd");
+    const envKey = await this.configService.get("ENV_KEY");
     if (this.validKeys.includes(envKey.toLowerCase())) {
       return true;
     } else {
