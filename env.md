@@ -33,7 +33,6 @@ and,
 LINEPULSE_SVC_PORT=9080
 LOG_LEVEL=info
 SVC_1_ENDPOINT=https://api.linepulse-dev.ai/health
-SVC_2_ENDPOINT=https://api.linepulse-dev.ai/task-manager
 PINO_PRETTY=true
 SWAGGER_ON=true
 ENV_KEY=lcl
