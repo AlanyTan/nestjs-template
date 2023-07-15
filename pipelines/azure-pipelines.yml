@@ -5,11 +5,14 @@ trigger:
       - main
   paths:
     exclude:
-      - docs
-      - pipelines
-      - .git_commit.json
+      - .github
+      - .husky
       - azure-pipelines.y*ml
       - azure-pipelines-qas.y*ml
+      - docs
+      - pipelines
+      - ENV.md
+      - README.md
 pr:
   branches:
     include:
