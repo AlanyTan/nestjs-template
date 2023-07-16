@@ -151,11 +151,12 @@ import { AppService } from "./app.service";
       provide: OPENFEATURE_CLIENT,
       inject: [ConfigService, Logger],
       useFactory: async (
-        configService: ConfigService
+        configService: ConfigService,
+        logger: Logger
       ): Promise<openfeature> => {
         const client = await new openfeature(
           configService.getOrThrow("OPENFEATURE_PROVIDER"),
-          new AcertaLogger(new Logger())
+          new AcertaLogger(logger)
         ).initialized();
         return client as openfeature;
       },
