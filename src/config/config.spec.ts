@@ -26,22 +26,21 @@ describe("ConfigSerivce should error out if required Environments are missing", 
             OPENFEATURE_PROVIDER: Joi.string().required(),
             LINEPULSE_SVC_PORT: Joi.number().required(),
             SVC_1_ENDPOINT: Joi.string().uri().required(),
-            SVC_2_ENDPOINT: Joi.string().uri().required(),
             PINO_PRETTY: Joi.boolean().default(true),
             SWAGGER_ON: Joi.boolean().default(false),
             DATABSE_TYPE: Joi.string().default("none"),
             LOG_LEVEL: Joi.string().default("info"),
-            LOGGING_REDACT_PATTERNS: Joi.string(),
-            SERVICE_PREFIX: Joi.string(),
+            LOGGING_REDACT_PATTERNS: Joi.string().default("[]"),
+            SERVICE_PREFIX: Joi.string().default(""),
           }),
         })
       ).rejects.toThrowError(
-        'Config validation error: "ENV_KEY" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required. "SVC_2_ENDPOINT" is required'
+        'Config validation error: "ENV_KEY" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required'
       );
     } catch (err) {
       expect(err).toMatchObject(
         new Error(
-          'Config validation error: "ENV_KEY" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required. "SVC_2_ENDPOINT" is required'
+          'Config validation error: "ENV_KEY" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required'
         )
       );
     }
@@ -60,7 +59,6 @@ describe("Config Service check configurations", () => {
     process.env.LINEPULSE_SVC_PORT = "9080";
     process.env.LOG_LEVEL = "info";
     process.env.SVC_1_ENDPOINT = "https://this.needs.to.be.a.valid.url/health";
-    process.env.SVC_2_ENDPOINT = "https://this.needs.to.be.a.valid.url/docs";
     process.env.PINO_PRETTY = "true";
     process.env.SWAGGER_ON = "true";
     process.env.ENV_KEY = "lcl";
@@ -95,7 +93,6 @@ describe("Config Service check configurations", () => {
             OPENFEATURE_PROVIDER: Joi.string().required(),
             LINEPULSE_SVC_PORT: Joi.number().required(),
             SVC_1_ENDPOINT: Joi.string().uri().required(),
-            SVC_2_ENDPOINT: Joi.string().uri().required(),
             PINO_PRETTY: Joi.boolean().default(true),
             SWAGGER_ON: Joi.boolean().default(false),
             DATABSE_TYPE: Joi.string().default("none"),
@@ -122,9 +119,6 @@ describe("Config Service check configurations", () => {
     );
     expect(configService.get<string>("SVC_1_ENDPOINT")).toBe(
       process.env.SVC_1_ENDPOINT
-    );
-    expect(configService.get<string>("SVC_2_ENDPOINT")).toBe(
-      process.env.SVC_2_ENDPOINT
     );
   });
 

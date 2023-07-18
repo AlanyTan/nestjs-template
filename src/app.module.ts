@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpModule } from "@nestjs/axios";
 import { Module, RequestMethod, Global, Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
@@ -41,15 +40,14 @@ import { AppService } from "./app.service";
         OPENFEATURE_PROVIDER: Joi.string().required(),
         LINEPULSE_SVC_PORT: Joi.number().required(),
         SVC_1_ENDPOINT: Joi.string().uri().required(),
-        SVC_2_ENDPOINT: Joi.string().uri(),
         PINO_PRETTY: Joi.boolean().default(true),
         SWAGGER_ON: Joi.boolean().default(false),
         DATABASE_TYPE: Joi.string().default("none"),
         LOG_LEVEL: Joi.string().default("info"),
-        LOGGING_REDACT_PATTERNS: Joi.string(),
+        LOGGING_REDACT_PATTERNS: Joi.string().default("[]"),
         SERVICE_PREFIX: Joi.string(),
         AAD_TENANT_ID: Joi.string().default(""),
-        AAD_CLIENT_ID: Joi.string(),
+        AAD_CLIENT_ID: Joi.string().default(""),
       }).options({ stripUnknown: true }),
     }),
     // we setup pino logger options here, and in main.ts.  once it's set up here and in main.ts, we can use it in any other file by using the standard nestjs Logger
@@ -58,14 +56,14 @@ import { AppService } from "./app.service";
       useFactory: async (configService: ConfigService) => ({
         pinoHttp: {
           enabled: true,
-          level: configService.get("LOG_LEVEL", "info"),
+          level: configService.getOrThrow("LOG_LEVEL"),
           // by default, we redact the Authorization header and the cookie header, if you'd like to customize it, you can do so by editting the logg_config.yaml file.
           redact: [
             "req.headers.Authorization",
             "req.headers.authorization",
             "req.headers.cookie",
           ].concat(
-            JSON.parse(configService.get("LOGGING_REDACT_PATTERNS", "[]"))
+            JSON.parse(configService.getOrThrow("LOGGING_REDACT_PATTERNS"))
           ),
           transport: configService.get("PINO_PRETTY")
             ? {
@@ -158,7 +156,7 @@ import { AppService } from "./app.service";
       ): Promise<openfeature> => {
         const client = await new openfeature(
           configService.getOrThrow("OPENFEATURE_PROVIDER"),
-          new AcertaLogger(new Logger())
+          new AcertaLogger(logger)
         ).initialized();
         return client as openfeature;
       },

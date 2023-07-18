@@ -213,8 +213,8 @@ You can find sample code how to use this in app.controller.ts where `  @UseGuard
 
 ```typescript
 const aadJwtValidator = new AadJwtValidator(
-  this.configService.get("AAD_TENANT_ID", ""),
-  this.configService.get("AAD_CLIENT_ID", "")
+  this.configService.getOrThrow("AAD_TENANT_ID"),
+  this.configService.getOrThrow("AAD_CLIENT_ID")
 );
 const jwtIsValid = await aadJwtValidator.validateAadJwt(request, [
   "AZR-Stg-AdAp-Scop-FTog",
@@ -323,10 +323,9 @@ The `/health` end-point is meant for Kubernetes liveliness probe. This probe wor
 
 The `/readiness` end-point is for Kubernetes readiness probe. This probe works this way: if this probe cannot get a 200 response, k8s will avoid sending trafics to this pod, however, it will not try to kill and restart this pod, rather will allow thid pod to recover.
 
-- The `readiness` end-point should check "needed but not critical" dependencies, so that if those dependencies can't be met, k8s readiness probe detects it and will stop sending traffic to this pod.
+- The `readiness` end-point should check critical dependencies, so that if those dependencies can't be met, k8s readiness probe detects it and will stop sending traffic to this pod.
 - You provide an array of strings as the parameter for readiness() function. Each member of this array is an URL that represents a backend service your current service depends on. The health() function will iterate through the members of the array and perform healthPingCheck of each.
-  - The idea is this service should not report "200 healthy" unless all services it depends on also reports back "200 healthy".
-    In this example 2 pingCheck were performed, to \$SVC_1_ENDPOINT and \$SVC_2_ENDPOINT.
+  - The idea is this service should not report "200 healthy" unless critical services it depends on also reports back "200 healthy".
 
 #### /initialized
 

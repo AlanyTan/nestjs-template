@@ -12,9 +12,10 @@ export function mainConfig(app: INestApplication): {
 
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
   app.useGlobalPipes(new ValidationPipe());
-  if (typeof configService.get("SERVICE_PREFIX") === "string") {
+  const servicePrefix = configService.get("SERVICE_PREFIX");
+  if (servicePrefix) {
     app.setGlobalPrefix(
-      configService.get("SERVICE_PREFIX", "")
+      servicePrefix
       // , {
       //   exclude: [
       //     { path: "health", method: RequestMethod.GET },
