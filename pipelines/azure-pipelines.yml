@@ -16,7 +16,7 @@ trigger:
 pr:
   branches:
     include:
-      - *
+      - '*'
 resources:
   repositories:
     - repository: lp-base
