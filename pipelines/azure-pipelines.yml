@@ -16,9 +16,7 @@ trigger:
 pr:
   branches:
     include:
-      - feature/*
-      - hotfix/*
-      - bugfix/*
+      - '*'
 resources:
   repositories:
     - repository: lp-base
