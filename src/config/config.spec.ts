@@ -110,59 +110,29 @@ describe("Config Service check configurations", () => {
   });
 
   test("Required Configuration values should resolve to values", () => {
-    expect(configService.get<number>("LINEPULSE_SVC_PORT")).toBe(
-      parseInt(process.env.LINEPULSE_SVC_PORT ?? "0")
-    );
+    expect(configService.get<number>("LINEPULSE_SVC_PORT")).toBe(parseInt(process.env.LINEPULSE_SVC_PORT ?? "0"));
     expect(configService.get<string>("ENV_KEY")).toBe(process.env.ENV_KEY);
-    expect(configService.get<string>("OPENFEATURE_PROVIDER")).toBe(
-      process.env.OPENFEATURE_PROVIDER
-    );
-    expect(configService.get<string>("SVC_1_ENDPOINT")).toBe(
-      process.env.SVC_1_ENDPOINT
-    );
+    expect(configService.get<string>("OPENFEATURE_PROVIDER")).toBe(process.env.OPENFEATURE_PROVIDER);
+    expect(configService.get<string>("SVC_1_ENDPOINT")).toBe(process.env.SVC_1_ENDPOINT);
   });
 
   test("Optional Configuration values should resolve to default values", () => {
-    expect(configService.get<boolean>("SWAGGER_ON")).toBe(
-      "true" === (process.env.SWAGGER_ON ?? "false")
-    );
-    expect(configService.get<boolean>("PINO_PRETTY")).toBe(
-      "true" === (process.env.PINO_PRETTY ?? "false")
-    );
-    expect(configService.get<string>("LOG_LEVEL")).toBe(
-      process.env.LOG_LEVEL ?? "info"
-    );
+    expect(configService.get<boolean>("SWAGGER_ON")).toBe("true" === (process.env.SWAGGER_ON ?? "false"));
+    expect(configService.get<boolean>("PINO_PRETTY")).toBe("true" === (process.env.PINO_PRETTY ?? "false"));
+    expect(configService.get<string>("LOG_LEVEL")).toBe(process.env.LOG_LEVEL ?? "info");
     // the reason the DATABASE_TYPE is tested here is because you are allowed to set the DATABASE_TYPE to "none" and it will not load the database config
-    expect(configService.get<string>("database.type")).toBe(
-      process.env.DATABASE_TYPE ?? "none"
-    );
+    expect(configService.get<string>("database.type")).toBe(process.env.DATABASE_TYPE ?? "none");
   });
 
   test("Database configurations should resolve to a database config object", () => {
-    expect(configService.get<string>("database.host")).toBe(
-      process.env.POSTGRES_HOST
-    );
-    expect(configService.get<number>("database.port")).toBe(
-      parseInt(process.env.POSTGRES_PORT ?? "5432")
-    );
-    expect(configService.get<string>("database.username")).toBe(
-      process.env.POSTGRES_USERNAME
-    );
-    expect(configService.get<string>("database.password")).toBe(
-      process.env.POSTGRES_PASSWORD
-    );
-    expect(configService.get<string>("database.database")).toBe(
-      process.env.POSTGRES_DATABASE
-    );
-    expect(configService.get<boolean>("database.synchronize")).toBe(
-      process.env.POSTGRES_SYNCHRONIZE ?? false
-    );
-    expect(configService.get<string>("database.migrationsRun")).toBe(
-      process.env.POSTGRES_MIGRATIONS_RUN ?? true
-    );
-    expect(configService.get<string>("database.dropSchema")).toBe(
-      process.env.POSTGRES_DROP_SCHEMA ?? false
-    );
+    expect(configService.get<string>("database.host")).toBe(process.env.POSTGRES_HOST);
+    expect(configService.get<number>("database.port")).toBe(parseInt(process.env.POSTGRES_PORT ?? "5432"));
+    expect(configService.get<string>("database.username")).toBe(process.env.POSTGRES_USERNAME);
+    expect(configService.get<string>("database.password")).toBe(process.env.POSTGRES_PASSWORD);
+    expect(configService.get<string>("database.database")).toBe(process.env.POSTGRES_DATABASE);
+    expect(configService.get<boolean>("database.synchronize")).toBe(process.env.POSTGRES_SYNCHRONIZE ?? false);
+    expect(configService.get<string>("database.migrationsRun")).toBe(process.env.POSTGRES_MIGRATIONS_RUN ?? true);
+    expect(configService.get<string>("database.dropSchema")).toBe(process.env.POSTGRES_DROP_SCHEMA ?? false);
   });
 
   test("Only Environment Variables that are listed in the ValidationSchema will be considered, not-listed will be excluded in the config object", () => {

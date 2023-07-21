@@ -1,14 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import {
-  CanActivate,
-  ExecutionContext,
-  Inject,
-  Injectable,
-  mixin,
-  NotFoundException,
-  Type,
-} from "@nestjs/common";
+import { CanActivate, ExecutionContext, Inject, Injectable, mixin, NotFoundException, Type } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 @Injectable()

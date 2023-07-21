@@ -10,8 +10,4 @@ export class UserDto {
   updated_at: Date;
 }
 
-export class CreateUserDto extends OmitType(UserDto, [
-  "uuid",
-  "created_at",
-  "updated_at",
-]) {}
+export class CreateUserDto extends OmitType(UserDto, ["uuid", "created_at", "updated_at"]) {}

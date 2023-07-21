@@ -26,11 +26,7 @@ export class RedisService implements OnModuleDestroy {
   async saveObject(key: string, value: unknown): Promise<string> {
     if (value !== null) {
       try {
-        return (await this.redis.json.set(
-          key,
-          "$",
-          value as RedisJSON
-        )) as string;
+        return (await this.redis.json.set(key, "$", value as RedisJSON)) as string;
       } catch (error) {
         this.logger.error(`Error saving object to redis: ${error}`);
         throw error;

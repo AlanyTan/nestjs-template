@@ -1,21 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Controller,
-  Get,
-  Req,
-  Request,
-  HttpException,
-  UseGuards,
-  Query,
-  Logger,
-} from "@nestjs/common";
+import { Controller, Get, Req, Request, HttpException, UseGuards, Query, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";
 import { AadJwtValidator } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { PinoLogger } from "nestjs-pino";
@@ -128,21 +114,11 @@ export class AppController {
     if (this.loggerService !== undefined) {
       PinoLogger.root.level = logLevel;
       this.loggerService.logger.level = logLevel;
-      this.logger.error(
-        `Changing LogLevel... this is an confirmation message that Error messages are shown.`
-      );
-      this.logger.warn(
-        `Changing LogLevel... this is an confirmation message that Warnning messages are shown.`
-      );
-      this.logger.log(
-        `Changing LogLevel... this is an confirmation message that Info messages are shown.`
-      );
-      this.logger.debug(
-        `Changing LogLevel... this is an confirmation message that Debug messages are shown.`
-      );
-      this.logger.verbose(
-        `Changing LogLevel... this is an confirmation message that Trace messages are shown.`
-      );
+      this.logger.error(`Changing LogLevel... this is an confirmation message that Error messages are shown.`);
+      this.logger.warn(`Changing LogLevel... this is an confirmation message that Warnning messages are shown.`);
+      this.logger.log(`Changing LogLevel... this is an confirmation message that Info messages are shown.`);
+      this.logger.debug(`Changing LogLevel... this is an confirmation message that Debug messages are shown.`);
+      this.logger.verbose(`Changing LogLevel... this is an confirmation message that Trace messages are shown.`);
       return `log level set to ${logLevel}`;
     } else {
       return "loggerService is undefined";

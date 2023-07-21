@@ -37,10 +37,7 @@ export function mainConfig(app: INestApplication): {
   };
 }
 
-function configureSwagger(
-  app: INestApplication,
-  configService: ConfigService<unknown, boolean>
-): void {
+function configureSwagger(app: INestApplication, configService: ConfigService<unknown, boolean>): void {
   const config = new DocumentBuilder()
     .setTitle(configService.get("title", "No Title"))
     .setDescription(configService.get("description", "No description"))

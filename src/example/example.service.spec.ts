@@ -9,18 +9,15 @@ import { ConfigService } from "@nestjs/config";
 import { openfeature_client } from "@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature";
 import { ExampleService } from "./example.service";
 
-jest.mock(
-  "@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature",
-  () => {
-    return {
-      openfeature_client: jest.fn().mockImplementation(() => {
-        return {
-          getBooleanValue: jest.fn().mockResolvedValue(false),
-        };
-      }),
-    };
-  }
-);
+jest.mock("@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature", () => {
+  return {
+    openfeature_client: jest.fn().mockImplementation(() => {
+      return {
+        getBooleanValue: jest.fn().mockResolvedValue(false),
+      };
+    }),
+  };
+});
 
 describe("ExampleService", () => {
   const configService = new ConfigService();
@@ -41,22 +38,13 @@ describe("ExampleService", () => {
   });
 
   it("getExample func call return New Feature if new-feature-flag=true", async () => {
-    expect(await service.getExample()).toContain(
-      "Hello World from <New Feature>"
-    );
+    expect(await service.getExample()).toContain("Hello World from <New Feature>");
   });
 
-  const serviceFeatureFlagOff = new ExampleService(
-    configService,
-    new Logger(),
-    new HttpService(),
-    {
-      client: { getBooleanValue: jest.fn().mockResolvedValue(false) },
-    } as unknown as openfeature_client
-  );
+  const serviceFeatureFlagOff = new ExampleService(configService, new Logger(), new HttpService(), {
+    client: { getBooleanValue: jest.fn().mockResolvedValue(false) },
+  } as unknown as openfeature_client);
   it("getExample func call return Orignal Feature if new-feature-flag=false", async () => {
-    expect(await serviceFeatureFlagOff.getExample()).toContain(
-      "Hello World from <the Original feature>"
-    );
+    expect(await serviceFeatureFlagOff.getExample()).toContain("Hello World from <the Original feature>");
   });
 });

@@ -4,8 +4,7 @@ import { NameEntitySchema } from "../example-orm/entities/user.entity";
 
 export class initial1679874297564 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    const tableOptions =
-      convertSchemaColumnOptionsToTableColumnOptions(NameEntitySchema);
+    const tableOptions = convertSchemaColumnOptionsToTableColumnOptions(NameEntitySchema);
     const newTable = new Table(tableOptions);
 
     await queryRunner.createTable(newTable, true);

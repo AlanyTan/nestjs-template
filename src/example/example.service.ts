@@ -24,17 +24,13 @@ export class ExampleService {
   }
 
   async getExample(): Promise<string> {
-    const newFeatureFlag = await this.openFeature.client.getBooleanValue(
-      "new-feature-flag",
-      false,
-      { transactionContext: "specific context for this particular transation" }
-    );
+    const newFeatureFlag = await this.openFeature.client.getBooleanValue("new-feature-flag", false, {
+      transactionContext: "specific context for this particular transation",
+    });
     this.logger.debug(
       {
         msg:
-          "Calling getExample within the service with debug details: " +
-          " and new feature flag is " +
-          newFeatureFlag,
+          "Calling getExample within the service with debug details: " + " and new feature flag is " + newFeatureFlag,
       },
       "ExampleService:debug"
     );
@@ -57,11 +53,7 @@ export class ExampleService {
       );
     } else {
       // if the new feature flag is false, we will return the old message
-      return (
-        "Hello World from <the Original feature>!\n" +
-        "New feature flag is " +
-        newFeatureFlag
-      );
+      return "Hello World from <the Original feature>!\n" + "New feature flag is " + newFeatureFlag;
     } // end of else block, if the old feautre is to be removed, we can remove the else block and the if statement above
   }
 

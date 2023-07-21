@@ -26,8 +26,6 @@ describe("convertSchemaColumnOptionsToTableColumnOptions", () => {
     });
     const expectedTableOptions =
       '{"name":"name","columns":[{"type":"uuid","primary":true,"generated":"uuid","name":"uuid"},{"name":"created_at","type":"timestamp with time zone","createDate":true},{"name":"updated_at","type":"timestamp with time zone","updateDate":true},{"name":"deleted_at","type":"timestamp with time zone","nullable":true,"deleteDate":true},{"type":"varchar","length":64,"name":"first"},{"type":"varchar","length":64,"name":"last"}]}';
-    expect(
-      JSON.stringify(convertSchemaColumnOptionsToTableColumnOptions(testSchema))
-    ).toEqual(expectedTableOptions);
+    expect(JSON.stringify(convertSchemaColumnOptionsToTableColumnOptions(testSchema))).toEqual(expectedTableOptions);
   });
 });

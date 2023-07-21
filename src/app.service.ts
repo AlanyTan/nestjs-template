@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Injectable,
-  BeforeApplicationShutdown,
-  Logger,
-  Inject,
-  OnApplicationBootstrap,
-} from "@nestjs/common";
+import { Injectable, BeforeApplicationShutdown, Logger, Inject, OnApplicationBootstrap } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import {
   HealthCheckResult,
@@ -88,15 +82,11 @@ export class AppService implements OnApplicationBootstrap {
       // add as many checks as you need to ensure all services
       ...servicesToCheck.map((value, index) => {
         return (): Promise<HealthIndicatorResult> =>
-          this.httpHealthIndicator.pingCheck(
-            `the #${index + 1} API <${value}> that I depend on:`,
-            value || ""
-          );
+          this.httpHealthIndicator.pingCheck(`the #${index + 1} API <${value}> that I depend on:`, value || "");
       }),
       // if you use TypeORM, you can use this to check the database connection
       this.configService.get("DATABASE_TYPE") !== "none"
-        ? (): Promise<HealthIndicatorResult> =>
-            this.typeOrmHealthIndicator.pingCheck("database")
+        ? (): Promise<HealthIndicatorResult> => this.typeOrmHealthIndicator.pingCheck("database")
         : (): Promise<HealthIndicatorResult> => Promise.resolve({}),
     ]);
   }
