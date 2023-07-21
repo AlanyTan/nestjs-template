@@ -17,16 +17,21 @@
   },
   "customizations": {
     "vscode": {
-      "settings": {},
+      "settings": {
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      },
       "extensions": [
         "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "github.vscode-pull-request-github",
+        "mindaro-dev.file-downloader",
         "mtxr.sqltools",
         "mtxr.sqltools-driver-pg",
-        "ms-azuretools.vscode-docker",
-        "mindaro-dev.file-downloader",
-        "github.vscode-pull-request-github",
-        "redhat.vscode-yaml",
         "ms-azure-devops.azure-pipelines",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
         "timonwong.shellcheck",
         "GitHub.vscode-pull-request-github"
       ]
