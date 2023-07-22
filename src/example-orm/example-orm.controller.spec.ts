@@ -14,18 +14,15 @@ import { User } from "./entities/user.entity";
 import { ExampleOrmController } from "./example-orm.controller";
 import { ExampleOrmService } from "./example-orm.service";
 
-jest.mock(
-  "@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature",
-  () => {
-    return {
-      openfeature_client: jest.fn().mockImplementation(() => {
-        return {
-          getBooleanValue: jest.fn().mockResolvedValue(false),
-        };
-      }),
-    };
-  }
-);
+jest.mock("@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature", () => {
+  return {
+    openfeature_client: jest.fn().mockImplementation(() => {
+      return {
+        getBooleanValue: jest.fn().mockResolvedValue(false),
+      };
+    }),
+  };
+});
 
 // This Unit test has been disabled because of its dependency on Postgres
 describe.skip("ExampleController", () => {
@@ -77,9 +74,7 @@ describe.skip("ExampleController", () => {
   });
 
   it("getNewExample should return a string with 'the Value of New Feature 2!", async () => {
-    expect(async () => await controller.findOne("wrong uuid")).rejects.toThrow(
-      '"value" must be a valid GUID'
-    );
+    expect(async () => await controller.findOne("wrong uuid")).rejects.toThrow('"value" must be a valid GUID');
   });
 
   afterEach(async () => {

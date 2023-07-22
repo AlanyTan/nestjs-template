@@ -59,9 +59,7 @@ export const BaseColumnSchemaPart = {
   } as EntitySchemaColumnOptions,
 };
 
-export function convertSchemaColumnOptionsToTableColumnOptions(
-  schema: EntitySchema
-): TableOptions {
+export function convertSchemaColumnOptionsToTableColumnOptions(schema: EntitySchema): TableOptions {
   const columns: TableOptions["columns"] = [];
   for (const key in schema.options.columns) {
     // eslint-disable-next-line no-prototype-builtins

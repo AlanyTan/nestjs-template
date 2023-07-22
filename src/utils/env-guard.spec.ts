@@ -34,9 +34,7 @@ describe("EnvGuard", () => {
   it("should return true in local IDE", async () => {
     const evaluatedGuardClass = EnvGuard;
     const evaluatedGuard = new evaluatedGuardClass(configService);
-    expect(await evaluatedGuard.canActivate({} as ExecutionContext)).toEqual(
-      true
-    );
+    expect(await evaluatedGuard.canActivate({} as ExecutionContext)).toEqual(true);
   });
   it("should return false when the ENV_KEY is 'prd'", async () => {
     const evaluatedGuardClass = EnvGuard;
@@ -50,10 +48,8 @@ describe("EnvGuard", () => {
         };
       }
     }
-    expect(
-      evaluatedGuard.canActivate(
-        new MockHttpContext() as unknown as ExecutionContext
-      )
-    ).rejects.toThrow(NotFoundException);
+    expect(evaluatedGuard.canActivate(new MockHttpContext() as unknown as ExecutionContext)).rejects.toThrow(
+      NotFoundException
+    );
   });
 });

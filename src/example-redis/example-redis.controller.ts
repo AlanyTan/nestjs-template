@@ -1,16 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Controller,
-  Get,
-  Version,
-  Logger,
-  UseGuards,
-  Param,
-  Delete,
-  Post,
-  Body,
-  HttpException,
-} from "@nestjs/common";
+import { Controller, Get, Version, Logger, UseGuards, Param, Delete, Post, Body, HttpException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import {
   ApiBody,
@@ -45,8 +34,7 @@ export class ExampleRedisController {
   })
   @ApiResponse({
     status: 500,
-    description:
-      "The service run into internal trouble, please check error logs for details.",
+    description: "The service run into internal trouble, please check error logs for details.",
   })
   async redisPing(): Promise<string> {
     this.logger.log("Calling redisPing with info", "redisPing");
@@ -66,8 +54,7 @@ export class ExampleRedisController {
   })
   @ApiResponse({
     status: 500,
-    description:
-      "The service run into internal trouble, please check error logs for details.",
+    description: "The service run into internal trouble, please check error logs for details.",
   })
   @ApiParam({
     name: "key",
@@ -80,10 +67,7 @@ export class ExampleRedisController {
     type: CreateCustomerDto,
     required: true,
   })
-  async redisJsonSet(
-    @Param("key") key: string,
-    @Body() value: string
-  ): Promise<string> {
+  async redisJsonSet(@Param("key") key: string, @Body() value: string): Promise<string> {
     this.logger.log("Calling redisSet with info", "redisSet");
     let keyToUse = key;
     if (!key) {
@@ -106,8 +90,7 @@ export class ExampleRedisController {
   })
   @ApiResponse({
     status: 500,
-    description:
-      "The service run into internal trouble, please check error logs for details.",
+    description: "The service run into internal trouble, please check error logs for details.",
   })
   @ApiParam({
     name: "key",

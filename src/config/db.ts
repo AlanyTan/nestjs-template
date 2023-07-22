@@ -47,10 +47,7 @@ const envVarsSchema: Joi.ObjectSchema = Joi.object({
  * mapEnVarToConfigKey("FOO_BAR", "foo") => "bar"
  * mapEnVarToConfigKey("FOO_BAR", /foo/) => "bar"
  */
-function ENVARToCamelCase(
-  enVar: string,
-  prefixToRemove?: string | RegExp
-): string {
+function ENVARToCamelCase(enVar: string, prefixToRemove?: string | RegExp): string {
   // If the prefix should be removed, remove it
   if (prefixToRemove !== undefined) {
     enVar = enVar.replace(prefixToRemove, "");
@@ -60,19 +57,14 @@ function ENVARToCamelCase(
   const pattern = /[^a-zA-Z0-9]+([a-zA-Z0-9])/g;
 
   // Replace the pattern with the character, converting it to lower case
-  const resultStr = enVar
-    .toLowerCase()
-    .replace(pattern, (match, p1) => p1.toUpperCase());
+  const resultStr = enVar.toLowerCase().replace(pattern, (match, p1) => p1.toUpperCase());
 
   // Return the resulting string
   return resultStr;
 }
 
 export default registerAs("database", (): TypeOrmModuleOptions => {
-  const { error, value: validatedEnvConfig } = envVarsSchema.validate(
-    process.env,
-    { allowUnknown: true }
-  );
+  const { error, value: validatedEnvConfig } = envVarsSchema.validate(process.env, { allowUnknown: true });
   const typeOfDatabase = validatedEnvConfig.DATABASE_TYPE ?? "none";
   if (typeOfDatabase === "none") {
     return {} as TypeOrmModuleOptions;

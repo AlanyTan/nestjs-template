@@ -1,25 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Controller,
-  Get,
-  Version,
-  Logger,
-  UseGuards,
-  Param,
-  Delete,
-  Post,
-  Body,
-  HttpException,
-} from "@nestjs/common";
+import { Controller, Get, Version, Logger, UseGuards, Param, Delete, Post, Body, HttpException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import {
-  ApiBody,
-  ApiOperation,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-  ApiParam,
-} from "@nestjs/swagger";
+import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 import Joi from "joi";
 import { OpenFeatureGuard } from "utils";
 import { UserDto, CreateUserDto } from "./dto/user.dto";
@@ -43,8 +25,7 @@ export class ExampleOrmController {
   })
   @ApiResponse({
     status: 204,
-    description:
-      "The query was properly executed, but there is no users found so the return is an empty list.",
+    description: "The query was properly executed, but there is no users found so the return is an empty list.",
   })
   @ApiResponse({
     status: 400,
@@ -52,8 +33,7 @@ export class ExampleOrmController {
   })
   @ApiResponse({
     status: 500,
-    description:
-      "The service run into internal trouble, please check error logs for details.",
+    description: "The service run into internal trouble, please check error logs for details.",
   })
   async findAll(): Promise<User[]> {
     this.logger.log("Calling findAll with info", "findAll");
@@ -82,8 +62,7 @@ export class ExampleOrmController {
   })
   @ApiResponse({
     status: 500,
-    description:
-      "The service run into internal trouble, please check error logs for details.",
+    description: "The service run into internal trouble, please check error logs for details.",
   })
   async findOne(@Param("uuid") uuid: string): Promise<User | null> {
     this.logger.log("Calling findOne with info", "findOne");
@@ -113,8 +92,7 @@ export class ExampleOrmController {
   })
   @ApiResponse({
     status: 500,
-    description:
-      "The service run into internal trouble, please check error logs for details.",
+    description: "The service run into internal trouble, please check error logs for details.",
   })
   async create(@Body() user: User): Promise<User> {
     this.logger.log("Calling create user with info", "creating user");
@@ -140,8 +118,7 @@ export class ExampleOrmController {
   })
   @ApiResponse({
     status: 204,
-    description:
-      "The specified User does not exist so no action happened, (and the user still does not exist).",
+    description: "The specified User does not exist so no action happened, (and the user still does not exist).",
   })
   @ApiResponse({
     status: 400,
@@ -149,8 +126,7 @@ export class ExampleOrmController {
   })
   @ApiResponse({
     status: 500,
-    description:
-      "The service run into internal trouble, please check error logs for details.",
+    description: "The service run into internal trouble, please check error logs for details.",
   })
   @UseGuards(OpenFeatureGuard("new-end-point"))
   async delete(@Param("uuid") uuid: string): Promise<void> {

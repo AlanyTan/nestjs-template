@@ -11,18 +11,15 @@ import { config, dbConfig, OPENFEATURE_CLIENT } from "config";
 import { ExampleController } from "./example.controller";
 import { ExampleService } from "./example.service";
 
-jest.mock(
-  "@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature",
-  () => {
-    return {
-      openfeature_client: jest.fn().mockImplementation(() => {
-        return {
-          getBooleanValue: jest.fn().mockResolvedValue(false),
-        };
-      }),
-    };
-  }
-);
+jest.mock("@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature", () => {
+  return {
+    openfeature_client: jest.fn().mockImplementation(() => {
+      return {
+        getBooleanValue: jest.fn().mockResolvedValue(false),
+      };
+    }),
+  };
+});
 
 describe("ExampleController", () => {
   let controller: ExampleController;
@@ -64,9 +61,7 @@ describe("ExampleController", () => {
     expect(await controller.getExample()).toContain("Hello World");
   });
   it("getNewExample should return a string with 'the Value of New Feature 2!", async () => {
-    expect(await controller.getNewExample()).toContain(
-      "the Value of New Feature 2!"
-    );
+    expect(await controller.getNewExample()).toContain("the Value of New Feature 2!");
   });
 
   afterEach(async () => {

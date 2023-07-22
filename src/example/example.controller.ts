@@ -1,22 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Controller,
-  Get,
-  Version,
-  Logger,
-  UseGuards,
-  Headers,
-  UseInterceptors,
-  Res,
-} from "@nestjs/common";
+import { Controller, Get, Version, Logger, UseGuards, Headers, UseInterceptors, Res } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import {
-  ApiOkResponse,
-  ApiOperation,
-  ApiProperty,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiOkResponse, ApiOperation, ApiProperty, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import { OpenFeatureGuard, EnvGuard } from "utils";
 import { forwardHeaderAuthInterceptor } from "utils/forward.header.auth";
@@ -36,8 +21,7 @@ export class ExampleController {
   @ApiOperation({ summary: "A feature controlled example message." })
   @ApiResponse({
     status: 200,
-    description:
-      "Normal run, returns either old or new messages based on the feature flag value.",
+    description: "Normal run, returns either old or new messages based on the feature flag value.",
   })
   @ApiResponse({
     status: 204,
@@ -49,12 +33,9 @@ export class ExampleController {
   })
   @ApiResponse({
     status: 500,
-    description:
-      "The service run into internal trouble, please check error logs for details.",
+    description: "The service run into internal trouble, please check error logs for details.",
   })
-  async getExample(
-    @Headers("customer_uuid") sessionToken?: string
-  ): Promise<string> {
+  async getExample(@Headers("customer_uuid") sessionToken?: string): Promise<string> {
     this.logger.log("Calling getExample with info", "ExampleController:info");
     return this.exampleService.getExample();
   }
@@ -75,13 +56,11 @@ export class ExampleController {
   })
   @ApiResponse({
     status: 404,
-    description:
-      "The requested resource is not found (i.e. being turned off by the feature flag).",
+    description: "The requested resource is not found (i.e. being turned off by the feature flag).",
   })
   @ApiResponse({
     status: 500,
-    description:
-      "The service run into internal trouble, please check error logs for details.",
+    description: "The service run into internal trouble, please check error logs for details.",
   })
   @UseGuards(OpenFeatureGuard("new-end-point"))
   async getNewExample(): Promise<string> {
@@ -154,9 +133,7 @@ export class ExampleController {
       };
       // Set initial options for the chart
       chart.setOption(options);
-        const source = new EventSource('/${this.configService.get(
-          "SERVICE_PREFIX"
-        )}/v1/example/updates');
+        const source = new EventSource('/${this.configService.get("SERVICE_PREFIX")}/v1/example/updates');
 
         source.onmessage = function logEvents(event) {
           const { data } = event;
@@ -231,14 +208,10 @@ export class ExampleDevOnlyController {
   })
   @ApiResponse({
     status: 500,
-    description:
-      "The service run into internal trouble, please check error logs for details.",
+    description: "The service run into internal trouble, please check error logs for details.",
   })
   async getDevOnlyExample(): Promise<EnvDto> {
-    this.logger.log(
-      "Calling getDevOnlyExample with info",
-      "ExampleController:info"
-    );
+    this.logger.log("Calling getDevOnlyExample with info", "ExampleController:info");
     return { env: this.configService.getOrThrow("ENV_KEY") };
   }
 }

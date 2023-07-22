@@ -3,15 +3,8 @@ import { Module, RequestMethod, Global, Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import {
-  openfeature,
-  AcertaLogger,
-} from "@acertaanalyticssolutions/acerta-standardnpm";
-import {
-  PrometheusModule,
-  PrometheusController,
-  makeGaugeProvider,
-} from "@willsoto/nestjs-prometheus";
+import { openfeature, AcertaLogger } from "@acertaanalyticssolutions/acerta-standardnpm";
+import { PrometheusModule, PrometheusController, makeGaugeProvider } from "@willsoto/nestjs-prometheus";
 import Joi from "joi";
 import { LoggerModule } from "nestjs-pino";
 import { OPENFEATURE_CLIENT, config, dbConfig } from "config";
@@ -58,11 +51,7 @@ import { AppService } from "./app.service";
           enabled: true,
           level: configService.getOrThrow("LOG_LEVEL"),
           // by default, we redact the Authorization header and the cookie header, if you'd like to customize it, you can do so by editting the logg_config.yaml file.
-          redact: [
-            "req.headers.Authorization",
-            "req.headers.authorization",
-            "req.headers.cookie",
-          ].concat(
+          redact: ["req.headers.Authorization", "req.headers.authorization", "req.headers.cookie"].concat(
             JSON.parse(configService.getOrThrow("LOGGING_REDACT_PATTERNS"))
           ),
           transport: configService.get("PINO_PRETTY")
@@ -92,8 +81,7 @@ import { AppService } from "./app.service";
                     method_url: req.method + " " + req.url,
                     query: req.query,
                     params: req.params,
-                    remoteAddress_port:
-                      req.remoteAddress + ":" + req.remotePort,
+                    remoteAddress_port: req.remoteAddress + ":" + req.remotePort,
                   }),
                 }
               : {
@@ -126,9 +114,7 @@ import { AppService } from "./app.service";
           }),
           ExampleOrmModule,
         ]),
-    ...((process.env.REDIS_URL ?? "none") == "none"
-      ? []
-      : [ExampleRedisModule]),
+    ...((process.env.REDIS_URL ?? "none") == "none" ? [] : [ExampleRedisModule]),
   ],
   controllers: [AppController],
   providers: [
@@ -137,23 +123,12 @@ import { AppService } from "./app.service";
     makeGaugeProvider({
       name: "serviceInfo",
       help: "Service info metric, labels are created dynamically to reflect running version",
-      labelNames: [
-        "build",
-        "build_time",
-        "build_number",
-        "commit_time",
-        "commit_hash",
-        "commit_message",
-        "version",
-      ],
+      labelNames: ["build", "build_time", "build_number", "commit_time", "commit_hash", "commit_message", "version"],
     }),
     {
       provide: OPENFEATURE_CLIENT,
       inject: [ConfigService, Logger],
-      useFactory: async (
-        configService: ConfigService,
-        logger: Logger
-      ): Promise<openfeature> => {
+      useFactory: async (configService: ConfigService, logger: Logger): Promise<openfeature> => {
         const client = await new openfeature(
           configService.getOrThrow("OPENFEATURE_PROVIDER"),
           new AcertaLogger(logger)
