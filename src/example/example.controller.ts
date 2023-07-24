@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller, Get, Version, Logger, UseGuards, Headers, UseInterceptors, Res } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiOkResponse, ApiOperation, ApiProperty, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -16,8 +15,7 @@ export class ExampleController {
     private readonly configService: ConfigService,
     private readonly logger: Logger = new Logger(ExampleController.name)
   ) {}
-  @Get("get_request")
-  @Version("1")
+  @Get("get-request")
   @ApiOperation({ summary: "A feature controlled example message." })
   @ApiResponse({
     status: 200,
@@ -37,10 +35,13 @@ export class ExampleController {
   })
   async getExample(@Headers("customer_uuid") sessionToken?: string): Promise<string> {
     this.logger.log("Calling getExample with info", "ExampleController:info");
+    if (sessionToken) {
+      this.logger.log("session token set");
+    }
     return this.exampleService.getExample();
   }
 
-  @Get("get_request")
+  @Get("get-request")
   @Version("2")
   @ApiResponse({
     status: 200,
@@ -186,16 +187,15 @@ class EnvDto {
   @ApiProperty({ enum: Env })
   env: Env;
 }
-@ApiTags("example_dev_only")
+@ApiTags("example-dev-only")
 @UseGuards(EnvGuard)
-@Controller({ path: "example_dev_only", version: "1" })
+@Controller({ path: "example-dev-only", version: "1" })
 export class ExampleDevOnlyController {
   constructor(
     private readonly configService: ConfigService,
     private readonly logger: Logger = new Logger(ExampleController.name)
   ) {}
-  @Get("get_dev_only")
-  @Version("1")
+  @Get("get-dev-only")
   @ApiOperation({ summary: "A env-guard controlled example message." })
   @ApiOkResponse({
     status: 200,

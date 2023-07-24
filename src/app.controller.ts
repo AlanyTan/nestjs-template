@@ -100,7 +100,7 @@ export class AppController {
     return this.appService.configuration();
   }
 
-  @Get("update_log_level")
+  @Get("update-log-level")
   @ApiBearerAuth("JWT-auth")
   @ApiOperation({ summary: "update log level" })
   @ApiQuery({

@@ -4,20 +4,19 @@ import { ConfigService } from "@nestjs/config";
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 import Joi from "joi";
 import { OpenFeatureGuard } from "utils";
-import { UserDto, CreateUserDto } from "./dto/user.dto";
-import { Person, User, UserEntitySchema } from "./entities/user.entity";
+import { CreateUserDto } from "./dto/user.dto";
+import { Person, User } from "./entities/user.entity";
 import { ExampleOrmService } from "./example-orm.service";
 
-@ApiTags("example_orm")
-@Controller({ path: "example_orm", version: "1" })
+@ApiTags("example-orm")
+@Controller({ path: "example-orm", version: "1" })
 export class ExampleOrmController {
   constructor(
     private readonly exampleOrmService: ExampleOrmService,
     private readonly configService: ConfigService,
     private readonly logger: Logger = new Logger(ExampleOrmController.name)
   ) {}
-  @Get("find_all")
-  @Version("1")
+  @Get("find-all")
   @ApiOperation({ summary: "List all users" })
   @ApiResponse({
     status: 200,
@@ -74,7 +73,6 @@ export class ExampleOrmController {
   }
 
   @Post("create")
-  @Version("1")
   @ApiOperation({ summary: "Create a new user" })
   @ApiBody({
     description: "the user to be created",
