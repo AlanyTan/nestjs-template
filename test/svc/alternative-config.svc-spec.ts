@@ -24,12 +24,12 @@ describe("AppController (svc) testing wrong settings.", () => {
   });
   describe("the 'example' application with feature toggles set to off ", () => {
     const servicePrefix = process.env.SERVICE_PREFIX ? "/" + process.env.SERVICE_PREFIX : "";
-    it(`${servicePrefix}/v1/example/get_request should return "new-feature-flag false"`, async () => {
-      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v1/example/get_request`);
+    it(`${servicePrefix}/v1/example/get-request should return "new-feature-flag false"`, async () => {
+      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v1/example/get-request`);
       expect(response.text).toContain("New feature flag is false");
     });
-    it(`${servicePrefix}/v2/example/get_request should return 404`, async () => {
-      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v2/example/get_request`);
+    it(`${servicePrefix}/v2/example/get-request should return 404`, async () => {
+      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v2/example/get-request`);
       expect(response.status).toEqual(404);
     });
   });

@@ -33,31 +33,31 @@ describe("Application Controllers (svc)", () => {
 
   describe("the 'example' application end-points", () => {
     const servicePrefix = process.env.SERVICE_PREFIX ? "/" + process.env.SERVICE_PREFIX : "";
-    it(`${servicePrefix}/v1/example/get_request should return 200`, async () => {
-      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v1/example/get_request`);
+    it(`${servicePrefix}/v1/example/get-request should return 200`, async () => {
+      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v1/example/get-request`);
       expect(response.status).toEqual(200);
     });
-    it(`${servicePrefix}/v2/example/get_request should return 200`, async () => {
-      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v2/example/get_request`);
+    it(`${servicePrefix}/v2/example/get-request should return 200`, async () => {
+      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v2/example/get-request`);
       expect(response.status).toEqual(200);
     });
   });
 
-  describe("the 'exampleOrm' application create and find_all end-points", () => {
+  describe("the 'exampleOrm' application create and find-all end-points", () => {
     const testUser = {
       name: { first: "John", last: "Doe" },
       notes: "a new user",
       isActive: true,
     };
     const servicePrefix = process.env.SERVICE_PREFIX ? "/" + process.env.SERVICE_PREFIX : "";
-    it(`/v1/example_orm/create should return 201, and return a user with uuid, which can be queried using /v1/example_orm/find`, async () => {
-      const response = await request(app.getHttpServer()).post(`${servicePrefix}/v1/example_orm/create`).send(testUser);
+    it(`/v1/example-orm/create should return 201, and return a user with uuid, which can be queried using /v1/example-orm/find`, async () => {
+      const response = await request(app.getHttpServer()).post(`${servicePrefix}/v1/example-orm/create`).send(testUser);
       expect(response.status).toEqual(201);
       const savedUser = JSON.parse(response.text);
       expect(savedUser).toMatchObject(testUser);
     });
-    it(`/v1/example_orm/find_all should return 200`, async () => {
-      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v1/example_orm/find_all`);
+    it(`/v1/example-orm/find-all should return 200`, async () => {
+      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v1/example-orm/find-all`);
       expect(response.status).toEqual(200);
     });
   });
@@ -65,16 +65,16 @@ describe("Application Controllers (svc)", () => {
   describe("the 'exampleOrm' application find_one and delete end-points", () => {
     const servicePrefix = process.env.SERVICE_PREFIX ? "/" + process.env.SERVICE_PREFIX : "";
 
-    test(`we can find_all, iterately find each using fine_one then delete each `, async () => {
-      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v1/example_orm/find_all`);
+    test(`we can find-all, iterately find each using fine_one then delete each `, async () => {
+      const response = await request(app.getHttpServer()).get(`${servicePrefix}/v1/example-orm/find-all`);
       const foundUsers = JSON.parse(response.text);
       for (const savedUser of foundUsers) {
         const response2 = await request(app.getHttpServer()).get(
-          `${servicePrefix}/v2/example_orm/find_one/${savedUser?.uuid}`
+          `${servicePrefix}/v2/example-orm/find_one/${savedUser?.uuid}`
         );
         expect(response2.status).toEqual(200);
         // const response3 = await request(app.getHttpServer()).delete(
-        //   `${servicePrefix}/v1/example_orm/delete/${savedUser?.uuid}`
+        //   `${servicePrefix}/v1/example-orm/delete/${savedUser?.uuid}`
         // );
         // expect(response3.status).toEqual(200);
       }

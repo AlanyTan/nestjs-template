@@ -26,7 +26,6 @@ export class ExampleRedisController {
   ) {}
 
   @Get("ping")
-  @Version("1")
   @ApiOperation({ summary: "ping redis server" })
   @ApiResponse({
     status: 200,
@@ -42,7 +41,6 @@ export class ExampleRedisController {
   }
 
   @Post("save_object:/:key")
-  @Version("1")
   @ApiOperation({ summary: "save a JSON object to redis server" })
   @ApiCreatedResponse({
     status: 201,
@@ -77,7 +75,6 @@ export class ExampleRedisController {
   }
 
   @Get("get_object/:key")
-  @Version("1")
   @ApiOperation({ summary: "get a JSON object from redis server" })
   @ApiOkResponse({
     status: 200,
