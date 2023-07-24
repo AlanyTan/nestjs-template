@@ -4,6 +4,11 @@ import { CanActivate, ExecutionContext, Inject, Injectable, mixin, NotFoundExcep
 import { ConfigService } from "@nestjs/config";
 
 @Injectable()
+/**
+ * controller route guard to hide non-productive end-points
+ * routes or contollers with this guard configured, will not be availalbe when running in system where
+ *  $ENV_KEY is not in the ${validKeys} array, which currently are ["lcl","dev","qas"]
+ */
 export class EnvGuard implements CanActivate {
   constructor(private readonly configService: ConfigService) {
     this.validKeys = ["lcl", "dev", "qas"];

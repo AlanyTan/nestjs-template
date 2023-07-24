@@ -25,8 +25,9 @@ The .vscode config allows the VSCode to be able to debug, build container and ru
 - health check end-point (checks dependending services and DB)
 - metrics end-point
 - config service, with standard Joi validation using .env file or environment vars (.env is ignored in .gitignore and .dockerignore, check .example.env for example)
-- Standardized logging, logging format, redact, dynamic verbosness
+- Standardized logging, logging format, use of x-correlation-id, redact, dynamic verbosness
   - allowing dynamically change log level using /update_log_level endpoint
+  - if the requestor provides x-correlation-id in the request header, it will be added to all log message's context (and forwarded to all future request if calling other end-points.)
 - Jest based unit test and app svc test templates, and vscode integrated test execution
 - openapi/swagger-ui (can be turned on/off using EnVar via ConfigService)
 - VSCode usability enhancements
@@ -193,11 +194,9 @@ In the env-provider case, to change the value of the flags, update the .env (or 
 You can find example of how to use OpenFeature in the example.controller.ts where `  @UseGuards(OpenFeatureGuard("new-end-point"))`, and also in example.service.ts where
 
 ```typescript
-const newFeatureFlag = await this.openFeature.client.getBooleanValue(
-  "new-feature-flag",
-  false,
-  { transactionContext: "specific context for this particular transation" }
-);
+const newFeatureFlag = await this.openFeature.client.getBooleanValue("new-feature-flag", false, {
+  transactionContext: "specific context for this particular transation",
+});
 ```
 
 #### Acerta Object Store
@@ -216,9 +215,7 @@ const aadJwtValidator = new AadJwtValidator(
   this.configService.getOrThrow("AAD_TENANT_ID"),
   this.configService.getOrThrow("AAD_CLIENT_ID")
 );
-const jwtIsValid = await aadJwtValidator.validateAadJwt(request, [
-  "AZR-Stg-AdAp-Scop-FTog",
-]);
+const jwtIsValid = await aadJwtValidator.validateAadJwt(request, ["AZR-Stg-AdAp-Scop-FTog"]);
 ```
 
 The tenant_id and client_id are AAD app register provided info. Depends on which application and scope it should be validated against, these can be set to different values.
