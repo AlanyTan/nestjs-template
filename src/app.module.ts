@@ -1,6 +1,7 @@
 import { HttpModule } from "@nestjs/axios";
 import { Module, RequestMethod, Global, Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { APP_INTERCEPTOR } from "@nestjs/core";
 import { TerminusModule } from "@nestjs/terminus";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { openfeature, AcertaLogger } from "@acertaanalyticssolutions/acerta-standardnpm";
@@ -11,6 +12,7 @@ import { OPENFEATURE_CLIENT, config, dbConfig } from "config";
 import { ExampleModule } from "example/example.module";
 import { ExampleOrmModule } from "example-orm/example-orm.module";
 import { ExampleRedisModule } from "example-redis/example-redis.module";
+import { forwardHeadersInterceptor } from "utils/forward-headers.interceptor";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 
@@ -82,12 +84,14 @@ import { AppService } from "./app.service";
                     query: req.query,
                     params: req.params,
                     remoteAddress_port: req.remoteAddress + ":" + req.remotePort,
+                    correlation_id: req.headers["x-correlation-id"],
                   }),
                 }
               : {
                   req: (req): object => ({
                     id: req.id,
                     method_url: req.method + " " + req.url,
+                    correlation_id: req.headers["x-correlation-id"],
                   }),
                 },
         },
@@ -120,6 +124,7 @@ import { AppService } from "./app.service";
   providers: [
     Logger,
     AppService,
+    { provide: APP_INTERCEPTOR, useClass: forwardHeadersInterceptor },
     makeGaugeProvider({
       name: "serviceInfo",
       help: "Service info metric, labels are created dynamically to reflect running version",
