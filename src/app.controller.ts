@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller, Get, Req, Request, HttpException, UseGuards, Query, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
@@ -69,27 +68,26 @@ export class AppController {
     }
   }
 
+  async #isAadJwtValid(request: Request): Promise<boolean> {
+    const aadJwtValidator = new AadJwtValidator(
+      this.configService.get("AAD_TENANT_ID", ""),
+      this.configService.get("AAD_CLIENT_ID", "")
+    );
+    try {
+      return await aadJwtValidator.validateAadJwt(request);
+    } catch (e) {
+      return false;
+    }
+  }
+
   @Get("version")
   @ApiBearerAuth("JWT-auth")
   async version(@Req() request: Request): Promise<unknown> {
-    let commitJson = {};
-    let buildJson = {};
-    try {
-      const aadJwtValidator = new AadJwtValidator(
-        this.configService.get("AAD_TENANT_ID", ""),
-        this.configService.get("AAD_CLIENT_ID", "")
-      );
-      const jwtIsValid = await aadJwtValidator.validateAadJwt(request);
-      commitJson = { commitInfo: this.configService.get("commitInfo") };
-      buildJson = { buildInfo: this.configService.get("buildInfo") };
-    } catch (err) {
-      commitJson = { commitInfo: "Unauthorized to view commit info" };
-      buildJson = { buildInfo: "Unauthorized to view build info" };
-    }
+    const isAadJwtValid = await this.#isAadJwtValid(request);
     return {
       version: this.configService.get("version"),
-      ...commitJson,
-      ...buildJson,
+      commitInfo: isAadJwtValid ? this.configService.get("commitInfo") : "Unauthorized to view commit info",
+      buildInfo: isAadJwtValid ? this.configService.get("buildInfo") : "Unauthorized to view build info",
     };
   }
 
