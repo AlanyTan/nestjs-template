@@ -6,15 +6,17 @@ import { tap } from "rxjs/operators";
 import { v4 as uuidv4 } from "uuid";
 
 @Injectable()
-export class forwardHeadersInterceptor implements NestInterceptor {
+export class ForwardHeadersInterceptor implements NestInterceptor {
   constructor(private readonly httpService: HttpService) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const contextRequest = context.switchToHttp().getRequest();
     const token = contextRequest.headers["authorization"];
     // Extract or generate the correlation ID
     const correlationId = contextRequest.headers["x-correlation-id"] || uuidv4();
+    contextRequest["x-correlation-id"] = correlationId;
+    const contextResponse = context.switchToHttp().getResponse();
+    contextResponse.setHeader("X-Correlation-ID", correlationId);
     this.httpService.axiosRef.defaults.headers.common["X-Correlation-ID"] = correlationId;
-
     if (token) {
       this.httpService.axiosRef.defaults.headers.common["authorization"] = token;
     }

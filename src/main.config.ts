@@ -4,15 +4,14 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 //we use pino logger here.  once it's set up here and in app.module.ts, we can use it in any other file by using the standard nestjs Logger
 import { LoggerErrorInterceptor } from "nestjs-pino";
-import { forwardHeadersInterceptor } from "utils/forward-headers.interceptor";
+import { ForwardHeadersInterceptor } from "utils/forward-headers.interceptor";
 
 export function mainConfig(app: INestApplication): {
   port: number;
 } {
   const configService = app.get(ConfigService);
 
-  app.useGlobalInterceptors(new LoggerErrorInterceptor());
-  app.useGlobalInterceptors(app.get(forwardHeadersInterceptor));
+  app.useGlobalInterceptors(app.get(ForwardHeadersInterceptor), new LoggerErrorInterceptor());
   app.useGlobalPipes(new ValidationPipe());
   const servicePrefix = configService.get("SERVICE_PREFIX");
   if (servicePrefix) {

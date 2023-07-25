@@ -1,9 +1,8 @@
-import { Controller, Get, Version, Logger, UseGuards, Headers, UseInterceptors, Res } from "@nestjs/common";
+import { Controller, Get, Version, Logger, UseGuards, Headers, Res } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import { OpenFeatureGuard, EnvGuard } from "utils";
-import { forwardHeadersInterceptor } from "utils/forward-headers.interceptor";
 import { ExampleService } from "./example.service";
 
 @ApiTags("example")
@@ -13,7 +12,6 @@ import { ExampleService } from "./example.service";
   required: false,
   description: "An optional correlation ID for tracking requests through multiple services",
 })
-@UseInterceptors(forwardHeadersInterceptor)
 export class ExampleController {
   constructor(
     private readonly exampleService: ExampleService,
