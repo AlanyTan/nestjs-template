@@ -13,5 +13,6 @@ set -o allexport
 source "${SCRIPT_DIR}/ci.env"
 set +o allexport
 
-npm clean-install --include=dev
+npm clean-install
+npm run lint:ci
 npm run test:ci
