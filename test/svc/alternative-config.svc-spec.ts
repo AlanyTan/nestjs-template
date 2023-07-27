@@ -8,7 +8,7 @@ process.env.ENV_KEY = "tst";
 
 import { ConfigService } from "@nestjs/config";
 import request from "supertest";
-import { app } from "../setup-svc";
+import { app } from "./setup-svc";
 
 describe("AppController (svc) testing wrong settings.", () => {
   const servicePrefix = process.env.SERVICE_PREFIX ? "/" + process.env.SERVICE_PREFIX : "";
