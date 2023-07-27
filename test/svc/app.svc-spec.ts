@@ -6,7 +6,7 @@ process.env.NEW_FEATURE_FLAG = "true";
 process.env.ENV_KEY = "lcl";
 
 import request from "supertest";
-import { app } from "../setup-svc";
+import { app } from "./setup-svc";
 
 describe("Application Controllers (svc)", () => {
   const servicePrefix = process.env.SERVICE_PREFIX ? "/" + process.env.SERVICE_PREFIX : "";

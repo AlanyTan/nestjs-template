@@ -13,7 +13,7 @@ const config: Config = {
   collectCoverage: true,
   coverageReporters: ["cobertura", "lcov"],
   collectCoverageFrom: ["<rootDir>/src/**/*.(t|j)s"],
-  coveragePathIgnorePatterns: ["<rootDir>/src/migrations"],
+  coveragePathIgnorePatterns: ["<rootDir>/src/migrations", ".*spec.ts$", "main.ts"],
   testEnvironment: "node",
   modulePathIgnorePatterns: ["<rootDir>/package.json"],
 };

@@ -7,12 +7,7 @@
   "collectCoverage": true,
   "collectCoverageFrom": ["<rootDir>/src/**/*.(t|j)s"],
   "coverageReporters": ["cobertura", "lcov"],
-  "coveragePathIgnorePatterns": [
-    "<rootDir>/src/migrations",
-    ".*spec.ts$",
-    "main.ts"
-  ],
-  "testRegex": ".*svc-spec.ts$",
+  "coveragePathIgnorePatterns": ["<rootDir>/src/migrations", ".*spec.ts$", "main.ts"],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   }
