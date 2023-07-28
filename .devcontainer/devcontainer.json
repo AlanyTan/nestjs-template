@@ -67,6 +67,5 @@
     "github-cli": "latest"
   },
 
-  // install all dependent packages after container is built and files copied into
-  "postCreateCommand": "npm install  --userconfig=/dev/null husky --save-dev && npm pkg set scripts.prepare=\"husky install\" && npm run prepare"
+  "postCreateCommand": "npm install"
 }
