@@ -6,10 +6,12 @@ import { AppModule } from "./app.module";
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
-  app.useLogger(app.get(Logger));
+  const logger = app.get(Logger);
+  app.useLogger(logger);
   const { port } = mainConfig(app);
 
   await app.listen(port);
+  logger.log(`Service is running at URL: ${await app.getUrl()}`);
 }
 
 bootstrap();
