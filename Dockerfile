@@ -39,4 +39,4 @@ EXPOSE 9080
 
 USER node
 
-ENTRYPOINT ["npm","run","start:prod"]
+ENTRYPOINT ["npm","run","start"]
