@@ -4,7 +4,7 @@
 
 There are 2 files that are critical for Environment variable settings:
 
-### `src/app.module.ts`
+### `src/config/app.env.ts`
 
 The main (sometimes called root) module file takes in the main configuration (environment variables) in this section:
 
@@ -17,13 +17,19 @@ The main (sometimes called root) module file takes in the main configuration (en
       expandVariables: true,
       cache: true,
       isGlobal: true,
-      validationSchema: Joi.object({
+      validationSchema: environmentVariableList.option();
         ...
 ```
 
-The data type of each environment variable and if they are required is listed here.
+### environmentVariableList configuration validation schema
 
-and,
+The `environmentVariableList` is a constant defined in [a relative link](/src/config/app.env.ts)
+The data type of each environment variable and if they are required is listed here, along with its descriptions.
+
+### redactation of config values
+
+The /config end-point will report the config values from the environment variables listed here. However, unless you mark an environment variable as `.label("public)` its value will be redacted by default.
+So for non-sensitive information, we recommend you keep `.label("public)`, on the env var.
 
 ### `src/config/db.ts`
 
