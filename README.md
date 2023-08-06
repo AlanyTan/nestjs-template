@@ -365,6 +365,8 @@ Please note that Swagger uses the name, description, and version info you update
 
 We use **standard** Nestjs ConfigService. The required Environment Variables are listed in the app.module.ts files in the `validationSchema` section under `imports:[ConfigModule.forRoot]` using Joi notions.
 This ensures the service will fail on start if the required Environment Variable has not been set. You can also provide default values in here as well so that instead of fail to start, ConfigService can use that default value if the EnVar is not set.
+Environment Variables that are read by this projects are listed in [a relative link](/src/config/app.env.ts) as validation schema, including their descriptions.  
+Please note, if you do not list `.label("public")` as part of its validation rules, by default, the /config end-point will redact their values when you call it to check the config values. So, for no-sensitive invormation, it is highly recommended to keep `.label("public")` for them as part of the validation rules.
 
 You should list **all** Environment Variables your code use here, even if they are completely optional. The only exception is for Database configuration should be listed in the config/db.ts (see below).
 

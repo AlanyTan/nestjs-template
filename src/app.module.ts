@@ -5,9 +5,8 @@ import { TerminusModule } from "@nestjs/terminus";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { openfeature, AcertaLogger } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { PrometheusModule, PrometheusController, makeGaugeProvider } from "@willsoto/nestjs-prometheus";
-import Joi from "joi";
 import { LoggerModule } from "nestjs-pino";
-import { OPENFEATURE_CLIENT, config, dbConfig } from "config";
+import { OPENFEATURE_CLIENT, config, dbConfig, environmentVariableList } from "config";
 import { ExampleModule } from "example/example.module";
 import { ExampleOrmModule } from "example-orm/example-orm.module";
 import { ExampleRedisModule } from "example-redis/example-redis.module";
@@ -24,25 +23,7 @@ import { AppService } from "./app.service";
       expandVariables: true,
       cache: true,
       isGlobal: true,
-      validationSchema: Joi.object({
-        //add *ALL* configuration that your application need here, even if they are "optional" (other than DB config, which you should do in the db.ts)
-        //if ".required()" then application will abort starting if that configuration was not provided.
-        //if ".default(value)" then the value is used if the expected EnVar does not exist
-        //if neither ".required()" nor ".default(value)" then the EnVar is optional, and will be processed by the ConfigService.get() method
-        //if you do not list a configuration here, then it will not be available as part of the ConfigService to the application at all
-        ENV_KEY: Joi.string().required(),
-        OPENFEATURE_PROVIDER: Joi.string().required(),
-        LINEPULSE_SVC_PORT: Joi.number().required(),
-        SVC_1_ENDPOINT: Joi.string().uri().required(),
-        PINO_PRETTY: Joi.boolean().default(true),
-        SWAGGER_ON: Joi.boolean().default(false),
-        DATABASE_TYPE: Joi.string().default("none"),
-        LOG_LEVEL: Joi.string().default("info"),
-        LOGGING_REDACT_PATTERNS: Joi.string().default("[]"),
-        SERVICE_PREFIX: Joi.string(),
-        AAD_TENANT_ID: Joi.string().default(""),
-        AAD_CLIENT_ID: Joi.string().default(""),
-      }).options({ stripUnknown: true }),
+      validationSchema: environmentVariableList.options({ stripUnknown: true }),
     }),
     // we setup pino logger options here, and in main.ts.  once it's set up here and in main.ts, we can use it in any other file by using the standard nestjs Logger
     LoggerModule.forRootAsync({

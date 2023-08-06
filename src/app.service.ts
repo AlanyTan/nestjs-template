@@ -11,7 +11,7 @@ import {
 import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { InjectMetric } from "@willsoto/nestjs-prometheus";
 import { Gauge } from "prom-client";
-import { OPENFEATURE_CLIENT } from "./config";
+import { environmentVariableList, OPENFEATURE_CLIENT } from "config";
 
 @Injectable()
 export class AppService implements OnApplicationBootstrap {
@@ -93,33 +93,21 @@ export class AppService implements OnApplicationBootstrap {
 
   configuration(): unknown {
     const rawConfig: any = {}; //this.configService.get("_PROCESS_ENV_VALIDATED");
-    for (const key in this.configService["internalConfig"]) {
-      //if (this.configService.hasOwnProperty(key)) {
-      if (key == "_PROCESS_ENV_VALIDATED") {
-        rawConfig["core_config"] = this.configService.get(key);
+    const validatedConfig = environmentVariableList.describe();
+
+    for (const keyName in validatedConfig.keys) {
+      const keyDetail = validatedConfig.keys[keyName];
+      if (keyDetail.flags["label"] === "public") {
+        rawConfig[keyName] = this.configService.get(keyName);
       } else {
-        rawConfig[key] = this.configService.get(key) || {};
-      }
-      //}
-    }
-
-    function redactPasswords(obj: any): unknown {
-      if (typeof obj !== "object" || obj === null) {
-        return obj; // base case
-      }
-      const regex = /password|secret/i;
-      const redactedObj: any = {};
-
-      for (const key in obj) {
-        if (regex.test(key)) {
-          redactedObj[key] = "=[REDACTED]=";
+        if (typeof this.configService.get(keyName) === "string") {
+          rawConfig[keyName] = this.configService.get(keyName).replace(/./g, "*");
         } else {
-          redactedObj[key] = redactPasswords(obj[key]);
+          rawConfig[keyName] = "**Redacted**";
         }
       }
-      return redactedObj;
     }
-    return redactPasswords(rawConfig);
+    return rawConfig;
   }
 }
 
