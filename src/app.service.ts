@@ -97,7 +97,7 @@ export class AppService implements OnApplicationBootstrap {
 
     for (const keyName in validatedConfig.keys) {
       const keyDetail = validatedConfig.keys[keyName];
-      if (keyDetail.flags["label"] === "public") {
+      if (Array.isArray(keyDetail["tags"]) && keyDetail["tags"].includes("public")) {
         rawConfig[keyName] = this.configService.get(keyName);
       } else {
         if (typeof this.configService.get(keyName) === "string") {
