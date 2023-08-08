@@ -34,3 +34,5 @@ lerna-debug.log*
 
 # Env
 .env*
+
+/dev/postgres-data
