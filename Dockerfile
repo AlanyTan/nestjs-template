@@ -1,6 +1,6 @@
-################
-# Run-time image
-################
+#############
+# Build image
+#############
 FROM node:18-alpine AS build
 
 RUN apk add --no-cache openssh-client git
