@@ -11,12 +11,13 @@ export class ExampleService {
   constructor(
     private readonly configService: ConfigService,
     private readonly logger: Logger,
-    private readonly httpService: HttpService,
+    @Inject("REQUEST_SCOPED_HTTP_SERVICE") private readonly httpService: HttpService,
     @Inject(OPENFEATURE_CLIENT) private openFeature: openfeature
   ) {}
 
   get newFeature1(): string {
-    return "the Value of New Feature 1";
+    const responseData = this.httpService.get("https://jsonplaceholder.typicode.com/todos/1");
+    return "the Value of New Feature 1" + responseData;
   }
 
   get newFeature2(): string {

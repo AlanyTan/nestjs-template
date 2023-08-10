@@ -1,5 +1,5 @@
-import { HttpModule } from "@nestjs/axios";
-import { Module, RequestMethod, Global, Logger } from "@nestjs/common";
+import { HttpModule, HttpService } from "@nestjs/axios";
+import { Module, RequestMethod, Global, Logger, Scope } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
@@ -105,6 +105,14 @@ import { AppService } from "./app.service";
     Logger,
     AppService,
     ForwardHeadersInterceptor,
+    {
+      provide: "REQUEST_SCOPED_HTTP_SERVICE",
+      inject: [HttpService],
+      scope: Scope.REQUEST,
+      useFactory: (http: HttpService): HttpService => {
+        return http;
+      },
+    },
     makeGaugeProvider({
       name: "serviceInfo",
       help: "Service info metric, labels are created dynamically to reflect running version",
@@ -122,6 +130,6 @@ import { AppService } from "./app.service";
       },
     },
   ],
-  exports: [OPENFEATURE_CLIENT],
+  exports: [OPENFEATURE_CLIENT, "REQUEST_SCOPED_HTTP_SERVICE"],
 })
 export class AppModule {}
