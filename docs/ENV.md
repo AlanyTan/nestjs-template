@@ -28,8 +28,8 @@ The data type of each environment variable and if they are required is listed he
 
 ### redactation of config values
 
-The /config end-point will report the config values from the environment variables listed here. However, unless you mark an environment variable as `.label("public)` its value will be redacted by default.
-So for non-sensitive information, we recommend you keep `.label("public)`, on the env var.
+The /config end-point will report the config values from the environment variables listed here. However, unless you mark an environment variable as `.tag("public)` its value will be redacted by default.
+So for non-sensitive information, we recommend you keep `.tag("public)`, on the env var.
 
 ### `src/config/db.ts`
 
