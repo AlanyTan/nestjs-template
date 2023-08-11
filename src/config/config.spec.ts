@@ -84,11 +84,6 @@ describe("Config Service check configurations", () => {
           ignoreEnvFile: true,
           expandVariables: true,
           validationSchema: Joi.object({
-            //add *ALL* configuration that your application need here, even if they are "optional" (other than DB config, which you should do in the db.ts)
-            //if ".required()" then application will abort starting if that configuration was not provided.
-            //if ".default(value)" then the value is used if the expected EnVar does not exist
-            //if neither ".required()" nor ".default(value)" then the EnVar is optional, and will be processed by the ConfigService.get() method
-            //if you do not list a configuration here, then it will not be available as part of the ConfigService to the application at all
             ENV_KEY: Joi.string().required(),
             OPENFEATURE_PROVIDER: Joi.string().required(),
             LINEPULSE_SVC_PORT: Joi.number().required(),

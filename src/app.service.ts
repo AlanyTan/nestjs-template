@@ -92,7 +92,7 @@ export class AppService implements OnApplicationBootstrap {
   }
 
   configuration(): unknown {
-    const rawConfig: any = {}; //this.configService.get("_PROCESS_ENV_VALIDATED");
+    const rawConfig: any = {};
     const validatedConfig = environmentVariableList.describe();
 
     for (const keyName in validatedConfig.keys) {
