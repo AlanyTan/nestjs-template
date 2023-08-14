@@ -19,7 +19,7 @@
     "test": "jest --testRegex \".*\\..*spec\\.ts\" --runInBand",
     "test:unit": "eval $(xargs < test/test.env) jest",
     "test:service": "eval $(xargs < test/test.env) jest --config ./test/svc/jest-svc.config.ts",
-    "test:ci": "eval $(xargs < test/test.env) JEST_JUNIT_OUTPUT_DIR=test-reports jest --config ./test/svc/jest-svc.config.ts --ci --reporters=default --reporters=jest-junit --coverageDirectory=test-reports/coverage",
+    "test:ci": "eval $(xargs < test/test.env) POSTGRES_HOST=postgres JEST_JUNIT_OUTPUT_DIR=test-reports jest --config ./test/svc/jest-svc.config.ts --ci --reporters=default --reporters=jest-junit --coverageDirectory=test-reports/coverage",
     "prepare": "husky install",
     "typeorm": "eval $(grep -vE '^[ \t]*#' .env | xargs -0) typeorm-ts-node-commonjs -d ormconfig.ts"
   },
