@@ -1,0 +1,4 @@
+/coverage
+/dev/postgres-data/
+/dist/
+/node_modules/
