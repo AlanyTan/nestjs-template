@@ -32,7 +32,7 @@ Configure application environment variables for service execution:
 
     cp test/test.env .env
 
-Running tests does not the previous `.env`. Tests run using the file `test/test.env`.
+Running tests does not require the previous `.env`. Tests use the file `test/test.env`.
 
 To run the service or the service tests, you need to set up the Docker dependencies:
 
@@ -50,12 +50,10 @@ Run the service:
 
 You can add `-- --watch` for watch mode. You can add `--  --debug` for debug mode; make sure VCS auto attach is set to `--inspect`.
 
-On first start, it is normal to get a few error: `The group coordinator is not available`.
-
 ### Test scripts
 
-- Unit: `npm test:unit` - Fast unit tests
-- Service: `npm run test:service` - Tests with depencency on Kafka container (work in progress)
+- Unit: `npm run test:unit` - Fast unit tests
+- Service: `npm run test:service` - Tests with which require Docker depencencies
 - All: `npm test` - All of the above
 
 You can add `-- --watchAll` for watch mode.

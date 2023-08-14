@@ -27,23 +27,12 @@
     "no-trailing-spaces": "warn",
     "@typescript-eslint/explicit-function-return-type": "warn",
     "@typescript-eslint/no-inferrable-types": "warn",
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      { "ignoreRestSiblings": true }
-    ],
+    "@typescript-eslint/no-unused-vars": ["warn", { "ignoreRestSiblings": true }],
     "import/no-unresolved": "off",
     "import/order": [
       "warn",
       {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index",
-          "object"
-        ],
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object"],
         "pathGroups": [
           {
             "pattern": "@nestjs/*",
@@ -58,5 +47,6 @@
         }
       }
     ]
-  }
+  },
+  "ignorePatterns": ["/coverage/", "/dev/postgres-data", "/dist", "/node_modules"]
 }

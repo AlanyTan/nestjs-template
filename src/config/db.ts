@@ -1,6 +1,6 @@
 import { registerAs } from "@nestjs/config";
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
-import * as Joi from "joi";
+import Joi from "joi";
 
 const envVarsSchema: Joi.ObjectSchema = Joi.object({
   DATABASE_TYPE: Joi.string().allow(
@@ -33,7 +33,6 @@ const envVarsSchema: Joi.ObjectSchema = Joi.object({
   POSTGRES_SYNCHRONIZE: Joi.boolean().default(false),
   POSTGRES_MIGRATIONS_RUN: Joi.boolean().default(true),
   POSTGRES_DROP_SCHEMA: Joi.boolean().default(false),
-  //SQLITE_DATABASE: Joi.string(),
 }).options({ stripUnknown: true });
 
 /***
@@ -47,7 +46,7 @@ const envVarsSchema: Joi.ObjectSchema = Joi.object({
  * mapEnVarToConfigKey("FOO_BAR", "foo") => "bar"
  * mapEnVarToConfigKey("FOO_BAR", /foo/) => "bar"
  */
-function ENVARToCamelCase(enVar: string, prefixToRemove?: string | RegExp): string {
+function EnvironmentVariableToCamelCase(enVar: string, prefixToRemove?: string | RegExp): string {
   // If the prefix should be removed, remove it
   if (prefixToRemove !== undefined) {
     enVar = enVar.replace(prefixToRemove, "");
@@ -57,9 +56,8 @@ function ENVARToCamelCase(enVar: string, prefixToRemove?: string | RegExp): stri
   const pattern = /[^a-zA-Z0-9]+([a-zA-Z0-9])/g;
 
   // Replace the pattern with the character, converting it to lower case
-  const resultStr = enVar.toLowerCase().replace(pattern, (match, p1) => p1.toUpperCase());
+  const resultStr = enVar.toLowerCase().replace(pattern, (_, p1) => p1.toUpperCase());
 
-  // Return the resulting string
   return resultStr;
 }
 
@@ -87,13 +85,12 @@ export default registerAs("database", (): TypeOrmModuleOptions => {
     const prefixRegExp = new RegExp(`^${typeOfDatabase.toUpperCase()}_`, "i");
     for (const configItem in validatedEnvConfig as Record<string, string>) {
       if (configItem.match(prefixRegExp)) {
-        const configKey = ENVARToCamelCase(configItem, prefixRegExp);
+        const configKey = EnvironmentVariableToCamelCase(configItem, prefixRegExp);
         typeOrmConfig[configKey] = validatedEnvConfig[configItem];
       }
     }
   }
-  const returnConfig = typeOrmConfig as TypeOrmModuleOptions;
-  return returnConfig;
+  return typeOrmConfig as TypeOrmModuleOptions;
 });
 
 // how to use dynamic table names for same table structure
