@@ -1,12 +1,12 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
-  "name": "Node.js & TypeScript",
+  "name": "NestJS Example",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:1-18-bookworm",
   // See: https://containers.dev/features
   "features": {
-      "docker-in-docker": {},
-      "github-cli": {}
+    "docker-in-docker": {},
+    "github-cli": {}
   },
   "portsAttributes": {
     "9080": {
@@ -18,13 +18,13 @@
     "vscode": {
       "settings": {
         "[json]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
         "[typescript]": {
-            "editor.defaultFormatter": "esbenp.prettier-vscode"
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
         }
-    },
-    "extensions": [
+      },
+      "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "github.vscode-pull-request-github",
