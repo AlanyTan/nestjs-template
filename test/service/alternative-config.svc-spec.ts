@@ -6,9 +6,20 @@ process.env.NEW_END_POINT = "false";
 process.env.NEW_FEATURE_FLAG = "false";
 process.env.ENV_KEY = "tst";
 
+import { INestApplication } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import request from "supertest";
-import { app } from "./setup-svc";
+import { closeApplication, getTestApplication } from "./service-common";
+
+let app: INestApplication;
+
+beforeAll(async () => {
+  app = await getTestApplication();
+});
+
+afterAll(async () => {
+  await closeApplication(app);
+});
 
 describe("AppController (svc) testing wrong settings.", () => {
   const servicePrefix = process.env.SERVICE_PREFIX ? "/" + process.env.SERVICE_PREFIX : "";

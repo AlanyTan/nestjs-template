@@ -56,7 +56,9 @@ You can add `-- --watch` for watch mode. You can add `--  --debug` for debug mod
 - Service: `npm run test:service` - Tests with which require Docker depencencies
 - All: `npm test` - All of the above
 
-You can add `-- --watchAll` for watch mode.
+You can add `-- --watchAll` for watch mode. You can disable coverage with `-- --collectCoverage=false`.
+
+To run the tests in Codespaces, you need a machine with 8G+ of RAM. The default machine with 4G RAM will intermittently result in error "terminated" when running Jest.
 
 ## Visual Studio Code launching
 

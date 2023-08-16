@@ -5,8 +5,19 @@ process.env.NEW_END_POINT = "true";
 process.env.NEW_FEATURE_FLAG = "true";
 process.env.ENV_KEY = "lcl";
 
+import { INestApplication } from "@nestjs/common";
 import request from "supertest";
-import { app } from "./setup-svc";
+import { closeApplication, getTestApplication } from "./service-common";
+
+let app: INestApplication;
+
+beforeAll(async () => {
+  app = await getTestApplication();
+});
+
+afterAll(async () => {
+  await closeApplication(app);
+});
 
 describe("Application Controllers (svc)", () => {
   const servicePrefix = process.env.SERVICE_PREFIX ? "/" + process.env.SERVICE_PREFIX : "";
