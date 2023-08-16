@@ -1,14 +1,13 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.202.5/containers/typescript-node
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
-  "name": "Nest.js Example with DevContainer",
-  //runArgs is used to set container name to USERNAME.programname
-  //the reason it shows ${localEnv:USERNAME} is so that it covers both Windwos and *nix systems as frontend VSCode
-  "runArgs": ["--init", "--network=host"],
-  "build": {
-    "dockerfile": "Dockerfile"
+  "name": "Node.js & TypeScript",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-18-bookworm",
+  // See: https://containers.dev/features
+  "features": {
+      "docker-in-docker": {},
+      "github-cli": {}
   },
-
   "portsAttributes": {
     "9080": {
       "label": "NestJS Example",
@@ -18,21 +17,21 @@
   "customizations": {
     "vscode": {
       "settings": {
+        "[json]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
         "[typescript]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
+            "editor.defaultFormatter": "esbenp.prettier-vscode"
         }
-      },
-      "extensions": [
+    },
+    "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "github.vscode-pull-request-github",
-        "mindaro-dev.file-downloader",
         "mtxr.sqltools",
         "mtxr.sqltools-driver-pg",
         "ms-azure-devops.azure-pipelines",
         "ms-azuretools.vscode-docker",
-        "redhat.vscode-yaml",
-        "timonwong.shellcheck",
         "GitHub.vscode-pull-request-github"
       ]
     },
@@ -46,26 +45,5 @@
       }
     }
   },
-
-  // Add the IDs of extensions you want installed when the container is created.
-
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  // "forwardPorts": [],
-
-  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-  "remoteEnv": {
-    "DOCKER_BUILDKIT": "1"
-  },
-  "remoteUser": "node",
-  "features": {
-    "docker-from-docker": {
-      "version": "latest",
-      "moby": true
-    },
-    "kubectl-helm-minikube": "latest",
-    "git": "latest",
-    "github-cli": "latest"
-  },
-
   "postCreateCommand": "npm install"
 }
