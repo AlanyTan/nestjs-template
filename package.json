@@ -12,16 +12,16 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "eval $(grep -vE '^[ \t]*#' .env | xargs -0) nest start",
+    "start": "eval $(awk '!/^#/{print \"export \" $0}' .env) && nest start",
     "start:prod": "node dist/src/main",
     "lint": "eslint {src,test}/**/*.ts --fix",
     "lint:ci": "eslint {src,test}/**/*.ts",
-    "test": "eval $(xargs < test/test.env) jest --runInBand",
-    "test:unit": "eval $(xargs < test/test.env) jest --testRegex \\\".*\\\\.spec\\\\.ts\\\" --runInBand",
-    "test:service": "eval $(xargs < test/test.env) jest --testRegex \\\".*\\.svc-spec\\.ts\\\" --runInBand",
-    "test:ci": "rimraf test-reports && eval $(xargs < test/test.env) POSTGRES_HOST=postgres JEST_JUNIT_OUTPUT_DIR=test-reports jest --ci --reporters=default --reporters=jest-junit --coverageDirectory=test-reports/coverage --runInBand",
+    "test": "eval $(awk '!/^#/{print \"export \" $0}' test/test.env) && jest --runInBand",
+    "test:unit": "eval $(awk '!/^#/{print \"export \" $0}' test/test.env) && jest --testRegex \".*\\.spec\\.ts\" --runInBand",
+    "test:service": "eval $(awk '!/^#/{print \"export \" $0}' test/test.env) && jest --testRegex \".*\\.svc-spec.ts\" --runInBand",
+    "test:ci": "rimraf test-reports && eval $(awk '!/^#/{print \"export \" $0}' test/test.env) && POSTGRES_HOST=postgres JEST_JUNIT_OUTPUT_DIR=test-reports jest --ci --reporters=default --reporters=jest-junit --coverageDirectory=test-reports/coverage --runInBand",
     "prepare": "husky install",
-    "typeorm": "eval $(grep -vE '^[ \t]*#' .env | xargs -0) typeorm-ts-node-commonjs -d ormconfig.ts"
+    "typeorm": "eval $(awk '!/^#/{print \"export \" $0}' .env) && typeorm-ts-node-commonjs -d ormconfig.ts"
   },
   "dependencies": {
     "@acertaanalyticssolutions/acerta-standardnpm": "github:acertaanalyticssolutions/acerta-standardnpm",
