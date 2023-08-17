@@ -55,6 +55,7 @@ You can add `-- --watch` for watch mode. You can add `--  --debug` for debug mod
 - Unit: `npm run test:unit` - Fast unit tests
 - Service: `npm run test:service` - Tests with which require Docker depencencies
 - All: `npm test` - All of the above
+- CI: `npm run test:ci` - Like all tests but with CI configuration. In local, you will need `127.0.0.1 postgres` in the `/etc/hosts` file; for example `sudo vi /etc/hosts`.
 
 You can add `-- --watch` for watch mode. You can disable coverage with `-- --collectCoverage=false`.
 

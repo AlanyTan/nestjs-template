@@ -4,6 +4,7 @@ const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: ["<rootDir>/src/**/*.(t|j)s"],
   coveragePathIgnorePatterns: ["main.ts", "src/migrations"],
+  coverageReporters: ["cobertura", "text"],
   moduleFileExtensions: ["js", "json", "ts"],
   moduleDirectories: ["./node_modules", "./src"],
   modulePathIgnorePatterns: ["<rootDir>/package.json", "dev/postgres-data"],
