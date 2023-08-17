@@ -6,10 +6,10 @@ const config: Config = {
   coveragePathIgnorePatterns: ["main.ts", "src/migrations"],
   moduleFileExtensions: ["js", "json", "ts"],
   moduleDirectories: ["./node_modules", "./src"],
-  modulePathIgnorePatterns: ["<rootDir>/package.json"],
-  rootDir: ".",
+  modulePathIgnorePatterns: ["<rootDir>/package.json", "dev/postgres-data"],
+  openHandlesTimeout: 10000,
   testEnvironment: "node",
-  testRegex: ".*\\.spec\\.ts$",
+  testRegex: ".*\\.(svc-)?spec\\.ts$",
   transform: {
     "^.+\\.(t)s$": "ts-jest",
   },
