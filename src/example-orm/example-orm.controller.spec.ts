@@ -5,7 +5,7 @@
 import { Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
-import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { Repository } from "typeorm";
 // eslint-disable-next-line import/order
@@ -24,8 +24,7 @@ jest.mock("@acertaanalyticssolutions/acerta-standardnpm/dist/openfeature", () =>
   };
 });
 
-// This Unit test has been disabled because of its dependency on Postgres
-describe.skip("ExampleController", () => {
+describe("ExampleController", () => {
   let controller: ExampleOrmController;
   let moduleRef: TestingModule;
 
@@ -37,13 +36,6 @@ describe.skip("ExampleController", () => {
           ignoreEnvVars: true,
           load: [config, dbConfig],
         }),
-        TypeOrmModule.forRootAsync({
-          imports: [ConfigModule.forRoot({ load: [dbConfig] })],
-          inject: [ConfigService],
-          useFactory: async (configService: ConfigService) => {
-            return configService.get("database") as TypeOrmModuleOptions;
-          },
-        }),
       ],
       controllers: [ExampleOrmController],
       providers: [
@@ -54,13 +46,18 @@ describe.skip("ExampleController", () => {
           provide: "user1Repository",
           useClass: Repository<User>,
         },
-
         {
           provide: OPENFEATURE_CLIENT,
           useFactory: async (): Promise<openfeature> => {
             return {
               client: { getBooleanValue: jest.fn().mockResolvedValue(true) },
             } as unknown as openfeature;
+          },
+        },
+        {
+          provide: TypeOrmModule,
+          useFactory: async (): Promise<TypeOrmModule> => {
+            return {} as unknown as TypeOrmModule;
           },
         },
       ],

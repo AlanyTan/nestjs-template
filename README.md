@@ -55,8 +55,11 @@ You can add `-- --watch` for watch mode. You can add `--  --debug` for debug mod
 - Unit: `npm run test:unit` - Fast unit tests
 - Service: `npm run test:service` - Tests with which require Docker depencencies
 - All: `npm test` - All of the above
+- CI: `npm run test:ci` - Like all tests but with CI configuration. In local, you will need `127.0.0.1 postgres` in the `/etc/hosts` file; for example `sudo vi /etc/hosts`.
 
-You can add `-- --watchAll` for watch mode.
+You can add `-- --watch` for watch mode. You can disable coverage with `-- --collectCoverage=false`.
+
+To run the tests in Codespaces, you need a machine with 8G+ of RAM. The default machine with 4G RAM will intermittently result in error "terminated" when running Jest.
 
 ## Visual Studio Code launching
 
@@ -81,8 +84,9 @@ You can debug the service or the tests using the provided VSC launch configurati
 
 Recommended extensions:
 
-- Mongo `mongodb.mongodb-vscode` to view and edit your collections.
+- Mongo `mongodb.mongodb-vscode` to view and edit your collections
 - Jest `Orta.vscode-jest` to run individual tests easily. Root configuration file allows for both unit and service tests execution but for service tests you need to add this VSC setting:
   - `"jest.jestCommandLine": "npm run test --"`
+- Git Blame `waderyan.gitblame` to track who made changes to the code
 - Azure Pipelines (`ms-azure-devops.azure-pipelines`) which also installs Azure Account extension to edit YAML files under `pipelines`
 - ShellCheck (`timonwong.shellcheck`) to edit `*.sh` files

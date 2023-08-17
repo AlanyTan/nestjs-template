@@ -5,55 +5,43 @@
       "name": "Launch via NPM",
       "request": "launch",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "start:debug"],
+      "runtimeArgs": ["run-script", "start"],
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
-      "envFile": "${workspaceFolder}/.env",
-      "cwd": "${workspaceRoot}",
-      "console": "integratedTerminal",
-      "protocol": "inspector"
+      "console": "integratedTerminal"
     },
     {
       "name": "Unit Test (test:unit)",
       "type": "node",
       "request": "launch",
-      "runtimeArgs": [
-        "--inspect-brk",
-        "${workspaceFolder}/node_modules/.bin/jest",
-        "--runInBand"
-      ],
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test:unit", "--", "--collectCoverage=false"],
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
-      "envFile": "${workspaceFolder}/.env",
-      "cwd": "${workspaceRoot}",
-      "console": "integratedTerminal",
-      "protocol": "inspector"
+      "console": "integratedTerminal"
     },
     {
       "name": "Auto Test on save (test:unit)",
       "type": "node",
       "request": "launch",
-      "runtimeArgs": ["run-script", "test:watch"],
       "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test:unit", "--", "--watch"],
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
-      "envFile": "${workspaceFolder}/.env",
       "cwd": "${workspaceRoot}",
-      "console": "integratedTerminal",
-      "protocol": "inspector"
+      "console": "integratedTerminal"
     },
     {
-      "name": "AppModule Test (test:service)",
+      "name": "Service Test (test:service)",
       "type": "node",
       "request": "launch",
-      "runtimeArgs": ["run-script", "test:service"],
       "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "test:service", "--", "--collectCoverage=false"],
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
       "envFile": "${workspaceFolder}/.env",
       "cwd": "${workspaceRoot}",
-      "console": "integratedTerminal",
-      "protocol": "inspector"
+      "console": "integratedTerminal"
     },
     {
       "name": "Docker Node.js Launch",

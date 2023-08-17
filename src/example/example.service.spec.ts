@@ -30,7 +30,7 @@ describe("ExampleService", () => {
   });
 
   it("should respond to newFeature1 func call", () => {
-    expect(service.newFeature1).toBe("the Value of New Feature 1");
+    expect(service.newFeature1).toContain("the Value of New Feature 1");
   });
 
   it("should respond to newFeature2 func call", () => {

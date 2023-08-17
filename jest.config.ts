@@ -1,21 +1,20 @@
 import type { Config } from "jest";
 
 const config: Config = {
-  rootDir: ".",
-  verbose: true,
-  moduleDirectories: ["./node_modules", "./src"],
-  transformIgnorePatterns: ["<rootDir>/node_modules/(?!axios)/"],
+  collectCoverage: true,
+  collectCoverageFrom: ["<rootDir>/src/**/*.(t|j)s"],
+  coveragePathIgnorePatterns: ["main.ts", "src/migrations"],
+  coverageReporters: ["cobertura", "text"],
   moduleFileExtensions: ["js", "json", "ts"],
-  testRegex: ".*\\.spec\\.ts$",
+  moduleDirectories: ["./node_modules", "./src"],
+  modulePathIgnorePatterns: ["<rootDir>/package.json", "dev/postgres-data"],
+  openHandlesTimeout: 10000,
+  testEnvironment: "node",
+  testRegex: ".*\\.(svc-)?spec\\.ts$",
   transform: {
     "^.+\\.(t)s$": "ts-jest",
   },
-  collectCoverage: true,
-  coverageReporters: ["cobertura", "lcov"],
-  collectCoverageFrom: ["<rootDir>/src/**/*.(t|j)s"],
-  coveragePathIgnorePatterns: ["<rootDir>/src/migrations", ".*spec.ts$", "main.ts"],
-  testEnvironment: "node",
-  modulePathIgnorePatterns: ["<rootDir>/package.json"],
+  verbose: true,
 };
 
 export default config;

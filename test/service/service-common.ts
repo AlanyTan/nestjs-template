@@ -4,20 +4,19 @@ import { AppModule } from "app.module";
 import { OPENFEATURE_CLIENT } from "config";
 import { mainConfig } from "main.config";
 
-export let app: INestApplication;
-
-beforeAll(async () => {
+export async function getTestApplication(): Promise<INestApplication> {
   const moduleFixture: TestingModule = await Test.createTestingModule({
     imports: [AppModule],
   }).compile();
 
-  app = moduleFixture.createNestApplication();
+  const app = moduleFixture.createNestApplication();
   mainConfig(app);
   app.useLogger(false);
   await app.init();
-});
+  return app;
+}
 
-afterAll(async () => {
+export async function closeApplication(app: INestApplication): Promise<void> {
   await (await app.resolve(OPENFEATURE_CLIENT)).close();
   await app.close();
-});
+}
