@@ -22,7 +22,7 @@ export class ExampleRedisController {
   constructor(
     private readonly redisService: RedisService,
     private readonly configService: ConfigService,
-    private readonly logger: Logger = new Logger(ExampleRedisController.name)
+    private readonly logger: Logger = new Logger(ExampleRedisController.name),
   ) {}
 
   @Get("ping")

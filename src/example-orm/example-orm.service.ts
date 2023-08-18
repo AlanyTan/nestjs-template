@@ -14,7 +14,7 @@ export class ExampleOrmService {
     // this is because we prefer to use the more eleborate EntitySchema + Interface approach to define Entity
     // instead of the Entity class approach
     @InjectRepository(UserEntitySchema)
-    private usersRepository: Repository<User>
+    private usersRepository: Repository<User>,
   ) {}
 
   async findAll(): Promise<User[]> {

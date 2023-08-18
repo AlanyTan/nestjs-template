@@ -49,7 +49,7 @@ describe("EnvGuard", () => {
       }
     }
     expect(evaluatedGuard.canActivate(new MockHttpContext() as unknown as ExecutionContext)).rejects.toThrow(
-      NotFoundException
+      NotFoundException,
     );
   });
 });

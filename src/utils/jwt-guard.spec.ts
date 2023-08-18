@@ -30,7 +30,7 @@ describe("JwtGuard", () => {
       new JwtGuard(new ConfigService()).canActivate({
         getClass: () => ({}),
         switchToHttp: () => ({ getRequest: (): unknown => "" }),
-      } as unknown as ExecutionContext)
+      } as unknown as ExecutionContext),
     ).rejects.toThrowError("Unauthorized");
   });
   test("should return 401 if jwt is invalid", async () => {
@@ -45,7 +45,7 @@ describe("JwtGuard", () => {
           switchToHttp: () => ({
             getRequest: (): unknown => ({ headers: {} }),
           }),
-        } as unknown as ExecutionContext)
+        } as unknown as ExecutionContext),
     ).rejects.toThrowError("Unauthorized, HttpException: Unauthorized");
   });
   it("should return true if jwt is valid", async () => {
@@ -57,7 +57,7 @@ describe("JwtGuard", () => {
       await newJwtGuard.canActivate({
         getClass: () => ({}),
         switchToHttp: () => ({ getRequest: (): unknown => ({ headers: {} }) }),
-      } as unknown as ExecutionContext)
+      } as unknown as ExecutionContext),
     ).toBe(true);
   });
 });

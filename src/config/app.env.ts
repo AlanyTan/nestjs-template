@@ -30,7 +30,7 @@ export const environmentVariableList = Joi.object({
     .default("[]")
     .tag("public")
     .description(
-      "Additional patterns to redact from logs, default is [] which the developer is responsible for redact log messages"
+      "Additional patterns to redact from logs, default is [] which the developer is responsible for redact log messages",
     ),
   SERVICE_PREFIX: Joi.string().tag("public").description("The prefix of the service, default is ''"),
   AAD_TENANT_ID: Joi.string()

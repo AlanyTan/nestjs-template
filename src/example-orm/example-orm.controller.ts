@@ -14,7 +14,7 @@ export class ExampleOrmController {
   constructor(
     private readonly exampleOrmService: ExampleOrmService,
     private readonly configService: ConfigService,
-    private readonly logger: Logger = new Logger(ExampleOrmController.name)
+    private readonly logger: Logger = new Logger(ExampleOrmController.name),
   ) {}
   @Get("find-all")
   @ApiOperation({ summary: "List all users" })

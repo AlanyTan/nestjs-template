@@ -22,7 +22,9 @@ describe("ExampleOrmService", () => {
     find: jest.fn(() => Promise.resolve(testUser as User)),
     save: jest.fn(() => Promise.resolve(savedTestUser)),
     findOneByOrFail: jest.fn((obj) =>
-      obj?.uuid == "dfb23ad9-9dd1-48f9-9dc7-4b634119dc5d" ? Promise.resolve(savedTestUser) : Promise.reject("not found")
+      obj?.uuid == "dfb23ad9-9dd1-48f9-9dc7-4b634119dc5d"
+        ? Promise.resolve(savedTestUser)
+        : Promise.reject("not found"),
     ),
     delete: jest.fn(() => Promise.resolve()),
   };
@@ -59,7 +61,7 @@ describe("ExampleOrmService", () => {
 
   it("findOne func call calls .findOneBy of the Repository and rejects the user is NOT found.", async () => {
     expect(async () => await exampleOrmService.findOne("aec73a9d-9dd1-48f9-9dc7-4b634119dc51")).rejects.toThrow(
-      "not found"
+      "not found",
     );
     expect(mockedRepo.findOneByOrFail).toBeCalledTimes(2);
   });

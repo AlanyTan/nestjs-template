@@ -12,7 +12,7 @@ export class RedisService implements OnModuleDestroy {
   public constructor(
     @Inject(REDIS_CLIENT) private readonly redis: RedisClient,
     private readonly configService: ConfigService,
-    private readonly logger: Logger = new Logger(RedisService.name)
+    private readonly logger: Logger = new Logger(RedisService.name),
   ) {}
 
   async ping(): Promise<string> {

@@ -12,7 +12,7 @@ export class ExampleService {
     private readonly configService: ConfigService,
     private readonly logger: Logger,
     @Inject("REQUEST_SCOPED_HTTP_SERVICE") private readonly httpService: HttpService,
-    @Inject(OPENFEATURE_CLIENT) private openFeature: openfeature
+    @Inject(OPENFEATURE_CLIENT) private openFeature: openfeature,
   ) {}
 
   get newFeature1(): string {
@@ -33,14 +33,14 @@ export class ExampleService {
         msg:
           "Calling getExample within the service with debug details: " + " and new feature flag is " + newFeatureFlag,
       },
-      "ExampleService:debug"
+      "ExampleService:debug",
     );
     this.logger.verbose(
       "Calling getExample within the service with trace including details: " +
         JSON.stringify(this.configService.get("logger")) +
         " and new feature flag is " +
         newFeatureFlag,
-      "ExampleService:trace"
+      "ExampleService:trace",
     );
 
     if (newFeatureFlag) {

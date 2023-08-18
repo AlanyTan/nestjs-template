@@ -81,7 +81,7 @@ describe("Application Controllers (svc)", () => {
       const foundUsers = JSON.parse(response.text);
       for (const savedUser of foundUsers) {
         const response2 = await request(app.getHttpServer()).get(
-          `${servicePrefix}/v2/example-orm/find_one/${savedUser?.uuid}`
+          `${servicePrefix}/v2/example-orm/find_one/${savedUser?.uuid}`,
         );
         expect(response2.status).toEqual(200);
         // const response3 = await request(app.getHttpServer()).delete(
