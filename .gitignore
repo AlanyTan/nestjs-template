@@ -10,7 +10,7 @@
 /test-reports
 
 # Env
-/.env
+.env*
 
 # Development
 /dev/postgres-data
