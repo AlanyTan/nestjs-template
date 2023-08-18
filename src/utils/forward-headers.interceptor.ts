@@ -40,9 +40,9 @@ export class ForwardHeadersInterceptor implements NestInterceptor {
             // //i.e. to reset the default headers after the request, if necessary (but request scoped axios service will automatically garbage collect after the request is finished)
             // delete this.httpService.axiosRef.defaults.headers.common["Authorization"];
             // delete this.httpService.axiosRef.defaults.headers.common["X-Correlation-ID"];
-          })
+          }),
         );
-      })
+      }),
     );
   }
 }

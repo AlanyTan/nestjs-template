@@ -23,7 +23,7 @@ export class AppController {
     private readonly appService: AppService,
     private readonly loggerService: PinoLogger,
     private readonly logger: Logger,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {}
 
   @Get("health")
@@ -63,7 +63,7 @@ export class AppController {
             },
           },
         },
-        503
+        503,
       );
     }
   }
@@ -71,7 +71,7 @@ export class AppController {
   async #isAadJwtValid(request: Request): Promise<boolean> {
     const aadJwtValidator = new AadJwtValidator(
       this.configService.get("AAD_TENANT_ID", ""),
-      this.configService.get("AAD_CLIENT_ID", "")
+      this.configService.get("AAD_CLIENT_ID", ""),
     );
     try {
       return await aadJwtValidator.validateAadJwt(request);

@@ -34,7 +34,7 @@ import { AppService } from "./app.service";
           level: configService.getOrThrow("LOG_LEVEL"),
           // by default, we redact the Authorization header and the cookie header, if you'd like to customize it, you can do so by editting the logg_config.yaml file.
           redact: ["req.headers.Authorization", "req.headers.authorization", "req.headers.cookie"].concat(
-            JSON.parse(configService.getOrThrow("LOGGING_REDACT_PATTERNS"))
+            JSON.parse(configService.getOrThrow("LOGGING_REDACT_PATTERNS")),
           ),
           transport: configService.get("PINO_PRETTY")
             ? {
@@ -124,7 +124,7 @@ import { AppService } from "./app.service";
       useFactory: async (configService: ConfigService, logger: Logger): Promise<openfeature> => {
         const client = await new openfeature(
           configService.getOrThrow("OPENFEATURE_PROVIDER"),
-          new AcertaLogger(logger)
+          new AcertaLogger(logger),
         ).initialized();
         return client as openfeature;
       },

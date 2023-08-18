@@ -33,15 +33,15 @@ describe("ConfigSerivce should error out if required Environments are missing", 
             LOGGING_REDACT_PATTERNS: Joi.string().default("[]"),
             SERVICE_PREFIX: Joi.string().default(""),
           }),
-        })
+        }),
       ).rejects.toThrowError(
-        'Config validation error: "ENV_KEY" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required'
+        'Config validation error: "ENV_KEY" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required',
       );
     } catch (err) {
       expect(err).toMatchObject(
         new Error(
-          'Config validation error: "ENV_KEY" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required'
-        )
+          'Config validation error: "ENV_KEY" is required. "OPENFEATURE_PROVIDER" is required. "LINEPULSE_SVC_PORT" is required. "SVC_1_ENDPOINT" is required',
+        ),
       );
     }
   });

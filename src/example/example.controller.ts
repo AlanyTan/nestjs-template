@@ -16,7 +16,7 @@ export class ExampleController {
   constructor(
     private readonly exampleService: ExampleService,
     private readonly configService: ConfigService,
-    private readonly logger: Logger = new Logger(ExampleController.name)
+    private readonly logger: Logger = new Logger(ExampleController.name),
   ) {}
   @Get("get-request")
   @ApiOperation({ summary: "A feature controlled example message." })
@@ -196,7 +196,7 @@ class EnvDto {
 export class ExampleDevOnlyController {
   constructor(
     private readonly configService: ConfigService,
-    private readonly logger: Logger = new Logger(ExampleController.name)
+    private readonly logger: Logger = new Logger(ExampleController.name),
   ) {}
   @Get("get-dev-only")
   @ApiOperation({ summary: "A env-guard controlled example message." })

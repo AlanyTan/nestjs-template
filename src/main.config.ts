@@ -16,7 +16,7 @@ export function mainConfig(app: INestApplication): {
   const servicePrefix = configService.get("SERVICE_PREFIX");
   if (servicePrefix) {
     app.setGlobalPrefix(
-      servicePrefix
+      servicePrefix,
       // , {
       //   exclude: [
       //     { path: "health", method: RequestMethod.GET },
@@ -52,7 +52,7 @@ function configureSwagger(app: INestApplication, configService: ConfigService<un
         description: "Bearer JWT token",
         in: "header",
       },
-      "JWT-auth"
+      "JWT-auth",
     )
     .build();
   const document = SwaggerModule.createDocument(app, config);

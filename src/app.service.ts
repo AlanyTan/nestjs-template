@@ -20,7 +20,7 @@ export class AppService implements OnApplicationBootstrap {
     private readonly configService: ConfigService,
     private readonly typeOrmHealthIndicator: TypeOrmHealthIndicator,
     private readonly httpHealthIndicator: HttpHealthIndicator,
-    @InjectMetric("serviceInfo") public gauge: Gauge<string>
+    @InjectMetric("serviceInfo") public gauge: Gauge<string>,
   ) {}
 
   async onApplicationBootstrap(): Promise<void> {
@@ -37,7 +37,7 @@ export class AppService implements OnApplicationBootstrap {
         commit_hash: commitInfo.commitHash,
         commit_message: commitInfo.commitMessage,
       },
-      1
+      1,
     );
     const buildInfo = this.configService.get("buildInfo");
     this.gauge.set(
@@ -46,7 +46,7 @@ export class AppService implements OnApplicationBootstrap {
         build_number: buildInfo.buildNumber,
         build_time: buildInfo.buildTime,
       },
-      1
+      1,
     );
     this.initialize();
   }
@@ -115,7 +115,7 @@ export class AppService implements OnApplicationBootstrap {
 export class AppCloseService implements BeforeApplicationShutdown {
   constructor(
     private readonly logger: Logger = new Logger(AppCloseService.name),
-    @Inject(OPENFEATURE_CLIENT) private openFeature: openfeature
+    @Inject(OPENFEATURE_CLIENT) private openFeature: openfeature,
   ) {}
   beforeApplicationShutdown(_signal: string): void {
     this.openFeature.close();
