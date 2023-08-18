@@ -12,5 +12,8 @@
 # Env
 .env*
 
+# Logs
+*.log
+
 # Development
 /dev/postgres-data
