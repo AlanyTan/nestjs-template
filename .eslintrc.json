@@ -48,5 +48,5 @@
       }
     ]
   },
-  "ignorePatterns": ["/coverage/", "/dev/postgres-data", "/dist", "/node_modules"]
+  "ignorePatterns": ["/dev/postgres-data", "/dist", "/node_modules", "/test/coverage/"]
 }
