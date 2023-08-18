@@ -12,8 +12,6 @@ The provided template service implementation and its tests are runable. The next
 
 # Development setup
 
-WORK IN PROGRESS: the following development setup instructions where recently introduced and are being finalized.
-
 This setup documentation has been tested in GitHub Codespaces; both the web or desktop mode can be used. Using the dev container in directory `.devcontainer` is the recommended approach for doing development at Acerta because it removes discrepencies which are common when setting up on a local computer.
 
 Launching development codespaces can be done in GitHub under the menu _<> Code_ (not _Use this template_).
@@ -22,7 +20,9 @@ Launching development codespaces can be done in GitHub under the menu _<> Code_ 
 
 NPM install is automatically ran as part of the dev container creation but when updating or pulling changes to dependencies, you will need to run:
 
-    npm install
+```bash
+npm install
+```
 
 ## Service dependencies
 
@@ -30,13 +30,17 @@ See [docs/ENV.md](./docs/ENV.md) for environment variable configuration informat
 
 Configure application environment variables for service execution:
 
-    cp test/test.env .env
+```bash
+cp test/test.env .env
+```
 
 Running tests does not require the previous `.env`. Tests use the file `test/test.env`.
 
 To run the service or the service tests, you need to set up the Docker dependencies:
 
-    ./local-db-setup.sh
+```bash
+./local-db-setup.sh
+```
 
 You will need to rerun this script when your environment is restarted.
 
@@ -46,7 +50,9 @@ You will need to rerun this script when your environment is restarted.
 
 Run the service:
 
-    npm start
+```bash
+npm start
+```
 
 You can add `-- --watch` for watch mode. You can add `--  --debug` for debug mode; make sure VCS auto attach is set to `--inspect`.
 
@@ -69,8 +75,10 @@ You can also run the service and the tests using the VS Code launch configuratio
 
 Run TypeScript formatter and linter before committing:
 
+```bash
     npm run format
     npm run lint
+```
 
 You can also format and lint in Visual Studio Code. The Husky pre-commit hook will enforce both formatting and litting.
 
@@ -90,3 +98,11 @@ Recommended extensions:
 - Git Blame `waderyan.gitblame` to track who made changes to the code
 - Azure Pipelines (`ms-azure-devops.azure-pipelines`) which also installs Azure Account extension to edit YAML files under `pipelines`
 - ShellCheck (`timonwong.shellcheck`) to edit `*.sh` files
+
+# Build
+
+# Docker build
+
+```bash
+docker build -t nestjs-example .
+```
