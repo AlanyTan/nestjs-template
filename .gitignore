@@ -1,7 +1,6 @@
 # Build and depencies
 /dist
 /node_modules
-/.build-info.json
 
 # OS
 .DS_Store
