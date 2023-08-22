@@ -10,8 +10,6 @@ export function mainConfig(app: INestApplication): {
 } {
   const configService = app.get(ConfigService);
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
-
-  //app.useGlobalInterceptors( new LoggerErrorInterceptor());
   app.useGlobalPipes(new ValidationPipe());
   const servicePrefix = configService.get("SERVICE_PREFIX");
   if (servicePrefix) {
@@ -40,9 +38,9 @@ export function mainConfig(app: INestApplication): {
 
 function configureSwagger(app: INestApplication, configService: ConfigService<unknown, boolean>): void {
   const config = new DocumentBuilder()
-    .setTitle(configService.get("title", "No Title"))
-    .setDescription(configService.get("description", "No description"))
-    .setVersion(configService.get("version", "0.0.0"))
+    .setTitle(configService.getOrThrow("title"))
+    .setDescription(configService.getOrThrow("description"))
+    .setVersion(configService.getOrThrow("version"))
     .addBearerAuth(
       {
         type: "http",

@@ -10,7 +10,7 @@ async function bootstrap(): Promise<void> {
   app.useLogger(logger);
   const { port } = mainConfig(app);
 
-  await app.listen(port, "0.0.0.0");
+  await app.listen(port);
   logger.log(`Service is running at URL: ${await app.getUrl()}`);
 }
 
