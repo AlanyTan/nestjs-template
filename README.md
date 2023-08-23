@@ -101,8 +101,15 @@ Recommended extensions:
 
 # Build
 
-# Docker build
+## Docker build
+
+## SSH setup
+
+To build the Docker container, you will need a running SSH agent with a valid SSH key. Codespaces have no SSH configured by default.
+See [docs/SSH.md](./docs/SSH.md).
+
+## Docker build invocation
 
 ```bash
-docker build -t nestjs-example .
+docker build -t nestjs-example:latest . --ssh default
 ```
