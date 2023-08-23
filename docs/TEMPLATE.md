@@ -109,7 +109,7 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 RUN --mount=type=ssh npm ci
 ```
 
-Then, you can use `DOCKER_BUILDKIT=1 docker build . -t nestjs.example:latest --ssh default` to build docker image on your PC (or VM).
+Then, you can use `docker build . -t nestjs.example:latest --ssh default` to build docker image on your PC (or VM). Ensure Docker version 23+.
 You should be able to run your docker image on your PC as well, although you might need to fiddle with your docker network settings to enable connectivity between your postgres docker and your service's docker.
 
 ##### CI/CD deploying
@@ -211,7 +211,7 @@ You can find sample code how to use this in app.controller.ts where `  @UseGuard
 ```typescript
 const aadJwtValidator = new AadJwtValidator(
   this.configService.getOrThrow("AAD_TENANT_ID"),
-  this.configService.getOrThrow("AAD_CLIENT_ID")
+  this.configService.getOrThrow("AAD_CLIENT_ID"),
 );
 const jwtIsValid = await aadJwtValidator.validateAadJwt(request, ["AZR-Stg-AdAp-Scop-FTog"]);
 ```
@@ -462,29 +462,6 @@ This repo is designed to work inside a VSCode devcontainer. To make everything r
 ### the .devcontainer/devcontainer.json file
 
 This is the key devcontainter config. In this file we need to make sure the devcontainer uses host network, and docker-from-docker devcontainer feature. These will allow our code to build runtime container using the same remote host and run the runtime container along the devcontainer. Having the devcontainer using the host network will allow us to leverage VSCode's auto port forwarding capability and visit the runtime container as if it runs directly inside the dev environment.
-Here is the runArgs section that uses host network:
-
-```
-"runArgs": [
-    "--init",
-    "--network=host",
-    "--name ${localEnv:USER}${localEnv:USERNAME}.Nestjs.Example"
-  ],
-```
-
-Here is the features section uses docker-from-docker:
-
-```
-  "features": {
-    "docker-from-docker": {
-      "version": "latest",
-      "moby": true
-    },
-    "kubectl-helm-minikube": "latest",
-    "git": "latest",
-    "github-cli": "latest"
-  },
-```
 
 ### the main.ts file
 
