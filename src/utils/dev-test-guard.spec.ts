@@ -1,6 +1,6 @@
 import { ExecutionContext, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { EnvGuard } from "./env-guard";
+import { DevTestGuard } from "./dev-test-guard";
 
 jest.mock("@nestjs/config", () => {
   return {
@@ -23,21 +23,21 @@ jest.mock("@nestjs/config", () => {
   };
 });
 
-describe("EnvGuard", () => {
+describe("DevTestGuard", () => {
   it("should be defined", () => {
-    expect(EnvGuard).toBeDefined();
+    expect(DevTestGuard).toBeDefined();
   });
   it("should return CanActivate()", () => {
-    expect(EnvGuard).toBeInstanceOf(Function);
+    expect(DevTestGuard).toBeInstanceOf(Function);
   });
   const configService = new ConfigService();
   it("should return true in local IDE", async () => {
-    const evaluatedGuardClass = EnvGuard;
+    const evaluatedGuardClass = DevTestGuard;
     const evaluatedGuard = new evaluatedGuardClass(configService);
     expect(await evaluatedGuard.canActivate({} as ExecutionContext)).toEqual(true);
   });
   it("should return false when the ENV_KEY is 'prd'", async () => {
-    const evaluatedGuardClass = EnvGuard;
+    const evaluatedGuardClass = DevTestGuard;
     const evaluatedGuard = new evaluatedGuardClass(configService);
     class MockHttpContext {
       switchToHttp(): Record<string, unknown> {

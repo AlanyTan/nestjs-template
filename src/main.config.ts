@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 //we use pino logger here.  once it's set up here and in app.module.ts, we can use it in any other file by using the standard nestjs Logger
 import { LoggerErrorInterceptor } from "nestjs-pino";
+import { isDevTest } from "utils";
 
 export function mainConfig(app: INestApplication): {
   port: number;
@@ -29,7 +30,7 @@ export function mainConfig(app: INestApplication): {
   }
   app.enableShutdownHooks();
   app.enableVersioning();
-  if (configService.get("SWAGGER_ON")) {
+  if (isDevTest(configService)) {
     configureSwagger(app, configService);
   }
 

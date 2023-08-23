@@ -2,7 +2,7 @@ import { Controller, Get, Version, Logger, UseGuards, Headers, Res } from "@nest
 import { ConfigService } from "@nestjs/config";
 import { ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
-import { OpenFeatureGuard, EnvGuard } from "utils";
+import { OpenFeatureGuard, DevTestGuard } from "utils";
 import { ExampleService } from "./example.service";
 
 @ApiTags("example")
@@ -191,7 +191,7 @@ class EnvDto {
   env: Env;
 }
 @ApiTags("example-dev-only")
-@UseGuards(EnvGuard)
+@UseGuards(DevTestGuard)
 @Controller({ path: "example-dev-only", version: "1" })
 export class ExampleDevOnlyController {
   constructor(

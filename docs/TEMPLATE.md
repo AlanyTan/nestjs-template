@@ -211,7 +211,7 @@ You can find sample code how to use this in app.controller.ts where `  @UseGuard
 ```typescript
 const aadJwtValidator = new AadJwtValidator(
   this.configService.getOrThrow("AAD_TENANT_ID"),
-  this.configService.getOrThrow("AAD_CLIENT_ID")
+  this.configService.getOrThrow("AAD_CLIENT_ID"),
 );
 const jwtIsValid = await aadJwtValidator.validateAadJwt(request, ["AZR-Stg-AdAp-Scop-FTog"]);
 ```
@@ -349,8 +349,7 @@ The /config endpoint is JWT protected, if you don't have a valid AAD JWT that gi
 
 ## Swagger
 
-Swagger is used for automatically document APIs following OpenAPI standards.
-However, Swagger is DISABLED if Environment Variable SWAGGER_ON=false (which is the default value). This should be the default behavior for all services running in production unless otherwise required.
+Swagger is used for automatically document APIs following OpenAPI standards. Swagger is only enabled in test environments: `lcl`, `dev``, and `qas`.
 
 Please note that Swagger uses the name, description, and version info you update in your package.json
 
