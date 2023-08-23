@@ -6,7 +6,7 @@ jest.mock("@nestjs/config", () => {
   return {
     ConfigService: jest.fn().mockImplementation(() => {
       return {
-        get: jest
+        getOrThrow: jest
           .fn()
           .mockImplementationOnce((input: string) => {
             if (input == "ENV_KEY") {
