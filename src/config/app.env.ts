@@ -20,10 +20,6 @@ export const environmentVariableList = Joi.object({
     .default(true)
     .tag("public")
     .description("Whether or not we shall use Pino Pretty, default is true"),
-  SWAGGER_ON: Joi.boolean()
-    .default(false)
-    .tag("public")
-    .description("Whether or not SWAGGER should be turned on, default is false"),
   DATABASE_TYPE: Joi.string().default("none").tag("public").description("The type of database to use, default is none"),
   LOG_LEVEL: Joi.string().default("info").tag("public").description("The log level at startup, default is info"),
   LOGGING_REDACT_PATTERNS: Joi.string()
