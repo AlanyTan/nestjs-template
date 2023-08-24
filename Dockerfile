@@ -1,7 +1,7 @@
 #############
 # Build image
 #############
-FROM node:18-bookworm AS build
+FROM node:18-alpine AS build
 
 RUN apk add --no-cache openssh-client git
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan -H github.com >> ~/.ssh/known_hosts
@@ -23,7 +23,7 @@ USER node
 ################
 # Run-time image
 ################
-FROM node:18-bookworm
+FROM node:18-alpine
 ENV NODE_ENV=production
 
 #RUN apk update && apk add git openssh-client
