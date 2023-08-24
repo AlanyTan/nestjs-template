@@ -17,9 +17,9 @@ export const environmentVariableList = Joi.object({
     .tag("public")
     .description("The endpoint of the first service that this service will call (i.e. https://svc1:9080)"),
   PINO_PRETTY: Joi.boolean()
-    .default(true)
+    .default(false)
     .tag("public")
-    .description("Whether or not we shall use Pino Pretty, default is true"),
+    .description("Whether or not we shall use Pino Pretty, default is false"),
   DATABASE_TYPE: Joi.string().default("none").tag("public").description("The type of database to use, default is none"),
   LOG_LEVEL: Joi.string().default("info").tag("public").description("The log level at startup, default is info"),
   LOGGING_REDACT_PATTERNS: Joi.string()

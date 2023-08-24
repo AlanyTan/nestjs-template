@@ -38,7 +38,6 @@ import { AppService } from "./app.service";
           ),
           transport: configService.get("PINO_PRETTY")
             ? {
-                // if this is non production env, then use pino-pretty to format the log
                 target: "pino-pretty",
                 options: {
                   colorize: configService.get("ENV_KEY") === "lcl",
@@ -48,7 +47,6 @@ import { AppService } from "./app.service";
                 },
               }
             : {
-                // in production keep json format
                 target: "pino/file",
               },
           serializers:
