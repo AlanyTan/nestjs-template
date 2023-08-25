@@ -56,7 +56,7 @@ function configureSwagger(app: INestApplication, configService: ConfigService<un
     .build();
   const document = SwaggerModule.createDocument(app, config);
   const path = `${configService.get("SERVICE_PREFIX", "")}/docs`;
-  app.get(Logger).log(`Swagger configured - route: /${path}`);
+  app.get(Logger).log(`Swagger configured - route: ${path}`);
   SwaggerModule.setup(path, app, document);
 }
 
