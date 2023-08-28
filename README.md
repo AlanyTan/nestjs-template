@@ -113,3 +113,7 @@ See [docs/SSH.md](./docs/SSH.md).
 ```bash
 docker build -t nestjs-example:latest . --ssh default
 ```
+
+# Services
+
+Swagger can be accessed at path `/` or `/docs`.
