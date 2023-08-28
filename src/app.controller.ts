@@ -1,10 +1,11 @@
-import { Controller, Get, Req, Request, HttpException, UseGuards, Query, Logger } from "@nestjs/common";
+import { Controller, Get, Req, Request, HttpException, UseGuards, Query, Logger, Redirect } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";
 import { AadJwtValidator } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { PinoLogger } from "nestjs-pino";
 import { AppService } from "app.service";
+import { DevTestGuard } from "utils";
 import { JwtGuard } from "utils/jwt-guard";
 
 enum LogLevels {
@@ -121,5 +122,13 @@ export class AppController {
     } else {
       return "loggerService is undefined";
     }
+  }
+
+  @UseGuards(DevTestGuard)
+  @Get()
+  @Redirect("/docs", 302)
+  @ApiExcludeEndpoint()
+  swaggerRedirect(): void {
+    return;
   }
 }
