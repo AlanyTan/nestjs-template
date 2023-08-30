@@ -44,6 +44,8 @@ To run the service or the service tests, you need to set up the Docker dependenc
 
 You will need to rerun this script when your environment is restarted.
 
+Postgres data is persisted in the `~/.postgres-data` directory.
+
 ## NPM scripts
 
 ### Service scripts

@@ -8,7 +8,7 @@ const config: Config = {
   coverageReporters: ["cobertura", "text"],
   moduleFileExtensions: ["js", "json", "ts"],
   moduleDirectories: ["./node_modules", "./src"],
-  modulePathIgnorePatterns: ["<rootDir>/package.json", "dev/postgres-data"],
+  modulePathIgnorePatterns: ["<rootDir>/package.json"],
   openHandlesTimeout: 10000,
   testEnvironment: "node",
   testRegex: ".*\\.(svc-)?spec\\.ts$",

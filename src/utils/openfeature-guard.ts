@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { CanActivate, ExecutionContext, Inject, Injectable, mixin, NotFoundException, Type } from "@nestjs/common";
 import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { OPENFEATURE_CLIENT } from "../config";

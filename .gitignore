@@ -15,6 +15,3 @@
 
 # Logs
 *.log
-
-# Development
-/dev/postgres-data

@@ -11,9 +11,9 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "lint": "eslint {src,test}/**/*.ts --fix",
-    "lint:ci": "eslint {src,test}/**/*.ts",
+    "format": "prettier --write \"**/*.{js,json,md,ts,yaml,yml}\"",
+    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" \"*.ts\" --fix",
+    "lint:ci": "eslint \"src/**/*.ts\" \"test/**/*.ts\" \"*.ts\"",
     "test": "eval $(awk '!/^#/{print \"export \" $0}' test/test.env) && jest --runInBand",
     "test:unit": "eval $(awk '!/^#/{print \"export \" $0}' test/test.env) && jest --testRegex \".*\\.spec\\.ts\" --runInBand",
     "test:service": "eval $(awk '!/^#/{print \"export \" $0}' test/test.env) && jest --testRegex \".*\\.svc-spec.ts\" --runInBand",
@@ -73,7 +73,7 @@
     "typescript": "^4.3.5"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,html,css,scss,less,json,yaml,md}": "prettier --write",
-    "*.{ts,tsx,js,jsx}": "eslint --max-warnings 0"
+    "*.{js,json,md,ts,yaml,yml}": "prettier --write",
+    "*.{ts,js}": "eslint --max-warnings 0"
   }
 }
