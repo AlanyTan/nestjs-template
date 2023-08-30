@@ -11,7 +11,5 @@ const datasource = new DataSource({
 } as DataSourceOptions);
 
 export default (async (): Promise<DataSource> => {
-  return getDataSourceName(dbConfig() as DataSourceOptions) === "default"
-    ? datasource
-    : await datasource.initialize();
+  return getDataSourceName(dbConfig() as DataSourceOptions) === "default" ? datasource : await datasource.initialize();
 })();

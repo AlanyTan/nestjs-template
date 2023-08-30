@@ -11,7 +11,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"**/*.{js,json,md,ts,yaml,yml}\"",
     "lint": "eslint {src,test}/**/*.ts --fix",
     "lint:ci": "eslint {src,test}/**/*.ts",
     "test": "eval $(awk '!/^#/{print \"export \" $0}' test/test.env) && jest --runInBand",
@@ -73,7 +73,7 @@
     "typescript": "^4.3.5"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,html,css,scss,less,json,yaml,md}": "prettier --write",
-    "*.{ts,tsx,js,jsx}": "eslint --max-warnings 0"
+    "*.{js,json,md,ts,yaml,yml}": "prettier --write",
+    "*.{ts,js}": "eslint --max-warnings 0"
   }
 }
