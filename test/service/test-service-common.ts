@@ -16,7 +16,7 @@ export async function getTestApplication(): Promise<INestApplication> {
   return app;
 }
 
-export async function closeApplication(app: INestApplication): Promise<void> {
+export async function closeTestApplication(app: INestApplication): Promise<void> {
   await (await app.resolve(OPENFEATURE_CLIENT)).close();
   await app.close();
 }

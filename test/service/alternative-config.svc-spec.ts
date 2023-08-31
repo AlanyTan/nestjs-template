@@ -9,7 +9,7 @@ process.env.ENV_KEY = "tst";
 import { INestApplication } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import request from "supertest";
-import { closeApplication, getTestApplication } from "./service-common";
+import { closeTestApplication, getTestApplication } from "./test-service-common";
 
 let app: INestApplication;
 
@@ -18,7 +18,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await closeApplication(app);
+  await closeTestApplication(app);
 });
 
 describe("AppController (svc) testing wrong settings.", () => {

@@ -7,7 +7,7 @@ process.env.ENV_KEY = "lcl";
 
 import { INestApplication } from "@nestjs/common";
 import request from "supertest";
-import { closeApplication, getTestApplication } from "./service-common";
+import { closeTestApplication, getTestApplication } from "./test-service-common";
 
 let app: INestApplication;
 
@@ -16,7 +16,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await closeApplication(app);
+  await closeTestApplication(app);
 });
 
 describe("Application Controllers (svc)", () => {

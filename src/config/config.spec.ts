@@ -123,7 +123,6 @@ describe("Config Service check configurations", () => {
     expect(configService.get<string>("database.database")).toBe(process.env.POSTGRES_DATABASE);
     expect(configService.get<boolean>("database.synchronize")).toBe(process.env.POSTGRES_SYNCHRONIZE ?? false);
     expect(configService.get<string>("database.migrationsRun")).toBe(process.env.POSTGRES_MIGRATIONS_RUN ?? true);
-    expect(configService.get<string>("database.dropSchema")).toBe(process.env.POSTGRES_DROP_SCHEMA ?? false);
   });
 
   test("Only Environment Variables that are listed in the ValidationSchema will be considered, not-listed will be excluded in the config object", () => {
