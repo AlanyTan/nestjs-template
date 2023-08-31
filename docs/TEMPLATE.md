@@ -379,7 +379,7 @@ The convention is if your `DATABASE_TYPE=postgres` then all POSTGRES related con
 - all POSTGRES related config should be listed in the src/config/db.ts file, the Joi.ObjectSchema variable.
 - - this is also where you can check all the required DATABASE configuration that you should set in the .env files
 - all POSTGRES related configuration environement variables are prefixed with "POSTGRES\_" and mapped to Postgress configuration
-- - all POSTGRES\_ prefix of the environment varuables will be removed, and variable will be converted to camelCase. i.e. POSTGRES_DROP_SCHEMA Environment Variable will be mapped to dropSchema option of the postgres option.
+- - all POSTGRES\_ prefix of the environment varuables will be removed, and variable will be converted to camelCase. i.e.
 - you are able to add other DATABASE options that are not controled by Environment Variables in the `registerAs` section of the config/db.ts.
 - - for example entities and migrations files are stored per our choice, and will not be differ at run time, so they are added in config/db.ts file directly.
 

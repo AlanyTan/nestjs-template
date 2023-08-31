@@ -32,7 +32,6 @@ const envVarsSchema: Joi.ObjectSchema = Joi.object({
   POSTGRES_DATABASE: Joi.string().required(),
   POSTGRES_SYNCHRONIZE: Joi.boolean().default(false),
   POSTGRES_MIGRATIONS_RUN: Joi.boolean().default(true),
-  POSTGRES_DROP_SCHEMA: Joi.boolean().default(false),
 }).options({ stripUnknown: true });
 
 /***
