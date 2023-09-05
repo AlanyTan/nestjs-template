@@ -44,7 +44,11 @@ To run the service or the service tests, you need to set up the Docker dependenc
 
 You will need to rerun this script when your environment is restarted.
 
-Postgres data is persisted in the `~/.postgres-data` directory.
+Postgres data is persisted in the `~/.postgres-data` directory. If you need to reset it run:
+
+```bash
+sudo rm -fr ~/.postgres-data/
+```
 
 ## NPM scripts
 
@@ -61,7 +65,7 @@ You can add `-- --watch` for watch mode. You can add `--  --debug` for debug mod
 ### Test scripts
 
 - Unit: `npm run test:unit` - Fast unit tests
-- Service: `npm run test:service` - Tests with which require Docker depencencies
+- Service: `npm run test:service` - Tests with which require Docker depencencies. Drops the Postgres schema before running.
 - All: `npm test` - All of the above
 - CI: `npm run test:ci` - Like all tests but with CI configuration. In local, you will need `echo -e "127.0.0.1\tpostgres" | sudo sh -c 'cat >> /etc/hosts'`.
 
