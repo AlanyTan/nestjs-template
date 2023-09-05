@@ -31,8 +31,7 @@
         "mtxr.sqltools",
         "mtxr.sqltools-driver-pg",
         "ms-azure-devops.azure-pipelines",
-        "ms-azuretools.vscode-docker",
-        "GitHub.vscode-pull-request-github"
+        "ms-azuretools.vscode-docker"
       ]
     },
     "codespaces": {
