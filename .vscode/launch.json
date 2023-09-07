@@ -2,45 +2,46 @@
   "configurations": [
     {
       "type": "node",
-      "name": "Launch via NPM",
+      "name": "Launch (NPM)",
       "request": "launch",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "start"],
+      "runtimeArgs": ["run-script", "start:vsc"],
+      "envFile": "${workspaceFolder}/.env",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
       "console": "integratedTerminal"
     },
     {
-      "name": "Unit Test (test:unit)",
+      "name": "Unit Test (NPM)",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "test:unit", "--", "--collectCoverage=false"],
+      "runtimeArgs": ["run-script", "test:unit:vsc", "--", "--collectCoverage=false"],
+      "envFile": "${workspaceFolder}/.env",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
       "console": "integratedTerminal"
     },
     {
-      "name": "Auto Test on save (test:unit)",
+      "name": "Unit Test Watch (NPM)",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "test:unit", "--", "--watch"],
+      "envFile": "${workspaceFolder}/.env",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
-      "cwd": "${workspaceRoot}",
       "console": "integratedTerminal"
     },
     {
-      "name": "Service Test (test:service)",
+      "name": "Service Test (NPM)",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "test:service", "--", "--collectCoverage=false"],
+      "envFile": "${workspaceFolder}/.env",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,
-      "envFile": "${workspaceFolder}/.env",
-      "cwd": "${workspaceRoot}",
       "console": "integratedTerminal"
     },
     {

@@ -73,10 +73,6 @@ You can add `-- --watch` for watch mode. You can disable coverage with `-- --col
 
 To run the tests in Codespaces, you need a machine with 8G+ of RAM. The default machine with 4G RAM will intermittently result in error "terminated" when running Jest.
 
-## Visual Studio Code launching
-
-You can also run the service and the tests using the VS Code launch configurations in `.vscode/launch.json` under the _Run and Debug_ menu.
-
 ### Code related scripts
 
 Run TypeScript formatter and linter before committing:
@@ -94,9 +90,12 @@ Consider using synchronized User settings across all your Codespaces.
 
 With a TypeScript file open, in bottom right of IDE, click _{}_ beside TypeScript, to use the project version of TypeScript.
 
-You can debug the service or the tests using the provided VSC launch configurations.
+## VSC - launching
 
-Recommended extensions:
+You can run the service and the tests using the VSC launch configurations in `.vscode/launch.json` under the _Run and Debug_ menu.
+The VSC test launchers are configured to use the `.env` file instead of `test/test.env`.
+
+## VSC - Recommended extensions
 
 - Mongo `mongodb.mongodb-vscode` to view and edit your collections
 - Jest `Orta.vscode-jest` to run individual tests easily. Root configuration file allows for both unit and service tests execution but for service tests you need to add this VSC setting:
