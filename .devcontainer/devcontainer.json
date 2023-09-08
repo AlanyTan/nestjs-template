@@ -5,7 +5,11 @@
   "image": "mcr.microsoft.com/devcontainers/typescript-node:1-18-bookworm",
   // See: https://containers.dev/features
   "features": {
-    "docker-in-docker": {},
+    // We use docker-outside-of-docker (aka docker-from-docker) instead of docker-in-docker for our dev container service
+    // to get network access to its Docker compose dependencies.
+    // https://code.visualstudio.com/remote/advancedcontainers/use-docker-kubernetes
+    // https://github.com/microsoft/vscode-dev-containers/tree/main/containers/docker-from-docker
+    "docker-outside-of-docker": {},
     "github-cli": {}
   },
   "portsAttributes": {
