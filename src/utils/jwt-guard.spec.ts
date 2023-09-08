@@ -1,9 +1,6 @@
 import { ExecutionContext } from "@nestjs/common";
 jest.resetModules();
 import { ConfigService } from "@nestjs/config";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { AadJwtValidator } from "@acertaanalyticssolutions/acerta-standardnpm";
-//import * as AcertaStandardNpm from "@AcertaAnalyticsSolutions/acerta-standardnpm";
 import { JwtGuard } from "./jwt-guard";
 
 let mockVerifyAadJwt = jest.fn();

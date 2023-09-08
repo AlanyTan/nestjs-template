@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // we will not implement multi tenant by schema yet, but the referece is here: https://thomasvds.com/schema-based-multitenancy-with-nest-js-type-orm-and-postgres-sql/
 import { HttpException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Person, User, UserEntitySchema } from "./entities/user.entity";
+import { User, UserEntitySchema } from "./entities/user.entity";
 
 @Injectable()
 export class ExampleOrmService {

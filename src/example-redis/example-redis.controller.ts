@@ -1,18 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Controller, Get, Version, Logger, UseGuards, Param, Delete, Post, Body, HttpException } from "@nestjs/common";
+import { Controller, Get, Logger, Param, Post, Body } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import {
   ApiBody,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
   ApiParam,
   ApiOkResponse,
   ApiCreatedResponse,
 } from "@nestjs/swagger";
-import Joi from "joi";
-import { OpenFeatureGuard } from "utils";
 import { CustomerDto, CreateCustomerDto } from "./dto/customer.dto";
 import { RedisService } from "./example-redis.service";
 

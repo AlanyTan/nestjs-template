@@ -8,7 +8,6 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { Repository } from "typeorm";
-// eslint-disable-next-line import/order
 import { config, dbConfig, OPENFEATURE_CLIENT } from "config";
 import { User } from "./entities/user.entity";
 import { ExampleOrmController } from "./example-orm.controller";

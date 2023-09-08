@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // The following is the recommended approach to create entities
 // starting from these base columns, which are uuids, created_at, updated_at and deleted_at
 //  Instead of defining Entities, we will define interface and schema for each entity separately,

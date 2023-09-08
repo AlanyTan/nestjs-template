@@ -1,12 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  EntitySchemaRelationOptions,
-  EntitySchemaColumnOptions,
-  EntitySchema,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, EntitySchema } from "typeorm";
 import { BaseColumnSchemaPart, BaseEntity } from "./entity.base";
 // This is an example of simple entity.
 // it is *not* recommended to use this approach due to the lack of control of how database columns are created

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpService } from "@nestjs/axios";
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor, Scope } from "@nestjs/common";
 import { ContextIdFactory, ModuleRef } from "@nestjs/core";

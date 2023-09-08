@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable, Logger, OnModuleDestroy } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigService } from "@nestjs/config";
 import { RedisJSON } from "@redis/json/dist/commands";
 import { createClient } from "redis";
 import { REDIS_CLIENT } from "../config";

@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller, Get, Version, Logger, UseGuards, Param, Delete, Post, Body, HttpException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
+import { ApiBody, ApiOperation, ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 import Joi from "joi";
 import { OpenFeatureGuard } from "utils";
 import { CreateUserDto } from "./dto/user.dto";
-import { Person, User } from "./entities/user.entity";
+import { User } from "./entities/user.entity";
 import { ExampleOrmService } from "./example-orm.service";
 
 @ApiTags("example-orm")

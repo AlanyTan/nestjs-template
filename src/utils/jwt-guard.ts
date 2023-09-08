@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import { CanActivate, ExecutionContext, HttpException, Injectable, mixin, Type } from "@nestjs/common";
+import { CanActivate, ExecutionContext, HttpException, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { AadJwtValidator } from "@acertaanalyticssolutions/acerta-standardnpm";
 

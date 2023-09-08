@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { createClient } from "redis";
@@ -18,8 +17,8 @@ describe("RedisService", () => {
   beforeEach(() => {
     mockRedisClient = {
       json: {
-        set: jest.fn().mockImplementationOnce((key: string, data: unknown) => key),
-        get: jest.fn().mockImplementationOnce((key: string) => data),
+        set: jest.fn().mockImplementationOnce((key: string) => key),
+        get: jest.fn().mockImplementationOnce(() => data),
       },
     } as unknown as jest.Mocked<RedisClient>;
     redisService = new RedisService(mockRedisClient as RedisClient, new ConfigService(), new Logger());
