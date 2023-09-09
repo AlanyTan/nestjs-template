@@ -10,4 +10,5 @@ dev
 dist
 docs
 node_modules
+tools
 README.md

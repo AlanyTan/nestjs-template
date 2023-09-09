@@ -9,6 +9,7 @@ trigger:
       - .husky
       - docs
       - pipelines
+      - tools
       - ENV.md
       - README.md
 pr:
