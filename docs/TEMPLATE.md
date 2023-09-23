@@ -237,7 +237,7 @@ As you can see, the scopy you requested is the `api://${CLIENT_ID}/${SCOPE_NAME}
 Update the local_setup.sh to use new name of the Database you'd like to use (if you use Database)
 
 ```
-./local-db-setup.sh
+./local-setup.sh
 ```
 
 This script depends on your environment variables (if .env file exist, it's content will be loaded as Environment variables), to get the following info:

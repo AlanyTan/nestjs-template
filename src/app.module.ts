@@ -3,7 +3,7 @@ import { Module, RequestMethod, Global, Logger, Scope } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TerminusModule } from "@nestjs/terminus";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { openfeature, AcertaLogger } from "@acertaanalyticssolutions/acerta-standardnpm";
+import { openfeature } from "@acertaanalyticssolutions/acerta-standardnpm";
 import { PrometheusModule, PrometheusController, makeGaugeProvider } from "@willsoto/nestjs-prometheus";
 import { LoggerModule } from "nestjs-pino";
 import { OPENFEATURE_CLIENT, config, dbConfig, environmentVariableList } from "config";
@@ -120,10 +120,7 @@ import { AppService } from "./app.service";
       provide: OPENFEATURE_CLIENT,
       inject: [ConfigService, Logger],
       useFactory: async (configService: ConfigService, logger: Logger): Promise<openfeature> => {
-        const client = await new openfeature(
-          configService.getOrThrow("OPENFEATURE_PROVIDER"),
-          new AcertaLogger(logger),
-        ).initialized();
+        const client = await new openfeature(configService.getOrThrow("OPENFEATURE_PROVIDER"), logger).initialized();
         return client as openfeature;
       },
     },

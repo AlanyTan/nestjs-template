@@ -75,7 +75,7 @@ export class AppController {
       this.configService.get("AAD_CLIENT_ID", ""),
     );
     try {
-      return await aadJwtValidator.validateAadJwt(request);
+      return !!(await aadJwtValidator.validateAadJwt(request));
     } catch (e) {
       return false;
     }

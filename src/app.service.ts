@@ -20,7 +20,6 @@ export class AppService implements OnApplicationBootstrap {
     private readonly configService: ConfigService,
     private readonly typeOrmHealthIndicator: TypeOrmHealthIndicator,
     private readonly httpHealthIndicator: HttpHealthIndicator,
-    // @ts-expect-error("@InjectMetric is a prometheus export and it might not be Typescript 5 ready")
     @InjectMetric("serviceInfo") public gauge: Gauge,
   ) {}
 

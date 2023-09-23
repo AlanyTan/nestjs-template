@@ -39,7 +39,7 @@ Running tests does not require the previous `.env`. Tests use the file `test/tes
 To run the service or the service tests, you need to set up the Docker dependencies:
 
 ```bash
-./local-db-setup.sh
+./local-setup.sh
 ```
 
 You will need to rerun this script when your environment is restarted.
@@ -97,6 +97,7 @@ The VSC test launchers are configured to use the `.env` file instead of `test/te
 
 ## VSC - Recommended extensions
 
+- GitHub Copilot `GitHub.copilot` to enable AI assisted coding suggestions.
 - Mongo `mongodb.mongodb-vscode` to view and edit your collections
 - Jest `Orta.vscode-jest` to run individual tests easily. Root configuration file allows for both unit and service tests execution but for service tests you need to add this VSC setting:
   - `"jest.jestCommandLine": "npm run test --"`
