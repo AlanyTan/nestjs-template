@@ -13,7 +13,6 @@ import { ExampleRedisModule } from "example-redis/example-redis.module";
 import { ForwardHeadersInterceptor } from "utils/forward-headers.interceptor";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-
 @Global()
 @Module({
   imports: [

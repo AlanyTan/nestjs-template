@@ -28,15 +28,11 @@ export class ExampleService {
       transactionContext: "specific context for this particular transation",
     });
     this.logger.debug(
-      {
-        msg:
-          "Calling getExample within the service with debug details: " + " and new feature flag is " + newFeatureFlag,
-      },
+      "Calling getExample within the service with debug details: " + " and new feature flag is " + newFeatureFlag,
       "ExampleService:debug",
     );
     this.logger.verbose(
       "Calling getExample within the service with trace including details: " +
-        JSON.stringify(this.configService.get("logger")) +
         " and new feature flag is " +
         newFeatureFlag,
       "ExampleService:trace",

@@ -5,7 +5,7 @@
       "name": "Launch (NPM)",
       "request": "launch",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "start"],
+      "runtimeArgs": ["run", "start", "--", "--watch"],
       "envFile": "${workspaceFolder}/.env",
       "skipFiles": ["<node_internals>/**"],
       "sourceMaps": true,

@@ -1,0 +1,18 @@
+// example/example.proto
+syntax = "proto3";
+
+package example;
+
+service ExampleService {
+  rpc GetExample (ExampleById) returns (Example) {};
+  rpc GetExampleMore (ExampleById) returns (Example) {};
+}
+
+message ExampleById {
+  int32 id = 1;
+}
+
+message Example {
+  int32 id = 1;
+  string name = 2;
+}
