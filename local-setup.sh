@@ -1,6 +1,12 @@
 #!/bin/bash
 PROJECT_NAME=dev
 DOCKER_NETWORK_NAME=${PROJECT_NAME}_default
+SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
+DOCKER_COMPOSE_FILE=dev/dev-docker-compose.yml
+
+# clean up potential left over orphan from previous runs
+docker compose -f "$SCRIPT_DIR/$DOCKER_COMPOSE_FILE" down --remove-orphans
+
 
 if ( ! docker network inspect ${DOCKER_NETWORK_NAME} > /dev/null 2>&1); then 
     docker network create ${DOCKER_NETWORK_NAME}
@@ -16,15 +22,6 @@ do
   fi
 done <<< $(docker ps -q)
 
-CONTAINER_NAME=postgres
-DOCKER_ID=$(docker ps -aq -f name=${CONTAINER_NAME})
-if [ -z "$DOCKER_ID" ]; then 
-    SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
-    docker compose -f "$SCRIPT_DIR/dev/dev-docker-compose.yml" up -d
-
-else 
-    docker start ${DOCKER_ID}
-fi
-
+docker compose -f "$SCRIPT_DIR/$DOCKER_COMPOSE_FILE" up -d
 
 

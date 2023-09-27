@@ -9,3 +9,12 @@ services:
       - ~/.postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
+  redis-stack:
+    image: redis/redis-stack-server:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - ~/.redis-stack-data:/data # adjust volume mappings as needed
+networks:
+  dev_default:
+    external: true

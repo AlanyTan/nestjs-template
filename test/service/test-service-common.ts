@@ -1,6 +1,6 @@
 import { INestApplication } from "@nestjs/common";
 import { TestingModule, Test } from "@nestjs/testing";
-import { AppModule } from "application/app.module";
+import { AppModule } from "app.module";
 import { OPENFEATURE_CLIENT } from "config";
 import { mainConfig } from "main.config";
 

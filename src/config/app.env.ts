@@ -35,4 +35,8 @@ export const environmentVariableList = Joi.object({
   AAD_CLIENT_ID: Joi.string()
     .default("")
     .description("The client id registered with Azure AD tenant that represent this service"),
+  REDIS_URL: Joi.string()
+    .default("")
+    .tag("public")
+    .description("The REDIS URL used to connec to REDIS instance, i.e. redis://redis-stack:6379/1 "),
 });
