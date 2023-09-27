@@ -13,6 +13,8 @@ import { ExampleRedisModule } from "example-redis/example-redis.module";
 import { ForwardHeadersInterceptor } from "utils/forward-headers.interceptor";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { getPinoHttpSerializer } from "./utils/pino-http-serializer";
+
 @Global()
 @Module({
   imports: [
@@ -48,29 +50,7 @@ import { AppService } from "./app.service";
             : {
                 target: "pino/file",
               },
-          serializers:
-            configService.get("LOG_LEVEL") === "trace"
-              ? {
-                  req: (req): object => req,
-                }
-              : configService.get("LOG_LEVEL") === "debug"
-              ? {
-                  req: (req): object => ({
-                    id: req.id,
-                    method_url: req.method + " " + req.url,
-                    query: req.query,
-                    params: req.params,
-                    remoteAddress_port: req.remoteAddress + ":" + req.remotePort,
-                    "x-correlation_id": req.headers["x-correlation-id"] || req["x-correlation-id"],
-                  }),
-                }
-              : {
-                  req: (req): object => ({
-                    id: req.id,
-                    method_url: req.method + " " + req.url,
-                    "x-correlation-id": req.headers["x-correlation-id"] || req["x-correlation-id"],
-                  }),
-                },
+          serializers: getPinoHttpSerializer(configService),
         },
         exclude: [{ method: RequestMethod.ALL, path: "/nothing_to_exclude" }],
       }),

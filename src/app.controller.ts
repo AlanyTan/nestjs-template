@@ -3,10 +3,10 @@ import { ConfigService } from "@nestjs/config";
 import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";
 import { AadJwtValidator } from "@acertaanalyticssolutions/acerta-standardnpm";
-import { PinoLogger } from "nestjs-pino";
 import { AppService } from "app.service";
 import { DevTestGuard } from "utils";
 import { JwtGuard } from "utils/jwt-guard";
+import { setAppModuleLogLevel } from "utils/pino-http-serializer";
 
 enum LogLevels {
   trace = "trace",
@@ -22,7 +22,6 @@ enum LogLevels {
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly loggerService: PinoLogger,
     private readonly logger: Logger,
     private readonly configService: ConfigService,
   ) {}
@@ -110,18 +109,14 @@ export class AppController {
   })
   @UseGuards(JwtGuard)
   updateLogLevel(@Query("loglevel") logLevel: LogLevels): string {
-    if (this.loggerService !== undefined) {
-      PinoLogger.root.level = logLevel;
-      this.loggerService.logger.level = logLevel;
-      this.logger.error(`Changing LogLevel... this is an confirmation message that Error messages are shown.`);
-      this.logger.warn(`Changing LogLevel... this is an confirmation message that Warnning messages are shown.`);
-      this.logger.log(`Changing LogLevel... this is an confirmation message that Info messages are shown.`);
-      this.logger.debug(`Changing LogLevel... this is an confirmation message that Debug messages are shown.`);
-      this.logger.verbose(`Changing LogLevel... this is an confirmation message that Trace messages are shown.`);
-      return `log level set to ${logLevel}`;
-    } else {
-      return "loggerService is undefined";
-    }
+    setAppModuleLogLevel(logLevel);
+    this.logger.fatal(`Changing LogLevel... this is a confirmation message that Fatal messages are shown.`);
+    this.logger.error(`Changing LogLevel... this is a confirmation message that Error messages are shown.`);
+    this.logger.warn(`Changing LogLevel... this is a confirmation message that Warnning messages are shown.`);
+    this.logger.log(`Changing LogLevel... this is a confirmation message that Info messages are shown.`);
+    this.logger.debug(`Changing LogLevel... this is a confirmation message that Debug messages are shown.`);
+    this.logger.verbose(`Changing LogLevel... this is a confirmation message that Trace messages are shown.`);
+    return `log level set to ${logLevel}`;
   }
 
   @UseGuards(DevTestGuard)
