@@ -3,6 +3,7 @@
 {
   "name": "NestJS Example",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:1-18-bookworm",
+  "runArgs": ["--network", "bridge"],
   // See: https://containers.dev/features
   "features": {
     // We use docker-outside-of-docker (aka docker-from-docker) instead of docker-in-docker for our dev container service

@@ -3,6 +3,8 @@ services:
   postgres:
     image: postgres:13
     container_name: postgres
+    networks:
+      - network1
     ports:
       - 5432:5432
     volumes:
@@ -10,11 +12,16 @@ services:
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
   redis-stack:
+    container_name: redis-stack
     image: redis/redis-stack-server:latest
+    networks:
+      - network1
     ports:
       - "6379:6379"
     volumes:
-      - ~/.redis-stack-data:/data # adjust volume mappings as needed
+      - ~/.redis-stack-data:/data
 networks:
   dev_default:
+  network1:
+    name: project_default
     external: true

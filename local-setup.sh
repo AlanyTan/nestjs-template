@@ -1,5 +1,5 @@
 #!/bin/bash
-PROJECT_NAME=dev
+PROJECT_NAME=project
 DOCKER_NETWORK_NAME=${PROJECT_NAME}_default
 SCRIPT_DIR=$(dirname ${BASH_SOURCE[0]})
 DOCKER_COMPOSE_FILE=dev/dev-docker-compose.yml
