@@ -34,6 +34,7 @@ stages:
     parameters:
       testRunnerImageName: node:18-bullseye
       postgresImageName: postgres:15
+      redisStackImageName: redis/redis-stack-server:latest
       sshRepositoryKeyEnabled: true
   - template: pipelines/azure-pipelines-with-ssh-template.yaml@lp-base
     parameters:
