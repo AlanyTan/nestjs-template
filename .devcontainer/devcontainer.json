@@ -6,10 +6,8 @@
   "runArgs": ["--network", "host", "--add-host", "postgres:127.0.0.1", "--add-host", "redis-stack:127.0.0.1"],
   // See: https://containers.dev/features
   "features": {
-    // We use docker-outside-of-docker (aka docker-from-docker) instead of docker-in-docker for our dev container service
-    // to get network access to its Docker compose dependencies.
     // https://code.visualstudio.com/remote/advancedcontainers/use-docker-kubernetes
-    "ghcr.io/devcontainers/features/docker-in-docker:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "github-cli": {}
   },
   "portsAttributes": {
