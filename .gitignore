@@ -12,3 +12,6 @@
 
 # Logs
 *.log
+
+# VS Code
+/.vscode/settings.json

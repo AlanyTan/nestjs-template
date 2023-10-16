@@ -1,3 +1,5 @@
+process.env.ENV_KEY = "tst";
+
 import { ExecutionContext } from "@nestjs/common";
 jest.resetModules();
 import { ConfigService } from "@nestjs/config";

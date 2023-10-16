@@ -3,7 +3,7 @@ process.env.LINEPULSE_SVC_PORT = "9081";
 process.env.OPENFEATURE_PROVIDER = "ENV";
 process.env.NEW_END_POINT = "true";
 process.env.NEW_FEATURE_FLAG = "true";
-process.env.ENV_KEY = "lcl";
+process.env.ENV_KEY = "tst";
 
 import { INestApplication } from "@nestjs/common";
 import request from "supertest";

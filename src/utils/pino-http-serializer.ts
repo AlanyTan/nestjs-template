@@ -1,5 +1,4 @@
 import { ConfigService } from "@nestjs/config";
-import { PinoLogger } from "nestjs-pino";
 
 type PinoRawRequest = {
   headers: {
@@ -29,7 +28,6 @@ type CustomSerializerProperties = BaseCustomSerializerProperties & {
 
 let appModuleLogLevel: string;
 export function setAppModuleLogLevel(logLevel: string): void {
-  PinoLogger.root.level = logLevel;
   appModuleLogLevel = logLevel;
 }
 

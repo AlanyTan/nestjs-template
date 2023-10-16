@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { HealthCheck, HealthCheckResult } from "@nestjs/terminus";
 import { AadJwtValidator } from "@acertaanalyticssolutions/acerta-standardnpm";
+import { PinoLogger } from "nestjs-pino";
 import { AppService } from "app.service";
 import { DevTestGuard } from "utils";
 import { JwtGuard } from "utils/jwt-guard";
@@ -22,8 +23,9 @@ enum LogLevels {
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly logger: Logger,
     private readonly configService: ConfigService,
+    private readonly logger: Logger,
+    private readonly loggerService: PinoLogger,
   ) {}
 
   @Get("health")
@@ -68,7 +70,7 @@ export class AppController {
     }
   }
 
-  async #isAadJwtValid(request: Request): Promise<boolean> {
+  private async isAadJwtValid(request: Request): Promise<boolean> {
     const aadJwtValidator = new AadJwtValidator(
       this.configService.get("AAD_TENANT_ID", ""),
       this.configService.get("AAD_CLIENT_ID", ""),
@@ -83,7 +85,7 @@ export class AppController {
   @Get("version")
   @ApiBearerAuth("JWT-auth")
   async version(@Req() request: Request): Promise<unknown> {
-    const isAadJwtValid = await this.#isAadJwtValid(request);
+    const isAadJwtValid = await this.isAadJwtValid(request);
     return {
       version: this.configService.get("version"),
       commitInfo: isAadJwtValid ? this.configService.get("commitInfo") : "Unauthorized to view commit info",
@@ -109,7 +111,8 @@ export class AppController {
   })
   @UseGuards(JwtGuard)
   updateLogLevel(@Query("loglevel") logLevel: LogLevels): string {
-    setAppModuleLogLevel(logLevel);
+    this.setCurrentAndFutureLogLevel(logLevel);
+    this.loggerService.logger.level = logLevel;
     this.logger.fatal(`Changing LogLevel... this is a confirmation message that Fatal messages are shown.`);
     this.logger.error(`Changing LogLevel... this is a confirmation message that Error messages are shown.`);
     this.logger.warn(`Changing LogLevel... this is a confirmation message that Warnning messages are shown.`);
@@ -117,6 +120,12 @@ export class AppController {
     this.logger.debug(`Changing LogLevel... this is a confirmation message that Debug messages are shown.`);
     this.logger.verbose(`Changing LogLevel... this is a confirmation message that Trace messages are shown.`);
     return `log level set to ${logLevel}`;
+  }
+
+  private setCurrentAndFutureLogLevel(logLevel: LogLevels): void {
+    this.loggerService.logger.level = logLevel;
+    PinoLogger.root.level = logLevel;
+    setAppModuleLogLevel(logLevel);
   }
 
   @UseGuards(DevTestGuard)
