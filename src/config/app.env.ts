@@ -25,10 +25,6 @@ export const environmentVariableList = Joi.object({
       "Additional patterns to redact from logs, default is [] which the developer is responsible for redact log messages",
     ),
   OPENFEATURE_PROVIDER: Joi.string().required().description("SDK Key of OpenFeature Provider (i.e. LD:sdkkey1234567"),
-  PINO_PRETTY: Joi.boolean()
-    .default(false)
-    .tag("public")
-    .description("Whether or not we shall use Pino Pretty, default is false"),
   SERVICE_PREFIX: Joi.string().tag("public").description("The prefix of the service, default is ''"),
   REDIS_URL: Joi.string()
     .default("")

@@ -262,7 +262,6 @@ Pino logging format is set in the app.module.ts, and should be considered Loggin
 There are 3 environment Variables that influence logging:
 
 - LOG_LEVEL : determines how verbose the logging will be (i.e. when LOG_LEVEL=info, trace and debug messages won't be added to the log).
-- PINO_PRETTY : boolean value determines if the logs will be written in pretty format or JSON, default is pretty formet
 - ENV_KEY : only if ENV_KEY=lcl (which you should keep when you are developing in your local PC IDE), the colorization will be used in pino-pretty, and it affects redactation as well.
 
 LOG_LEVEL default is "info", valid values are (and their internal numerical values) are:

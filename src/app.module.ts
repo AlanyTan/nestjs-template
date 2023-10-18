@@ -37,19 +37,15 @@ import { getPinoHttpSerializer } from "./utils/pino-http-serializer";
           redact: ["req.headers.Authorization", "req.headers.authorization", "req.headers.cookie"].concat(
             JSON.parse(configService.getOrThrow("LOGGING_REDACT_PATTERNS")),
           ),
-          transport: configService.get("PINO_PRETTY")
-            ? {
-                target: "pino-pretty",
-                options: {
-                  colorize: configService.get("ENV_KEY") === "lcl",
-                  singleLine: true,
-                  levelFirst: false,
-                  translateTime: "UTC:yyyy-mm-dd HH:MM:ss.l Z",
-                },
-              }
-            : {
-                target: "pino/file",
-              },
+          transport: {
+            target: "pino-pretty",
+            options: {
+              colorize: configService.get<string>("ENV_KEY") === "lcl",
+              singleLine: true,
+              levelFirst: false,
+              translateTime: "UTC:yyyy-mm-dd HH:MM:ss.l Z",
+            },
+          },
           serializers: getPinoHttpSerializer(configService),
         },
         exclude: [{ method: RequestMethod.ALL, path: "/nothing_to_exclude" }],

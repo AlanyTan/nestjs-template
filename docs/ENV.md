@@ -39,7 +39,6 @@ So for non-sensitive information, we recommend you keep `.tag("public)`, on the 
 LINEPULSE_SVC_PORT=9080
 LOG_LEVEL=info
 SVC_1_ENDPOINT=https://api.linepulse-dev.ai/health
-PINO_PRETTY=true
 ENV_KEY=lcl
 OPENFEATURE_PROVIDER=ENV
 NEW_FEATURE_FLAG=true

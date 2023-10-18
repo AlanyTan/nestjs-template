@@ -26,8 +26,7 @@ describe("ConfigSerivce should error out if required Environments are missing", 
             OPENFEATURE_PROVIDER: Joi.string().required(),
             LINEPULSE_SVC_PORT: Joi.number().required(),
             SVC_1_ENDPOINT: Joi.string().uri().required(),
-            PINO_PRETTY: Joi.boolean().default(true),
-            DATABSE_TYPE: Joi.string().default("none"),
+            DATABASE_TYPE: Joi.string().default("none"),
             LOG_LEVEL: Joi.string().default("info"),
             LOGGING_REDACT_PATTERNS: Joi.string().default("[]"),
             SERVICE_PREFIX: Joi.string().default(""),
@@ -58,7 +57,6 @@ describe("Config Service check configurations", () => {
     process.env.LINEPULSE_SVC_PORT = "9080";
     process.env.LOG_LEVEL = "info";
     process.env.SVC_1_ENDPOINT = "https://this.needs.to.be.a.valid.url/health";
-    process.env.PINO_PRETTY = "true";
     process.env.ENV_KEY = "lcl";
     process.env.OPENFEATURE_PROVIDER = "ENV";
     process.env.NEW_FEATURE_FLAG = "true";
@@ -86,8 +84,7 @@ describe("Config Service check configurations", () => {
             OPENFEATURE_PROVIDER: Joi.string().required(),
             LINEPULSE_SVC_PORT: Joi.number().required(),
             SVC_1_ENDPOINT: Joi.string().uri().required(),
-            PINO_PRETTY: Joi.boolean().default(true),
-            DATABSE_TYPE: Joi.string().default("none"),
+            DATABASE_TYPE: Joi.string().default("none"),
             LOG_LEVEL: Joi.string().default("info"),
             LOGGING_REDACT_PATTERNS: Joi.string(),
             SERVICE_PREFIX: Joi.string(),
@@ -109,7 +106,6 @@ describe("Config Service check configurations", () => {
   });
 
   test("Optional Configuration values should resolve to default values", () => {
-    expect(configService.get<boolean>("PINO_PRETTY")).toBe("true" === (process.env.PINO_PRETTY ?? "false"));
     expect(configService.get<string>("LOG_LEVEL")).toBe(process.env.LOG_LEVEL ?? "info");
     // the reason the DATABASE_TYPE is tested here is because you are allowed to set the DATABASE_TYPE to "none" and it will not load the database config
     expect(configService.get<string>("database.type")).toBe(process.env.DATABASE_TYPE ?? "none");
